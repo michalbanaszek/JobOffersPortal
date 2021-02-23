@@ -12,7 +12,7 @@ namespace JobOffersPortal.WebUI.MappingProfiles
         {
             CreateMap<Company, CompanyResponse>()                
                 .ForMember(dest => dest.JobOffers, opt =>
-                    opt.MapFrom(src => src.JobOffers.Select(x => new JobOfferResponse() { Id = x.JobOfferId, UserId = x.JobOffer.UserId })));
+                    opt.MapFrom(src => src.JobOffers.Select(x => new JobOfferResponse() { Id = x.JobOfferId})));
 
             CreateMap<JobOffer, JobOfferResponse>();
         }
