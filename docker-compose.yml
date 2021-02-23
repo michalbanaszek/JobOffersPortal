@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+ localnetwork:
+  name: localnetwork
+ redisnetwork:
+  name: redisnetwork
+
+services:
+ mssqllocal:
+  image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+  container_name: mssqllocalcontainer
+  environment:
+   - ACCEPT_EULA=Y
+   - MSSQL_SA_PASSWORD=Qwerty!1
+   - MSSQL_PID=Express
+  ports:
+   - 1431:1433
+  networks:
+   - localnetwork
+
+ main-api:  
+  image: biaaly13/joboffersapi
+  build:
+   context: .
+   dockerfile: JobOffersPortal.WebUI/Dockerfile 
+  ports:
+   - 8080:80
+  networks:
+   - localnetwork
+   - redisnetwork
+  depends_on:
+   - mssqllocal
+
+ redis:
+  image: redis
+  container_name: redis
+  ports:
+   - 6379:6379
+  networks: 
+   - redisnetwork
