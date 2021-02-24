@@ -59,7 +59,7 @@ namespace JobOffersPortal.WebUI.Controllers
         {
             var jobOffer = await _jobOfferService.GetByIdAsync(id);
 
-            return jobOffer == null ? NotFound() : Ok(_mapper.Map<JobOfferResponse>(jobOffer));
+            return jobOffer == null ? NotFound() : Ok(_mapper.Map<Response<JobOfferResponse>>(jobOffer));
         }
 
        
@@ -85,7 +85,7 @@ namespace JobOffersPortal.WebUI.Controllers
 
             var locationUri = _jobOfferUriService.GetJobOfferUri(jobOffer.Id.ToString());
 
-            return Created(locationUri, _mapper.Map<JobOfferResponse>(jobOffer));
+            return Created(locationUri, _mapper.Map<Response<JobOfferResponse>>(jobOffer));
         }
 
         [HttpPut(ApiRoutes.JobOffer.Update)]
@@ -102,7 +102,7 @@ namespace JobOffersPortal.WebUI.Controllers
 
             await _jobOfferService.UpdateAsync(jobOffer);
 
-            return Ok(_mapper.Map<JobOfferResponse>(jobOffer));
+            return Ok(_mapper.Map<Response<JobOfferResponse>>(jobOffer));
 
         }
 
