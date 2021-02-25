@@ -24,7 +24,8 @@ namespace JobOffersPortal.WebUI.Services
         {
             var formattedUrl = string.Format(UserInfoUrl, accessToken);
 
-            var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl); result.EnsureSuccessStatusCode();
+            var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl); 
+            result.EnsureSuccessStatusCode();
 
             var responseAsString = await result.Content.ReadAsStringAsync();
 
@@ -35,7 +36,8 @@ namespace JobOffersPortal.WebUI.Services
         {
             var formattedUrl = string.Format(TokenValidationUrl, accessToken, _facebookAuthOptions.AppId, _facebookAuthOptions.AppSecret);
 
-            var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl);            result.EnsureSuccessStatusCode();
+            var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl);           
+            result.EnsureSuccessStatusCode();
 
             var responseAsString = await result.Content.ReadAsStringAsync();
 
