@@ -37,6 +37,8 @@
             public const string Register = Base + "/identity/register";
 
             public const string RefreshToken = Base + "/identity/RefreshToken";
+
+            public const string FacebookAuth = Base + "/identity/auth/fb";
         }
     }
 }

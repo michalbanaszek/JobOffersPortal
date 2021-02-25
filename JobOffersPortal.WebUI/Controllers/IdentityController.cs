@@ -1,4 +1,5 @@
-﻿using JobOffersPortal.WebUI.Contracts.Requests;
+﻿using JobOffersPortal.Contracts.Contracts.Requests;
+using JobOffersPortal.WebUI.Contracts.Requests;
 using JobOffersPortal.WebUI.Contracts.Responses;
 using JobOffersPortal.WebUI.Domain;
 using JobOffersPortal.WebUI.Services;
@@ -43,6 +44,21 @@ namespace JobOffersPortal.WebUI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
+
+            return CheckAuthenticationResult(authResponse);
+        }
+
+        /// <summary>
+        /// Login facebook user in the system
+        /// </summary>
+        /// <response code="200">Login facebook user in the system</response>
+        /// <response code="400">Unable to login the user due to validation error</response>   
+        [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
+        [ProducesResponseType(typeof(AuthFailedResponse), 400)]
+        [HttpPost(ApiRoutes.Identity.FacebookAuth)]
+        public async Task<IActionResult> FacebookAuth([FromBody] LoginFacebookRequest request)
+        {
+            var authResponse = await _identityService.LoginWithFacebookAsync(request.TokenAccess);
 
             return CheckAuthenticationResult(authResponse);
         }
