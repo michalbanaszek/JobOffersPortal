@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using JobOffersPortal.WebUI.Contracts.Requests;
 
-namespace JobOffersPortal.WebUI.Validators
+namespace JobOffersPortal.WebUI.Validators.Company
 {
     public class UpdateCompanyRequestValidator : AbstractValidator<UpdateCompanyRequest>
     {
