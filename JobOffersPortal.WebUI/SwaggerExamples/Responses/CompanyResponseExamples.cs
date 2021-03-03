@@ -1,4 +1,5 @@
-﻿using JobOffersPortal.WebUI.Contracts.Responses;
+﻿using JobOffersPortal.Contracts.Contracts.Responses;
+using JobOffersPortal.WebUI.Contracts.Responses;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace JobOffersPortal.WebUI.SwaggerExamples.Responses
                 Id = Guid.NewGuid().ToString(),
                 Name = "NewCompany",
                 UserId = Guid.NewGuid().ToString(),
-                JobOffers = new List<JobOfferResponse>()
+                JobOffers = new List<CompanyJobOfferResponse>()
                 {
-                    new JobOfferResponse() { Id = Guid.NewGuid().ToString() }
+                    new CompanyJobOfferResponse() { Id = Guid.NewGuid().ToString() }
                 }
             };
         }
