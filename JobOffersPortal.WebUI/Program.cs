@@ -1,4 +1,5 @@
 using JobOffersPortal.WebUI.Data;
+using JobOffersPortal.WebUI.Data.Initializer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,11 +22,7 @@ namespace JobOffersPortal.WebUI
 
                 await dbContext.Database.MigrateAsync();
 
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-                await CreateAdminRole(dbContext, roleManager, userManager);
+                await DbInitializer.Initialize(serviceScope);
             }
 
             await host.RunAsync();
