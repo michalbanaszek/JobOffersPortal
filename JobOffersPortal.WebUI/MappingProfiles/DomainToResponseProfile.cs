@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JobOffersPortal.Contracts.Contracts.Responses;
 using JobOffersPortal.WebUI.Contracts.Responses;
 using JobOffersPortal.WebUI.Domain;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,10 @@ namespace JobOffersPortal.WebUI.MappingProfiles
         {
             CreateMap<Company, CompanyResponse>()                
                 .ForMember(dest => dest.JobOffers, opt =>
-                    opt.MapFrom(src => src.JobOffers.Select(x => new JobOfferResponse() { Id = x.JobOfferId})));
+                    opt.MapFrom(src => src.JobOffers.Select(x => new CompanyJobOfferResponse() 
+                    {
+                        Id = x.JobOfferId                    
+                    })));
 
             CreateMap<JobOffer, JobOfferResponse>();
         }

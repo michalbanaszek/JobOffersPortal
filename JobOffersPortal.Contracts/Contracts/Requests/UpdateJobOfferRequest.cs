@@ -1,7 +1,14 @@
-﻿namespace JobOffersPortal.WebUI.Contracts.Requests
+﻿using System;
+
+namespace JobOffersPortal.WebUI.Contracts.Requests
 {
     public class UpdateJobOfferRequest
     {
         public string Position { get; set; }
+        public int Salary { get; set; }
+        public DateTime Date { get; set; }
+        public string Requirements { get; set; }
+        public string Skills { get; set; }
+        public string Offers { get; set; }
     }
 }

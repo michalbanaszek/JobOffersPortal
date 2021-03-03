@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JobOffersPortal.Contracts.Contracts.Responses;
+using System.Collections.Generic;
 
 namespace JobOffersPortal.WebUI.Contracts.Responses
 {
@@ -6,12 +7,12 @@ namespace JobOffersPortal.WebUI.Contracts.Responses
     {
         public CompanyResponse()
         {
-            JobOffers = new List<JobOfferResponse>();
+            JobOffers = new List<CompanyJobOfferResponse>();
         }
 
         public string Id { get; set; }
         public string Name { get; set; }
         public string UserId { get; set; }
-        public IEnumerable<JobOfferResponse> JobOffers { get; set; }
+        public IEnumerable<CompanyJobOfferResponse> JobOffers { get; set; }
     }
 }
