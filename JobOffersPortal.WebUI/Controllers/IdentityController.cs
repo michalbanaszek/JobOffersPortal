@@ -1,23 +1,16 @@
-﻿using JobOffersPortal.Contracts.Contracts.Requests;
-using JobOffersPortal.WebUI.Contracts.Requests;
-using JobOffersPortal.WebUI.Contracts.Responses;
-using JobOffersPortal.WebUI.Domain;
-using JobOffersPortal.WebUI.Services;
+﻿using Application.Common.Models;
+using Application.Identity.Commands;
+using Application.Identity.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using WebUI;
+using WebUI.Controllers;
 
 namespace JobOffersPortal.WebUI.Controllers
-{   
-    [ApiController]
-    public class IdentityController : ControllerBase
+{
+    public class IdentityController : ApiControllerBase
     {
-        private readonly IIdentityService _identityService;
-
-        public IdentityController(IIdentityService identityService)
-        {
-            _identityService = identityService;
-        }
-
         /// <summary>
         /// Register user in the system
         /// </summary>
@@ -25,10 +18,10 @@ namespace JobOffersPortal.WebUI.Controllers
         /// <response code="400">Unable to create the user due to validation error</response> 
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
-        [HttpPost(ApiRoutes.Identity.Register)]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        [HttpPost(ApiRoutes.IdentityRoute.Register), AllowAnonymous]      
+        public async Task<ActionResult<AuthSuccessResponse>> Register([FromBody] RegisterCommand command)
         {
-            var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
+           var authResponse = await Mediator.Send(command);
 
             return CheckAuthenticationResult(authResponse);
         }
@@ -40,10 +33,10 @@ namespace JobOffersPortal.WebUI.Controllers
         /// <response code="400">Unable to login the user due to validation error</response>   
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
-        [HttpPost(ApiRoutes.Identity.Login)]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        [HttpPost(ApiRoutes.IdentityRoute.Login), AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
+            var authResponse = await Mediator.Send(command);
 
             return CheckAuthenticationResult(authResponse);
         }
@@ -55,10 +48,10 @@ namespace JobOffersPortal.WebUI.Controllers
         /// <response code="400">Unable to login the user due to validation error</response>   
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
-        [HttpPost(ApiRoutes.Identity.FacebookAuth)]
-        public async Task<IActionResult> FacebookAuth([FromBody] LoginFacebookRequest request)
+        [HttpPost(ApiRoutes.IdentityRoute.FacebookAuth), AllowAnonymous]
+        public async Task<IActionResult> FacebookAuth([FromBody] LoginFacebookCommand command)
         {
-            var authResponse = await _identityService.LoginWithFacebookAsync(request.TokenAccess);
+            var authResponse = await Mediator.Send(command);
 
             return CheckAuthenticationResult(authResponse);
         }
@@ -71,15 +64,15 @@ namespace JobOffersPortal.WebUI.Controllers
         /// <response code="400">Unable to generate refresh token due to validation error</response>   
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
-        [HttpPost(ApiRoutes.Identity.RefreshToken)]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        [HttpPost(ApiRoutes.IdentityRoute.RefreshToken), AllowAnonymous]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
         {
-            var authResponse = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
+            var authResponse = await Mediator.Send(command);
 
             return CheckAuthenticationResult(authResponse);
         }
 
-        private IActionResult CheckAuthenticationResult(AuthenticationResult authResponse)
+        private ActionResult CheckAuthenticationResult(AuthenticationResult authResponse)
         {
             if (!authResponse.Success)
             {

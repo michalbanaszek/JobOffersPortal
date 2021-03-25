@@ -1,7 +1,8 @@
-﻿using JobOffersPortal.Contracts.Contracts.Responses;
+﻿using Application;
+using Application.Companies.Commands.CreateCompany;
+using Application.Identity.Commands;
+using Application.Response;
 using JobOffersPortal.WebUI;
-using JobOffersPortal.WebUI.Contracts.Requests;
-using JobOffersPortal.WebUI.Contracts.Responses;
 using JobOffersPortal.WebUI.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,7 @@ namespace JobOffersPortal.IntegrationTests
     public class IntegrationTest : IDisposable
     {
         protected readonly HttpClient _httpClient;
-        private readonly IServiceProvider _serviceProvider;
-        private object _lockObj = new object();
+        private readonly IServiceProvider _serviceProvider;       
 
         protected IntegrationTest()
         {
@@ -51,7 +51,7 @@ namespace JobOffersPortal.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetJwtAsync());
         }
 
-        protected async Task<Response<CompanyResponse>> CreateCompanyAsync(CreateCompanyRequest request)
+        protected async Task<Response<CompanyResponse>> CreateCompanyAsync(CreateCompanyCommand request)
         {
             var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Company.Create, request);
 
@@ -61,7 +61,7 @@ namespace JobOffersPortal.IntegrationTests
 
         private async Task<string> GetJwtAsync()
         {
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new RegisterRequest()
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new RegisterCommand()
             {
                 Email = "test123@gmail.com",
                 Password = "Qwerty!1"

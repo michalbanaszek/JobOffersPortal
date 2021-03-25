@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Application.Common.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -28,26 +29,26 @@ namespace JobOffersPortal.WebUI.Installers
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                  {
-                    {
-                      new OpenApiSecurityScheme()
                       {
-                          Reference = new OpenApiReference
+                        {
+                          new OpenApiSecurityScheme()
                           {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
+                              Reference = new OpenApiReference
+                              {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                              }
+                            },
+                            new List<string>()
                           }
-                        },
-                        new List<string>()
-                      }
-                    });
+                        });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddSwaggerExamplesFromAssemblyOf<Startup>();
+            services.AddSwaggerExamplesFromAssemblyOf<Startup>();        
         }
     }
 }

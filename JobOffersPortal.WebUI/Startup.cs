@@ -1,16 +1,17 @@
-using JobOffersPortal.Contracts.HealthChecks;
+using Application;
+using Application.HealthChecks;
+using Infrastructure.DependencyInjections;
+using Infrastructure.Options;
 using JobOffersPortal.WebUI.Installers;
-using JobOffersPortal.WebUI.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using System;
+using System.IO;
 using System.Linq;
 
 namespace JobOffersPortal.WebUI
@@ -27,13 +28,9 @@ namespace JobOffersPortal.WebUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplication();
+            services.AddInfrastructure(Configuration);
             services.InstallServicesInAssembly(Configuration);
-            services.AddAutoMapper(typeof(Startup));
-
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

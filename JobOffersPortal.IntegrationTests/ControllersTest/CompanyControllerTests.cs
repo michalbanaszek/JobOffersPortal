@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
-using JobOffersPortal.Contracts.Contracts.Responses;
+﻿using Application;
+using Application.Companies.Commands.CreateCompany;
+using Application.Companies.Commands.UpdateCompany;
+using Application.Companies.Queries.GetCompanies;
+using Application.Response;
+using FluentAssertions;
 using JobOffersPortal.WebUI;
-using JobOffersPortal.WebUI.Contracts.Requests;
-using JobOffersPortal.WebUI.Contracts.Responses;
-using JobOffersPortal.WebUI.Domain;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -26,7 +26,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<PagedResponse<Company>>()).Data.Should().BeEmpty();
+            (await response.Content.ReadAsAsync<PagedResponse<CompanyDto>>()).Data.Should().BeEmpty();
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
         {
             // Arrange
             await AuthenticateAsync();
-            var createdCompany = await CreateCompanyAsync(new CreateCompanyRequest() { Name = "Test Company" });
+            var createdCompany = await CreateCompanyAsync(new CreateCompanyCommand() { Name = "Test Company" });
 
             // Act
             var response = await _httpClient.GetAsync(ApiRoutes.Company.Get.Replace("{id}", createdCompany.Data.Id));
@@ -51,8 +51,8 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
         {
             // Arrange
             await AuthenticateAsync();
-            var createdCompany = await CreateCompanyAsync(new CreateCompanyRequest() { Name = "Test Company" });
-            var updatedCompany = new UpdateCompanyRequest()
+            var createdCompany = await CreateCompanyAsync(new CreateCompanyCommand() { Name = "Test Company" });
+            var updatedCompany = new UpdateCompanyCommand()
             {
                 Name = "Updated Company"
             };
@@ -72,7 +72,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
         {
             // Arrange
             await AuthenticateAsync();
-            var createdCompany = new CreateCompanyRequest() { Name = "Test Company" };
+            var createdCompany = new CreateCompanyCommand() { Name = "Test Company" };
          
             // Act
             var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Company.Create, createdCompany);
@@ -88,7 +88,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
         {
             // Arrange
             await AuthenticateAsync();
-            var createdCompanyRequest = new CreateCompanyRequest() { Name = "Test Company" };
+            var createdCompanyRequest = new CreateCompanyCommand() { Name = "Test Company" };
             var createdCompanyResponse = await CreateCompanyAsync(createdCompanyRequest);
 
             // Act

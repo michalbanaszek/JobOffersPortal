@@ -1,130 +1,112 @@
-﻿using AutoMapper;
-using JobOffersPortal.Contracts.Contracts.Queries;
-using JobOffersPortal.Contracts.Contracts.Responses;
-using JobOffersPortal.WebUI.Cache;
-using JobOffersPortal.WebUI.Contracts.Requests;
-using JobOffersPortal.WebUI.Contracts.Responses;
-using JobOffersPortal.WebUI.Domain;
-using JobOffersPortal.WebUI.Extensions;
-using JobOffersPortal.WebUI.Helpers;
-using JobOffersPortal.WebUI.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Application.Common.Models;
+using Application.Companies.Commands.CreateCompany;
+using Application.Companies.Commands.DeleteCompany;
+using Application.Companies.Commands.UpdateCompany;
+using Application.Companies.Queries.GetCompanies;
+using Application.Companies.Queries.GetCompany;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
+using WebUI;
+using WebUI.Controllers;
+using WebUI.Filters.Cache;
 
 namespace JobOffersPortal.WebUI.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    [ApiController]
-    public class CompanyController : ControllerBase
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public class CompanyController : ApiControllerBase
     {
-        private readonly ICompanyService _companyService;
-        private readonly IMapper _mapper;
-        private readonly IUriCompanyService _companyUriService;
-
-        public CompanyController(ICompanyService companyService, IMapper mapper, IUriCompanyService companyUriService)
-        {
-            _companyService = companyService;
-            _mapper = mapper;
-            _companyUriService = companyUriService;
-        }
-
-        [HttpGet(ApiRoutes.Company.GetAll)]
+        /// <summary>
+        /// Get list of items in the system
+        /// </summary>
+        /// <response code="200">Get list of items in the system</response>       
+        [HttpGet(ApiRoutes.CompanyRoute.GetCompanies)]       
+        [ProducesResponseType(StatusCodes.Status200OK)]      
         [Cached(50)]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllByFilterQuery query, [FromQuery] PaginationQuery paginationQuery)
+        public async Task<ActionResult<PaginatedList<CompanyVm>>> GetAll([FromQuery] GetCompaniesWithPaginationQuery query)
         {
-            var paginationFilter = _mapper.Map<PaginationFilter>(paginationQuery);
-            var filter = _mapper.Map<GetAllFilter>(query);
+            var response = await Mediator.Send(query);
 
-            var companies = await _companyService.GetAllIncludedAsync(filter, paginationFilter);
-
-            var companiesResponse = _mapper.Map<List<CompanyResponse>>(companies);
-
-            if (paginationFilter == null || paginationFilter.PageNumber < 1 || paginationFilter.PageSize < 1)
-            {
-                return Ok(new PagedResponse<CompanyResponse>(companiesResponse));
-            }
-
-            var paginationResponse = PaginationHelpers.CreatePaginatedResponse(_companyUriService, paginationFilter, companiesResponse);
-
-            return Ok(paginationResponse);
-        }
-
-        [HttpGet(ApiRoutes.Company.Get)]
-        [Cached(50)]
-        public async Task<IActionResult> Get([FromRoute] string id)
-        {
-            var company = await _companyService.GetByIdIncludedAsync(id);
-
-            return company == null ? NotFound() : Ok(new Response<CompanyResponse>(_mapper.Map<CompanyResponse>(company)));
-        }
-
-        [HttpPut(ApiRoutes.Company.Update)]
-        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] UpdateCompanyRequest request)
-        {
-            var userOwnsCompany = await _companyService.UserOwnsEntityAsync(id, HttpContext.GetUserId());
-
-            if (!userOwnsCompany)
-            {
-                return BadRequest(new { error = "You are not a owner this company entity." });
-            }
-
-            var company = await _companyService.GetByIdIncludedAsync(id);
-
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            _mapper.Map(request, company);
-
-            var updated = await _companyService.UpdateAsync(company);
-
-            return updated == false ? NotFound() : Ok(new Response<CompanyResponse>(_mapper.Map<CompanyResponse>(company)));
+            return Ok(response);
         }
 
         /// <summary>
-        /// Creates a company in the system
+        /// Get item in the system
         /// </summary>
-        /// <response code="201">Creates a company in the system</response>
-        /// <response code="400">Unable to create the job offer due to validation error</response>      
-        [ProducesResponseType(typeof(CompanyResponse), 201)]
-        [ProducesResponseType(typeof(ErrorResponse), 400)]
-        [HttpPost(ApiRoutes.Company.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateCompanyRequest request)
+        /// <response code="200">Get item in the system</response>   
+        /// <response code="404">Not found item</response>    
+        [HttpGet(ApiRoutes.CompanyRoute.Get)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cached(50)]
+        public async Task<ActionResult<CompanyVm>> Get([FromRoute] string id)
         {
-            var company = _mapper.Map<Company>(request);
-            company.UserId = HttpContext.GetUserId();
+            var response = await Mediator.Send(new GetCompanyQuery() { Id = id });          
 
-            var created = await _companyService.CreateAsync(company);
-
-            if (!created)
-            {
-                return BadRequest(new ErrorResponse() { Errors = new List<ErrorModel>() { new ErrorModel() { Message = "Unable to create company" } } });
-            }
-
-            var locationUri = _companyUriService.GetCompanyUri(company.Id.ToString());
-
-            return Created(locationUri, new Response<CompanyResponse>(_mapper.Map<CompanyResponse>(company)));
+            return Ok(response);
         }
 
-        [HttpDelete(ApiRoutes.Company.Delete)]
-        public async Task<IActionResult> Delete([FromRoute] string id)
+        /// <summary>
+        /// Creates a item in the system
+        /// </summary>
+        /// <response code="201">Creates a item in the system</response>
+        /// <response code="400">Unable to create the item due to validation error</response>      
+        [HttpPost(ApiRoutes.CompanyRoute.Create)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<(Uri, string)>> Create([FromBody] CreateCompanyCommand command)
         {
-            var userOwnsCompany = await _companyService.UserOwnsEntityAsync(id, HttpContext.GetUserId());
-
-            if (!userOwnsCompany)
+            try
             {
-                return BadRequest(new { error = "You are not a owner this company entity." });
+                var response = await Mediator.Send(command);
+
+                return Created(response.Item1, response.Item2);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Updates a item in the system
+        /// </summary>
+        /// <response code="200">Updates a item in the system</response>
+        /// <response code="400">User own for this entity is diffrent.</response>
+        /// <response code="404">Not found item</response>    
+        [HttpPut(ApiRoutes.CompanyRoute.Update)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<string>> Update([FromRoute] string id, [FromBody] UpdateCompanyCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
             }
 
-            var company = await _companyService.DeleteAsync(id);
+            var response = await Mediator.Send(command);
 
-            return company == false ? NotFound() : NoContent();
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Deletes a item in the system
+        /// </summary>
+        /// <response code="201">Deletes a item in the system</response>
+        /// <response code="400">User own for this entity is diffrent.</response>
+        /// <response code="404">Not found item</response>  
+        [HttpDelete(ApiRoutes.CompanyRoute.Delete)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Delete([FromRoute] string id)
+        {
+            await Mediator.Send(new DeleteCompanyCommand() { Id = id });
+
+            return NoContent();
         }
     }
 }
