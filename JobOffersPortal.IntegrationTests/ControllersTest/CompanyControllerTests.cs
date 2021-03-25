@@ -1,10 +1,10 @@
 ﻿using Application;
+using Application.Common.Models;
 using Application.Companies.Commands.CreateCompany;
 using Application.Companies.Commands.UpdateCompany;
 using Application.Companies.Queries.GetCompanies;
-using Application.Response;
+using Application.Companies.Queries.GetCompany;
 using FluentAssertions;
-using JobOffersPortal.WebUI;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -22,11 +22,11 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
             await AuthenticateAsync();
 
             // Act
-            var response = await _httpClient.GetAsync(ApiRoutes.Company.GetAll);
+            var response = await _httpClient.GetAsync(ApiRoutes.CompanyRoute.GetAll);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<PagedResponse<CompanyDto>>()).Data.Should().BeEmpty();
+            (await response.Content.ReadAsAsync<PaginatedList<GetCompaniesWithPaginationQuery>>()).Items.Should().BeEmpty();
         }
 
         [Fact]
@@ -37,13 +37,12 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
             var createdCompany = await CreateCompanyAsync(new CreateCompanyCommand() { Name = "Test Company" });
 
             // Act
-            var response = await _httpClient.GetAsync(ApiRoutes.Company.Get.Replace("{id}", createdCompany.Data.Id));
+            var response = await _httpClient.GetAsync(ApiRoutes.CompanyRoute.Get.Replace("{id}", createdCompany));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var returnedCompany = await response.Content.ReadAsAsync<Response<CompanyResponse>>();
-            returnedCompany.Data.Id.Should().Be(createdCompany.Data.Id);
-            returnedCompany.Data.Name.Should().Be("Test Company");
+            var returnedCompany = await response.Content.ReadAsAsync<GetCompanyQuery>();
+            returnedCompany.Id.Should().Be(createdCompany);           
         }
 
         [Fact]
@@ -54,17 +53,17 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
             var createdCompany = await CreateCompanyAsync(new CreateCompanyCommand() { Name = "Test Company" });
             var updatedCompany = new UpdateCompanyCommand()
             {
+                Id = createdCompany,
                 Name = "Updated Company"
             };
 
             // Act
-            var response = await _httpClient.PutAsJsonAsync(ApiRoutes.Company.Update.Replace("{id}", createdCompany.Data.Id), updatedCompany);
+            var response = await _httpClient.PutAsJsonAsync(ApiRoutes.CompanyRoute.Update.Replace("{id}", createdCompany), updatedCompany);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var returnedCompany = await response.Content.ReadAsAsync<Response<CompanyResponse>>();
-            returnedCompany.Data.Id.Should().Be(createdCompany.Data.Id);
-            returnedCompany.Data.Name.Should().Be(updatedCompany.Name);
+            var returnedCompany = await response.Content.ReadAsAsync<string>();
+            returnedCompany.Should().Be(createdCompany);       
         }
 
         [Fact]
@@ -75,12 +74,11 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
             var createdCompany = new CreateCompanyCommand() { Name = "Test Company" };
          
             // Act
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Company.Create, createdCompany);
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.CompanyRoute.Create, createdCompany);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-            var returnedCompany = await response.Content.ReadAsAsync<Response<CompanyResponse>>();
-            returnedCompany.Data.Name.Should().Be(createdCompany.Name);
+            var id = await response.Content.ReadAsAsync<string>();          
         }
 
         [Fact]
@@ -92,7 +90,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
             var createdCompanyResponse = await CreateCompanyAsync(createdCompanyRequest);
 
             // Act
-            var response = await _httpClient.DeleteAsync(ApiRoutes.Company.Delete.Replace("{id}", createdCompanyResponse.Data.Id));
+            var response = await _httpClient.DeleteAsync(ApiRoutes.CompanyRoute.Delete.Replace("{id}", createdCompanyResponse));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);            

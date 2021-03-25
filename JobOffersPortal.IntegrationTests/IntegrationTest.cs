@@ -1,9 +1,9 @@
 ﻿using Application;
 using Application.Companies.Commands.CreateCompany;
 using Application.Identity.Commands;
-using Application.Response;
+using Application.Identity.Response;
+using Infrastructure.Persistence;
 using JobOffersPortal.WebUI;
-using JobOffersPortal.WebUI.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,14 +28,14 @@ namespace JobOffersPortal.IntegrationTests
                 {
                     builder.ConfigureServices(services =>
                     {
-                        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<DataContext>));
+                        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
                         if (descriptor != null)
                         {
                             services.Remove(descriptor);
                         }
 
-                        services.AddDbContext<DataContext>(options =>
+                        services.AddDbContext<ApplicationDbContext>(options =>
                         {
                             options.UseInMemoryDatabase("TestDbInMemory");
                         });
@@ -51,17 +51,17 @@ namespace JobOffersPortal.IntegrationTests
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetJwtAsync());
         }
 
-        protected async Task<Response<CompanyResponse>> CreateCompanyAsync(CreateCompanyCommand request)
+        protected async Task<string> CreateCompanyAsync(CreateCompanyCommand request)
         {
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Company.Create, request);
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.CompanyRoute.Create, request);
 
-            return await response.Content.ReadAsAsync<Response<CompanyResponse>>();
+            return await response.Content.ReadAsAsync<string>();
         }
 
 
         private async Task<string> GetJwtAsync()
         {
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new RegisterCommand()
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.IdentityRoute.Register, new RegisterCommand()
             {
                 Email = "test123@gmail.com",
                 Password = "Qwerty!1"
@@ -76,7 +76,7 @@ namespace JobOffersPortal.IntegrationTests
         public void Dispose()
         {            
                 using var serviceScope = _serviceProvider.CreateScope();
-                var context = serviceScope.ServiceProvider.GetService<DataContext>();
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
                 context.Database.EnsureDeleted();
         }
     }
