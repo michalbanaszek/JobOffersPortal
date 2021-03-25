@@ -7,7 +7,7 @@ Use these instructions to get the project up and running
 ### Prerequisites
 You will need the following tools:
 
-* [Visual Studio Code](https://code.visualstudio.com/)
+* [Visual Studio](https://visualstudio.microsoft.com/pl/)
 * [.NET Core SDK 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 ### Setup
