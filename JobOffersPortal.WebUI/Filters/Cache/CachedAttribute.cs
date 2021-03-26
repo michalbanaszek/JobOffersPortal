@@ -30,10 +30,10 @@ namespace WebUI.Filters.Cache
                 return;
             }
 
-            var cacheService = context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
+            var cacheService = context.HttpContext.RequestServices.GetRequiredService<ICacheService>();
 
             var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
-            var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
+            var cachedResponse = await cacheService.GetCacheValueAsync(cacheKey);
 
             if (!string.IsNullOrEmpty(cachedResponse))
             {
@@ -52,7 +52,7 @@ namespace WebUI.Filters.Cache
 
             if (executedContext.Result is OkObjectResult okObjectResult)
             {
-                await cacheService.SetCacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
+                await cacheService.SetCacheValueAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
             }
         }
 

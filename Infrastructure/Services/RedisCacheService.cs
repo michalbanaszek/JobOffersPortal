@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class ResponseCacheService : IResponseCacheService
+    public class RedisCacheService : ICacheService
     {
         private readonly IDistributedCache _distributedCache;
 
-        public ResponseCacheService(IDistributedCache distributedCache)
+        public RedisCacheService(IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
         }
 
-        public async Task SetCacheResponseAsync(string cacheKey, object response, TimeSpan timeToLive)
+        public async Task SetCacheValueAsync(string cacheKey, object response, TimeSpan timeToLive)
         {
             if (response == null)
             {
@@ -30,7 +30,7 @@ namespace Infrastructure.Services
             });
         }
 
-        public async Task<string> GetCachedResponseAsync(string cacheKey)
+        public async Task<string> GetCacheValueAsync(string cacheKey)
         {
             var cachedResponse = await _distributedCache.GetStringAsync(cacheKey);
 

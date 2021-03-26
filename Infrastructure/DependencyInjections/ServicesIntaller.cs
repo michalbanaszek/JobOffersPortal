@@ -16,6 +16,8 @@ namespace Infrastructure.DependencyInjections
 
             services.AddScoped<IJobOfferService, JobOfferService>();
 
+            services.AddSingleton<ICacheService, RedisCacheService>();
+
             services.AddTransient<IDateTime, DateTimeService>();
 
             services.AddScoped<IIdentityService, IdentityService>();
