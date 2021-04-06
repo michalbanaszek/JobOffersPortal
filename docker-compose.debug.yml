@@ -1,0 +1,28 @@
+version: '3'
+
+services: 
+ main-api:  
+  image: biaaly13/jobsapi
+  build:
+   context: .
+   dockerfile: JobOffersPortal.WebUI/Dockerfile   
+  environment:
+     - ASPNETCORE_URLS=https://+;http://+
+     - ASPNETCORE_HTTPS_PORTS=8001    
+     - ASPNETCORE_ENVIRONMENT=Development  
+  volumes:
+     - ${APPDATA}\Microsoft\UserSecrets\:/root/.microsoft/usersecrets
+     - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
+  ports:
+    - 8000:80
+    - 8001:443
+  networks:
+   - local-network  
+
+   redis:
+    image: bitnami/redis:latest
+    container_name: redis-master-container
+    environment:  
+     - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+     - 6379:6379 

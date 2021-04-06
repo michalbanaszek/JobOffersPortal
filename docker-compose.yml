@@ -1,15 +1,17 @@
 version: '3'
-
 networks:
- localnetwork:
-  name: localnetwork
- redisnetwork:
-  name: redisnetwork
+  local-network:
+    name: local-network
+  redis-network:
+    name: redis-network
+  grafana-network:
+    name: grafana-network
 
 services:
- mssqllocal:
+ sql-microsoft:
   image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
-  container_name: mssqllocalcontainer
+  container_name: sql-microsoft-container
+  restart: on-failure
   environment:
    - ACCEPT_EULA=Y
    - MSSQL_SA_PASSWORD=Qwerty!1
@@ -17,25 +19,86 @@ services:
   ports:
    - 1431:1433
   networks:
-   - localnetwork
+   - local-network
 
  main-api:  
-  image: biaaly13/joboffersapi
+  image: biaaly13/jobsapi
+  container_name: api-container
+  restart: on-failure
   build:
    context: .
    dockerfile: JobOffersPortal.WebUI/Dockerfile 
+  environment:
+     - ASPNETCORE_URLS=https://+;http://+
+     - ASPNETCORE_HTTPS_PORTS=8001    
+     - ASPNETCORE_ENVIRONMENT=Development  
+  volumes:
+     - ${APPDATA}\Microsoft\UserSecrets\:/root/.microsoft/usersecrets
+     - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
   ports:
-   - 8080:80
+    - 8000:80
+    - 8001:443
   networks:
-   - localnetwork
-   - redisnetwork
+   - local-network
+   - redis-network
   depends_on:
-   - mssqllocal
+   - sql-microsoft  
+   - redis-master
+   - redis-replica
+   - prometheus
 
- redis:
-  image: redis
-  container_name: redis
+ redis-master:
+  image: bitnami/redis:latest
+  container_name: redis-master-container
+  restart: on-failure
+  environment:  
+   - REDIS_REPLICATION_MODE=master
+   - ALLOW_EMPTY_PASSWORD=yes 
   ports:
-   - 6379:6379
+   - 6380:6379
   networks: 
-   - redisnetwork
+   - redis-network
+
+ redis-replica:
+  image: bitnami/redis:latest
+  container_name: redis-replica-container
+  restart: on-failure
+  links:
+   - redis-master:master
+  environment:
+   - REDIS_REPLICATION_MODE=slave
+   - REDIS_MASTER_HOST=redis-master
+   - REDIS_MASTER_PORT_NUMBER=6379 
+   - ALLOW_EMPTY_PASSWORD=yes
+  ports:
+   - 6381:6379 
+  depends_on:
+   - redis-master
+  networks: 
+   - redis-network
+
+ prometheus:
+  image: prom/prometheus
+  container_name: prometheus-container
+  restart: on-failure 
+  ports: 
+   - '9090:9090'
+  networks: 
+   - local-network
+   - grafana-network
+  volumes:
+   - ${USERPROFILE}\prometheus\prometheus.yml:/etc/prometheus/prometheus.yml
+  
+ grafana:
+  image: grafana/grafana
+  ports:
+   - '3000:3000'
+  container_name: grafana-container
+  restart: on-failure  
+  networks:
+   - grafana-network
+  depends_on:
+   - prometheus
+  
+
+
