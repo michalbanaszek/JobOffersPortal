@@ -9,6 +9,9 @@ namespace Application.Common.Interfaces
     {
         DbSet<Company> Companies { get; set; }
         DbSet<JobOffer> JobOffers { get; set; }
+        DbSet<JobOfferProposition> JobOfferPropositions { get; set; }
+        DbSet<JobOfferRequirement> JobOfferRequirements { get; set; }
+        DbSet<JobOfferSkill> JobOfferSkills { get; set; }
         DbSet<RefreshToken> RefreshTokens { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
