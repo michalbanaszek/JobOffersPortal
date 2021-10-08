@@ -261,5 +261,6 @@ __pycache__/
 *.pyc
 
 # Docker
-**/.env*
-**/docker-compose*
+**/.env.prod
+**/docker-compose.prod.yml
+**/Dockerfile.prod

@@ -8,10 +8,8 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     container_name: sql-microsoft-container
     restart: on-failure
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Qwerty!1
-      - MSSQL_PID=Express
+    env_file:
+      - ./.env.local
     ports:
       - 1431:1433
     networks:
@@ -25,12 +23,17 @@ services:
       dockerfile: JobOffersPortal.WebUI/Dockerfile.dev
     restart: on-failure
     environment:
-      - ASPNETCORE_URLS=http://+
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty!2
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/WebUI.pfx
     volumes:
       - ${APPDATA}\Microsoft\UserSecrets\29b8f3a9-83f6-4492-aa39-028c2cf4529b\:/root/.microsoft/usersecrets/29b8f3a9-83f6-4492-aa39-028c2cf4529b
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/:ro
     ports:
       - 8080:80
+      - 8081:443
     networks:
       - local-network
     depends_on:
