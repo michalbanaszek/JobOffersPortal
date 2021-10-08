@@ -12,35 +12,35 @@ using System.Threading.Tasks;
 
 namespace Application.JobOffers.Queries.GetListJobOffers
 {
-    public class GetJobOffersWithPaginationQuery : IRequest<PaginatedList<JobOfferVm>>
+    public class GetJobOffersWithPaginationQuery : IRequest<PaginatedList<JobOfferViewModel>>
     {
         public string CompanyId { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 5;
     }
 
-    public class GetListJobOffersQueryHandler : IRequestHandler<GetJobOffersWithPaginationQuery, PaginatedList<JobOfferVm>>
+    public class GetJobOffersWithPaginationQueryHandler : IRequestHandler<GetJobOffersWithPaginationQuery, PaginatedList<JobOfferViewModel>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IUriService _uriService;
 
-        public GetListJobOffersQueryHandler(IMapper mapper, IApplicationDbContext context, IUriService uriService)
+        public GetJobOffersWithPaginationQueryHandler(IMapper mapper, IApplicationDbContext context, IUriService uriService)
         {
             _mapper = mapper;
             _context = context;
             _uriService = uriService;
         }
 
-        public async Task<PaginatedList<JobOfferVm>> Handle(GetJobOffersWithPaginationQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedList<JobOfferViewModel>> Handle(GetJobOffersWithPaginationQuery request, CancellationToken cancellationToken)
         {
             return await _context.JobOffers
                                  .Include(x => x.Requirements)
                                  .Include(x => x.Skills)
                                  .Include(x => x.Propositions)
                                  .Where(x => x.CompanyId == request.CompanyId)
-                                 .OrderBy(x => x.Salary)
-                                 .ProjectTo<JobOfferVm>(_mapper.ConfigurationProvider)
+                                 .OrderBy(x => !x.IsAvailable)
+                                 .ProjectTo<JobOfferViewModel>(_mapper.ConfigurationProvider)
                                  .PaginatedListAsync(request.PageNumber, request.PageSize, _uriService); 
         } 
            

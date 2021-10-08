@@ -11,7 +11,7 @@ namespace Application.Companies.Queries.GetCompany
         public string Id { get; set; }
         public string Name { get; set; }
 
-        public IList<JobOfferVm> JobOffers { get; set; } = new List<JobOfferVm>();
+        public IList<JobOfferViewModel> JobOffers { get; set; } = new List<JobOfferViewModel>();
 
         public void Mapping(Profile profile)
         {

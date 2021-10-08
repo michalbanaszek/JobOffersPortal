@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Application.JobOffers.Queries.GetJobOffer
 {
-    public class GetJobOfferQuery : IRequest<JobOfferVm>
+    public class GetJobOfferQuery : IRequest<JobOfferViewModel>
     {
         public string Id { get; set; }
     }
 
-    public class GetJobOfferQueryHandler : IRequestHandler<GetJobOfferQuery, JobOfferVm>
+    public class GetJobOfferQueryHandler : IRequestHandler<GetJobOfferQuery, JobOfferViewModel>
     {
         private readonly IMapper _mapper;
         private readonly ILogger<GetJobOfferQueryHandler> _logger;
@@ -27,7 +27,7 @@ namespace Application.JobOffers.Queries.GetJobOffer
             _context = context;
         }
 
-        public async Task<JobOfferVm> Handle(GetJobOfferQuery request, CancellationToken cancellationToken)
+        public async Task<JobOfferViewModel> Handle(GetJobOfferQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.JobOffers
                                        .Include(x => x.Requirements)
@@ -42,7 +42,7 @@ namespace Application.JobOffers.Queries.GetJobOffer
                 throw new NotFoundException();
             }
 
-            return _mapper.Map<JobOfferVm>(entity);
+            return _mapper.Map<JobOfferViewModel>(entity);
         }
     }
 }

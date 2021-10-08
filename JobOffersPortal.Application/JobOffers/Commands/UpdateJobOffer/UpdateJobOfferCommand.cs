@@ -18,7 +18,10 @@ namespace Application.JobOffers.Commands.UpdateJobOffer
 
         public string Position { get; set; }
 
-        public int Salary { get; set; }
+        public string Salary { get; set; }
+
+        public bool IsAvailable { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
 
         public void Mapping(Profile profile)
         {

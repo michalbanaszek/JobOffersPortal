@@ -18,9 +18,10 @@ namespace Application.JobOffers.Commands.CreateJobOffer
 
         public string Position { get; set; }
 
-        public int Salary { get; set; }
+        public string Salary { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
+        public bool IsAvailable { get; set; } = false;
 
         public IEnumerable<string> Requirements { get; set; } = new List<string>();
 

@@ -4,6 +4,7 @@ using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOffer;
 using Application.JobOffers.Queries.GetJobOffer;
 using Application.JobOffers.Queries.GetListJobOffers;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,6 +17,7 @@ namespace JobOffersPortal.WebUI.Controllers
 {
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [EnableCors("CorsPolicy")]
     public class JobOfferController : ApiControllerBase
     {
         /// <summary>
@@ -25,7 +27,7 @@ namespace JobOffersPortal.WebUI.Controllers
         [HttpGet(ApiRoutes.JobOfferRoute.GetJobOffers)]
         [ProducesResponseType(StatusCodes.Status200OK)]       
         [Cached(50)]
-        public async Task<ActionResult<PaginatedList<JobOfferVm>>> GetAll([FromQuery] GetJobOffersWithPaginationQuery query)
+        public async Task<ActionResult<PaginatedList<JobOfferViewModel>>> GetAll([FromQuery] GetJobOffersWithPaginationQuery query)
         {
             var response = await Mediator.Send(query);
 
@@ -41,7 +43,7 @@ namespace JobOffersPortal.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Cached(50)]
-        public async Task<ActionResult<JobOfferVm>> Get([FromRoute] string id)
+        public async Task<ActionResult<JobOfferViewModel>> Get([FromRoute] string id)
         {
             var response = await Mediator.Send(new GetJobOfferQuery() { Id = id });            
 
