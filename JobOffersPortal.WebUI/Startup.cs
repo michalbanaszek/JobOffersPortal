@@ -30,12 +30,15 @@ namespace JobOffersPortal.WebUI
         {
             services.AddApplication();
             services.AddInfrastructure(Configuration);
-            services.InstallServicesInAssembly(Configuration);         
+            services.InstallServicesInAssembly(Configuration);
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             var swaggerOptions = new SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
 
@@ -70,9 +73,16 @@ namespace JobOffersPortal.WebUI
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();            
+            app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseCors(x => x
+             .AllowAnyOrigin()
+             .AllowAnyMethod()
+             .AllowAnyHeader()
+             .SetIsOriginAllowed(origin => true)
+             .AllowCredentials());
 
             app.UseAuthorization();
 
