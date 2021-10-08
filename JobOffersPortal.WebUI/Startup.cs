@@ -78,11 +78,10 @@ namespace JobOffersPortal.WebUI
             app.UseRouting();
 
             app.UseCors(x => x
-             .AllowAnyOrigin()
-             .AllowAnyMethod()
-             .AllowAnyHeader()
-             .SetIsOriginAllowed(origin => true)
-             .AllowCredentials());
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .SetIsOriginAllowed(origin => true) 
+               .AllowCredentials()); 
 
             app.UseAuthorization();
 
