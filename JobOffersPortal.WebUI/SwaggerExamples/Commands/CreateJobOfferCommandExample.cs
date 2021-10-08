@@ -14,7 +14,7 @@ namespace JobOffersPortal.WebUI.SwaggerExamples.Requests
                 Requirements = new string[] { "requirements test 1", "requirements test 2" },
                 Skills = new string[] { "skills test 1", "skills test 2" },
                 Propositions = new string[] { "propositions test 1", "propositions test 2" },
-                Salary = 2000                
+                Salary = "2000-3000"                
             };
         }
     }

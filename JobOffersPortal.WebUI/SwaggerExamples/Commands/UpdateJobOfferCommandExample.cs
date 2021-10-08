@@ -11,7 +11,7 @@ namespace WebUI.SwaggerExamples.Requests
             {            
                 Id = "string",
                 Position = "Position test",              
-                Salary = 2000
+                Salary = "2000-3000"
             };
         }
     }
