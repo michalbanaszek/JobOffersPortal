@@ -13,8 +13,7 @@ namespace JobOffersPortal.WebUI.Validators.JobOffer
 
             RuleFor(x => x.Salary)
                 .NotEmpty()
-                .NotNull()
-                .GreaterThan(999);
+                .NotNull();             
         }
     }
 }
