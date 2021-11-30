@@ -1,8 +1,8 @@
 ﻿using Application;
-using Application.Companies.Commands.CreateCompany;
 using Application.Identity.Commands;
 using Application.Identity.Response;
 using Infrastructure.Persistence;
+using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.WebUI;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;

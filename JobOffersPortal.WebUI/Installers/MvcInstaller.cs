@@ -1,6 +1,4 @@
 ﻿using Application.Common.Interfaces;
-using FluentValidation.AspNetCore;
-using JobOffersPortal.WebUI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +21,7 @@ namespace WebUI.Installers
             });
 
             services.AddControllersWithViews(options =>
-                options.Filters.Add<ApiExceptionFilterAttribute>())
-                    .AddFluentValidation();
+                options.Filters.Add<ApiExceptionFilterAttribute>());                   
         }
     }
 }

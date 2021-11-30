@@ -17,6 +17,7 @@ namespace Domain.Entities
         public string Salary { get; set; }
 
         public DateTime Date { get; set; }
+
         public bool IsAvailable { get; set; }
 
         public List<JobOfferRequirement> Requirements { get; set; } = new List<JobOfferRequirement>();

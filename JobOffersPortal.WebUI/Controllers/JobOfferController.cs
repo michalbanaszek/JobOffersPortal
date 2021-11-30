@@ -1,9 +1,9 @@
 ﻿using Application.Common.Models;
 using Application.JobOffers.Commands.CreateJobOffer;
-using Application.JobOffers.Commands.DeleteJobOffer;
-using Application.JobOffers.Commands.UpdateJobOffer;
-using Application.JobOffers.Queries.GetJobOffer;
-using Application.JobOffers.Queries.GetListJobOffers;
+using JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffer;
+using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
+using JobOffersPortal.Application.Functions.JobOffers.Queries.GetJobOfferDetail;
+using JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +45,7 @@ namespace JobOffersPortal.WebUI.Controllers
         [Cached(50)]
         public async Task<ActionResult<JobOfferViewModel>> Get([FromRoute] string id)
         {
-            var response = await Mediator.Send(new GetJobOfferQuery() { Id = id });            
+            var response = await Mediator.Send(new GetJobOfferDetailQuery() { Id = id });            
 
             return Ok(response);
         }
@@ -64,7 +64,7 @@ namespace JobOffersPortal.WebUI.Controllers
             {
                 var response = await Mediator.Send(command);
 
-                return Created(response.Item1, response.Item2);
+                return Created(response.Item1, response.Item2.Id);
             }
             catch (Exception)
             {
@@ -97,7 +97,7 @@ namespace JobOffersPortal.WebUI.Controllers
         /// <summary>
         /// Deletes a item in the system
         /// </summary>
-        /// <response code="201">Deletes a item in the system</response>
+        /// <response code="204">Deletes a item in the system</response>
         /// <response code="400">User own for this entity is diffrent.</response>
         /// <response code="404">Not found item</response>  
         [HttpDelete(ApiRoutes.JobOfferRoute.Delete)]

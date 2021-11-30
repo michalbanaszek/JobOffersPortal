@@ -1,10 +1,10 @@
 ﻿using Application;
 using Application.Common.Models;
-using Application.Companies.Commands.CreateCompany;
-using Application.Companies.Commands.UpdateCompany;
-using Application.Companies.Queries.GetCompanies;
-using Application.Companies.Queries.GetCompany;
 using FluentAssertions;
+using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
+using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
+using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
+using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -26,7 +26,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<PaginatedList<GetCompaniesWithPaginationQuery>>()).Items.Should().BeEmpty();
+            (await response.Content.ReadAsAsync<PaginatedList<GetCompaniesWithJobOffersListWithPaginationQuery>>()).Items.Should().BeEmpty();
         }
 
         [Fact]

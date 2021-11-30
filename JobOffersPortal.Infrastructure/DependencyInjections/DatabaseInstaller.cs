@@ -23,7 +23,7 @@ namespace Infrastructure.DependencyInjections
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
-                    options.UseSqlServer(configuration.GetConnectionString("DockerConnection"), x =>
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), x =>
                     {
                         x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
                     });

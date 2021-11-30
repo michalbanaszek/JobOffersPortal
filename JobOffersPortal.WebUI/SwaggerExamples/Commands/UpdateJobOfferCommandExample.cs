@@ -1,4 +1,4 @@
-﻿using Application.JobOffers.Commands.UpdateJobOffer;
+﻿using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace WebUI.SwaggerExamples.Requests
