@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.WebUI", "JobOffersPortal.WebUI\JobOffersPortal.WebUI.csproj", "{716DDDAC-CBF8-4102-B788-E1BEEE295CDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.API", "JobOffersPortal.WebUI\JobOffersPortal.API.csproj", "{716DDDAC-CBF8-4102-B788-E1BEEE295CDB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{57D041CA-7D2E-4987-8433-6097267FDD7E}"
 EndProject
@@ -11,17 +11,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DF2EAFCE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.IntegrationTests", "JobOffersPortal.IntegrationTests\JobOffersPortal.IntegrationTests.csproj", "{4393448D-26E2-4165-B670-00A6A6A662A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal..Domain", "JobOffersPortal.Domain\JobOffersPortal..Domain.csproj", "{FB52AD37-8BBD-4820-938F-21A63514DE6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Domain", "JobOffersPortal.Domain\JobOffersPortal.Domain.csproj", "{FB52AD37-8BBD-4820-938F-21A63514DE6C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Application", "JobOffersPortal.Application\JobOffersPortal.Application.csproj", "{25A74701-8492-4CCC-BCCB-D7B9CFEBCE5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Infrastructure", "JobOffersPortal.Infrastructure\JobOffersPortal.Infrastructure.csproj", "{42122D7A-8289-4D7A-93CC-C6B83C407357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Persistance.EF", "JobOffersPortal.Infrastructure\JobOffersPortal.Persistance.EF.csproj", "{42122D7A-8289-4D7A-93CC-C6B83C407357}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{AB5A0F2D-FD17-4D72-86F7-28E14BF8C11D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8E9E8C41-8875-450F-A738-C6EDAC775C39}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructuree", "Infrastructuree", "{3D78851F-55F2-474D-B026-85BBA1E55B9B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{3D78851F-55F2-474D-B026-85BBA1E55B9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Application.UnitTest", "JobOffersPortal.Application.UnitTest\JobOffersPortal.Application.UnitTest.csproj", "{087F1DC8-ECB7-4AF7-A9F8-0908F1FBCA6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{42122D7A-8289-4D7A-93CC-C6B83C407357}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42122D7A-8289-4D7A-93CC-C6B83C407357}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42122D7A-8289-4D7A-93CC-C6B83C407357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{087F1DC8-ECB7-4AF7-A9F8-0908F1FBCA6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{087F1DC8-ECB7-4AF7-A9F8-0908F1FBCA6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{087F1DC8-ECB7-4AF7-A9F8-0908F1FBCA6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{087F1DC8-ECB7-4AF7-A9F8-0908F1FBCA6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{AB5A0F2D-FD17-4D72-86F7-28E14BF8C11D} = {57D041CA-7D2E-4987-8433-6097267FDD7E}
 		{8E9E8C41-8875-450F-A738-C6EDAC775C39} = {57D041CA-7D2E-4987-8433-6097267FDD7E}
 		{3D78851F-55F2-474D-B026-85BBA1E55B9B} = {57D041CA-7D2E-4987-8433-6097267FDD7E}
+		{087F1DC8-ECB7-4AF7-A9F8-0908F1FBCA6D} = {DF2EAFCE-0378-42AC-874C-A66BB61E8765}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70826AAB-0714-4654-9E78-323657ACBB13}

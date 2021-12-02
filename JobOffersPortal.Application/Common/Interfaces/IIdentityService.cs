@@ -1,7 +1,7 @@
-﻿using Application.Common.Models;
+﻿using JobOffersPortal.Application.Common.Models.Responses;
 using System.Threading.Tasks;
 
-namespace Application.Common.Interfaces
+namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IIdentityService
     {

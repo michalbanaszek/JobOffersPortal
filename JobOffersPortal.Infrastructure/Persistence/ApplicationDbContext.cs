@@ -1,17 +1,16 @@
-﻿using Application.Common.Interfaces;
-using Domain.Common;
-using Domain.Entities;
-using Infrastructure.Identity;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Domain.Common;
+using JobOffersPortal.Domain.Entities;
+using JobOffersPortal.Persistance.EF.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Persistence
+namespace JobOffersPortal.Persistance.EF.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
@@ -19,14 +18,14 @@ namespace Infrastructure.Persistence
         private readonly IDateTime _dateTime;
 
         public ApplicationDbContext() : base()
-        {}
+        { }
 
         public ApplicationDbContext(
-            DbContextOptions options,            
+            DbContextOptions options,
             ICurrentUserService currentUserService,
             IDateTime dateTime) : base(options)
         {
-            _currentUserService = currentUserService;         
+            _currentUserService = currentUserService;
             _dateTime = dateTime;
         }
 
@@ -34,9 +33,9 @@ namespace Infrastructure.Persistence
         public DbSet<JobOffer> JobOffers { get; set; }
         public DbSet<JobOfferProposition> JobOfferPropositions { get; set; }
         public DbSet<JobOfferRequirement> JobOfferRequirements { get; set; }
-        public DbSet<JobOfferSkill> JobOfferSkills { get; set; }     
+        public DbSet<JobOfferSkill> JobOfferSkills { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-     
+
 
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

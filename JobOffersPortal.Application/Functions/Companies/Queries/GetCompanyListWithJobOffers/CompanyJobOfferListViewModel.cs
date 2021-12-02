@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
+namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers
 {
     public class CompanyJobOfferListViewModel
     {

@@ -7,8 +7,10 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
         public UpdateCompanyCommandValidator()
         {
             RuleFor(x => x.Name)
-               .NotEmpty()
-               .Matches("^[a-zA-Z0-9 ]*$");
+                .MinimumLength(2).MaximumLength(30)
+                .WithMessage("{PropertName} Length is beewten 2 and 30")
+                .Matches("^[a-zA-Z0-9 ]*$");
+              
         }
     }
 }

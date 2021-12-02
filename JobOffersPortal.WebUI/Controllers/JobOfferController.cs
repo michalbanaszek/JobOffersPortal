@@ -1,5 +1,7 @@
-﻿using Application.Common.Models;
-using Application.JobOffers.Commands.CreateJobOffer;
+﻿using Application.JobOffers.Commands.CreateJobOffer;
+using JobOffersPortal.API.Filters.Cache;
+using JobOffersPortal.Application;
+using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffer;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
 using JobOffersPortal.Application.Functions.JobOffers.Queries.GetJobOfferDetail;
@@ -9,11 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using WebUI;
-using WebUI.Controllers;
-using WebUI.Filters.Cache;
 
-namespace JobOffersPortal.WebUI.Controllers
+namespace JobOffersPortal.API.Controllers
 {
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -25,7 +24,7 @@ namespace JobOffersPortal.WebUI.Controllers
         /// </summary>
         /// <response code="200">Get list of items in the system</response>       
         [HttpGet(ApiRoutes.JobOfferRoute.GetJobOffers)]
-        [ProducesResponseType(StatusCodes.Status200OK)]       
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Cached(50)]
         public async Task<ActionResult<PaginatedList<JobOfferViewModel>>> GetAll([FromQuery] GetJobOffersWithPaginationQuery query)
         {
@@ -45,7 +44,7 @@ namespace JobOffersPortal.WebUI.Controllers
         [Cached(50)]
         public async Task<ActionResult<JobOfferViewModel>> Get([FromRoute] string id)
         {
-            var response = await Mediator.Send(new GetJobOfferDetailQuery() { Id = id });            
+            var response = await Mediator.Send(new GetJobOfferDetailQuery() { Id = id });
 
             return Ok(response);
         }
@@ -58,13 +57,13 @@ namespace JobOffersPortal.WebUI.Controllers
         [HttpPost(ApiRoutes.JobOfferRoute.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> Create([FromBody] CreateJobOfferCommand command)
+        public async Task<ActionResult> Create([FromBody] CreateJobOfferCommand command)
         {
             try
             {
                 var response = await Mediator.Send(command);
 
-                return Created(response.Item1, response.Item2.Id);
+                return Created(response.Url, response.Id);
             }
             catch (Exception)
             {
@@ -84,7 +83,7 @@ namespace JobOffersPortal.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<string>> Update([FromRoute] string id, [FromBody] UpdateJobOfferCommand command)
         {
-             if (id != command.Id)
+            if (id != command.Id)
             {
                 return BadRequest();
             }

@@ -1,16 +1,22 @@
-﻿using Application.Common.Models;
-using Application.Identity.Commands;
-using Application.Identity.Response;
+﻿using JobOffersPortal.Application;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models.Requests;
+using JobOffersPortal.Application.Common.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebUI;
-using WebUI.Controllers;
 
-namespace JobOffersPortal.WebUI.Controllers
+namespace JobOffersPortal.API.Controllers
 {
-    public class IdentityController : ApiControllerBase
+    public class IdentityController : ControllerBase
     {
+        private readonly IIdentityService _identityService;
+
+        public IdentityController(IIdentityService identityService)
+        {
+            _identityService = identityService;
+        }
+
         /// <summary>
         /// Register user in the system
         /// </summary>
@@ -18,10 +24,10 @@ namespace JobOffersPortal.WebUI.Controllers
         /// <response code="400">Unable to create the user due to validation error</response> 
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
-        [HttpPost(ApiRoutes.IdentityRoute.Register), AllowAnonymous]      
-        public async Task<ActionResult<AuthSuccessResponse>> Register([FromBody] RegisterCommand command)
+        [HttpPost(ApiRoutes.IdentityRoute.Register), AllowAnonymous]
+        public async Task<ActionResult<AuthSuccessResponse>> Register([FromBody] RegisterRequest request)
         {
-           var authResponse = await Mediator.Send(command);
+            var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
 
             return CheckAuthenticationResult(authResponse);
         }
@@ -34,9 +40,9 @@ namespace JobOffersPortal.WebUI.Controllers
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         [HttpPost(ApiRoutes.IdentityRoute.Login), AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var authResponse = await Mediator.Send(command);
+            var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
 
             return CheckAuthenticationResult(authResponse);
         }
@@ -49,9 +55,9 @@ namespace JobOffersPortal.WebUI.Controllers
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         [HttpPost(ApiRoutes.IdentityRoute.FacebookAuth), AllowAnonymous]
-        public async Task<IActionResult> FacebookAuth([FromBody] LoginFacebookCommand command)
+        public async Task<IActionResult> FacebookAuth([FromBody] LoginFacebookRequest request)
         {
-            var authResponse = await Mediator.Send(command);
+            var authResponse = await _identityService.LoginWithFacebookAsync(request.TokenAccess);
 
             return CheckAuthenticationResult(authResponse);
         }
@@ -65,9 +71,9 @@ namespace JobOffersPortal.WebUI.Controllers
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         [HttpPost(ApiRoutes.IdentityRoute.RefreshToken), AllowAnonymous]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
-            var authResponse = await Mediator.Send(command);
+            var authResponse = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
 
             return CheckAuthenticationResult(authResponse);
         }

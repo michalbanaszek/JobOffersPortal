@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Infrastructure.Identity;
+﻿using JobOffersPortal.Domain.Entities;
+using JobOffersPortal.Persistance.EF.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace Infrastructure.Persistence
+namespace JobOffersPortal.Persistance.EF.Persistence
 {
     public class ApplicationDbContextSeed
     {

@@ -18,11 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JobOffersPortal.Domain\JobOffersPortal..Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Functions\Companies\Queries\GetCompanyList\" />
+    <ProjectReference Include="..\JobOffersPortal.Domain\JobOffersPortal.Domain.csproj" />
   </ItemGroup>
 
 </Project>

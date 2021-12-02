@@ -1,4 +1,4 @@
-﻿using Application.Common.Models;
+﻿using JobOffersPortal.Application.Common.Models;
 using MediatR;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers

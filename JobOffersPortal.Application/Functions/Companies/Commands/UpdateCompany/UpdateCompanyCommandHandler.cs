@@ -1,7 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
-using Domain.Entities;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -11,31 +12,29 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
 {
     public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand, string>
     {
-        private readonly ICompanyService _companyService;
-        private readonly IApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly ICompanyRepository _companyRepository;  
         private readonly ICurrentUserService _currentUserService;
         private readonly ILogger<UpdateCompanyCommandHandler> _logger;
+        private readonly IMapper _mapper;
 
-        public UpdateCompanyCommandHandler(ICompanyService companyService, IMapper mapper, ILogger<UpdateCompanyCommandHandler> logger, IApplicationDbContext context, ICurrentUserService currentUserService)
+        public UpdateCompanyCommandHandler(ICompanyRepository companyService, IMapper mapper, ILogger<UpdateCompanyCommandHandler> logger, ICurrentUserService currentUserService)
         {
-            _companyService = companyService;
-            _mapper = mapper;
-            _logger = logger;
-            _context = context;
+            _companyRepository = companyService;          
+            _logger = logger;         
             _currentUserService = currentUserService;
+            _mapper = mapper;
         }
 
         public async Task<string> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Companies.FindAsync(request.Id);
+            var entity = await _companyRepository.GetByIdAsync(request.Id);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(Company), request.Id);
             }
 
-            var userOwns = await _companyService.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
+            var userOwns = await _companyRepository.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
 
             if (!userOwns)
             {
@@ -46,7 +45,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
 
             _mapper.Map(request, entity);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _companyRepository.UpdateAsync(entity);
 
             _logger.LogInformation("Updated Company Id: {0}", request.Id);
 

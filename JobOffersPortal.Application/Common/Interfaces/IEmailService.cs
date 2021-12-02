@@ -1,10 +1,10 @@
-﻿using Application.Emails.Commands;
+﻿using JobOffersPortal.Application.Common.Models.Requests;
 using System.Threading.Tasks;
 
-namespace Application.Common.Interfaces
+namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IEmailService
     {
-        public Task SendEmailAsync(SendEmailCommand command);
+        public Task SendEmailAsync(SendEmailRequest request);
     }
 }

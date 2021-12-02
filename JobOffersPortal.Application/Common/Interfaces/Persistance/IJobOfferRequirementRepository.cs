@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
+﻿using JobOffersPortal.Domain.Entities;
 
 namespace JobOffersPortal.Application.Common.Interfaces.Persistance
 {
-    interface IJobOfferRequirementRepository  : IRepositoryAsync<JobOfferRequirement>
+    public interface IJobOfferRequirementRepository  : IRepositoryAsync<JobOfferRequirement>
     {
     }
 }

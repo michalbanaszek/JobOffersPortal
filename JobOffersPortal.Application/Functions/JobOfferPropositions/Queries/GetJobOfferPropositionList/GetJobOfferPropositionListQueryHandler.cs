@@ -1,7 +1,6 @@
-﻿using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,18 +12,18 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.Get
     {
         private readonly IMapper _mapper;
         private readonly ILogger<GetJobOfferPropositionListQueryHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferPropositionRepository _jobOfferPropositionRepository;
 
-        public GetJobOfferPropositionListQueryHandler(IMapper mapper, ILogger<GetJobOfferPropositionListQueryHandler> logger, IApplicationDbContext context)
+        public GetJobOfferPropositionListQueryHandler(IMapper mapper, ILogger<GetJobOfferPropositionListQueryHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository)
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _jobOfferPropositionRepository = jobOfferPropositionRepository;
         }
 
         public async Task<List<JobOfferPropositionViewModel>> Handle(GetJobOfferPropositionListQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobOfferPropositions.ToListAsync();
+            var entity = await _jobOfferPropositionRepository.GetAllAsync();
 
             return _mapper.Map<List<JobOfferPropositionViewModel>>(entity);
         }

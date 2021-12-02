@@ -13,7 +13,10 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
 
             RuleFor(x => x.Position)
                 .NotEmpty()
-                .NotNull();
+                .NotNull()
+                .MinimumLength(2).MaximumLength(30)
+                .WithMessage("{PropertName} Length is beewten 2 and 30")
+                .Matches("^[a-zA-Z0-9 ]*$");
 
             RuleFor(x => x.Salary)
                 .NotEmpty()

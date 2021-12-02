@@ -1,9 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,22 +13,18 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Queries.GetJobOfferDet
     {
         private readonly IMapper _mapper;
         private readonly ILogger<GetJobOfferDetailQueryHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferRepository _jobOfferRepository;
 
-        public GetJobOfferDetailQueryHandler(IMapper mapper, ILogger<GetJobOfferDetailQueryHandler> logger, IApplicationDbContext context)
+        public GetJobOfferDetailQueryHandler(IMapper mapper, ILogger<GetJobOfferDetailQueryHandler> logger, IJobOfferRepository jobOfferRepository)
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _jobOfferRepository = jobOfferRepository;
         }
 
         public async Task<JobOfferViewModel> Handle(GetJobOfferDetailQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobOffers
-                                       .Include(x => x.Requirements)
-                                       .Include(x => x.Skills)
-                                       .Include(x => x.Propositions)
-                                       .SingleOrDefaultAsync(x => x.Id == request.Id);
+            var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.Id);
 
             if (entity == null)
             {

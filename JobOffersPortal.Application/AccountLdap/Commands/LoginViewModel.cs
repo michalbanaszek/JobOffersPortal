@@ -1,4 +1,4 @@
-﻿namespace Application.AccountLdap.Commands
+﻿namespace JobOffersPortal.Application.AccountLdap.Commands
 {
     public class LoginViewModel
     {

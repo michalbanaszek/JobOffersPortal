@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WebUI.Installers
+namespace JobOffersPortal.API.Installers
 {
     public class MetricsInstaller : IInstaller
     {

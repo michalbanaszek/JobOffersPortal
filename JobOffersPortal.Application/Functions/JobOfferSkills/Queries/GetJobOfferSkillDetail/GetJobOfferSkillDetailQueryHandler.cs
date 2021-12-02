@@ -1,6 +1,6 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -10,12 +10,12 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOff
 {
     public class GetJobOfferSkillDetailQueryHandler : IRequestHandler<GetJobOfferSkillDetailQuery, JobOfferSkillDetailViewModel>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferSkillRepository _jobOfferSkillRepository;
         private readonly IMapper _mapper;
 
-        public GetJobOfferSkillDetailQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetJobOfferSkillDetailQueryHandler(IJobOfferSkillRepository jobOfferSkillRepository, IMapper mapper)
         {
-            _context = context;
+            _jobOfferSkillRepository = jobOfferSkillRepository;
             _mapper = mapper;
         }
 
@@ -26,7 +26,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOff
                 throw new NotFoundException();
             }
 
-            var entities = await _context.JobOfferSkills.FirstOrDefaultAsync(m => m.Id == request.Id);
+            var entities = await _jobOfferSkillRepository.GetByIdAsync(request.Id);
 
             if (entities == null)
             {

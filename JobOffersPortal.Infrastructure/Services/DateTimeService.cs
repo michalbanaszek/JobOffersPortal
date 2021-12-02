@@ -1,7 +1,7 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using System;
 
-namespace Infrastructure.Services
+namespace JobOffersPortal.Persistance.EF.Services
 {
     public class DateTimeService : IDateTime
     {

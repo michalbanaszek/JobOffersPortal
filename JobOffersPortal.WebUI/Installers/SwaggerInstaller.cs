@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace JobOffersPortal.WebUI.Installers
+namespace JobOffersPortal.API.Installers
 {
     public class SwaggerInstaller : IInstaller
     {
@@ -48,7 +48,7 @@ namespace JobOffersPortal.WebUI.Installers
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddSwaggerExamplesFromAssemblyOf<Startup>();        
+            services.AddSwaggerExamplesFromAssemblyOf<Startup>();
         }
     }
 }

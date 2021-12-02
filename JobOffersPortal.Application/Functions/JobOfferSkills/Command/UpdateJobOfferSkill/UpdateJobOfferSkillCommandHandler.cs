@@ -1,11 +1,10 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
-using Domain.Entities;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,13 +14,13 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.UpdateJob
     {
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateJobOfferSkillCommandHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferSkillRepository _jobOfferSkillRepository;
 
-        public UpdateJobOfferSkillCommandHandler(IMapper mapper, ILogger<UpdateJobOfferSkillCommandHandler> logger, IApplicationDbContext context)
+        public UpdateJobOfferSkillCommandHandler(IMapper mapper, ILogger<UpdateJobOfferSkillCommandHandler> logger, IJobOfferSkillRepository jobOfferSkillRepository)
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _jobOfferSkillRepository = jobOfferSkillRepository;
         }
 
         public async Task<Unit> Handle(UpdateJobOfferSkillCommand request, CancellationToken cancellationToken)
@@ -34,9 +33,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.UpdateJob
                     Content = request.Content
                 };
 
-                _context.JobOfferSkills.Update(entity);
-
-                await _context.SaveChangesAsync(cancellationToken);
+                await _jobOfferSkillRepository.UpdateAsync(entity);
 
                 _logger.LogInformation("UpdateJobOfferSkillCommand execuded.");
 
@@ -44,7 +41,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.UpdateJob
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.JobOfferPropositions.Any(e => e.Id == request.Id))
+                if ((await _jobOfferSkillRepository.GetByIdAsync(request.Id)) == null)
                 {
                     _logger.LogWarning("UpdateJobOfferPropositionCommand - NotFoundException execuded.");
 

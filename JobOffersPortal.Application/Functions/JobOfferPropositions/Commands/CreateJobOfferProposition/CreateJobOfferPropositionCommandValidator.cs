@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using FluentValidation;
+﻿using FluentValidation;
+using JobOffersPortal.Domain.Entities;
 
 namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.CreateJobOfferProposition
 {
@@ -8,8 +8,11 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
         public CreateJobOfferPropositionCommandValidator()
         {
             RuleFor(x => x.Content)
-             .NotEmpty()
-             .Matches("^[a-zA-Z0-9 ]*$");
+                .NotEmpty()
+                .NotNull()
+                .MinimumLength(2).MaximumLength(50)
+                .WithMessage("{PropertName} Length is beewten 2 and 50")
+                .Matches("^[a-zA-Z0-9 ]*$");
         }
     }
 }

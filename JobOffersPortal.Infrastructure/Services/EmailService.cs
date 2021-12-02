@@ -1,14 +1,13 @@
-﻿using Application.Common.Interfaces;
-using Application.Emails.Commands;
-using Infrastructure.Options;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models.Requests;
+using JobOffersPortal.Persistance.EF.Options;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace JobOffersPortal.Persistance.EF.Services
 {
     public class EmailService : IEmailService
     {
@@ -18,7 +17,7 @@ namespace Infrastructure.Services
             _emailOptions = emailOptions.Value;
         }
 
-        public async Task SendEmailAsync(SendEmailCommand command)
+        public async Task SendEmailAsync(SendEmailRequest command)
         {
             var email = new MimeMessage();
 
@@ -45,7 +44,7 @@ namespace Infrastructure.Services
                         }
 
                         builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
-                    }                   
+                    }
                 }
             }
 
@@ -56,7 +55,7 @@ namespace Infrastructure.Services
             smtp.Authenticate(_emailOptions.SmtpUsername, _emailOptions.SmtpPassword);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
-            
+
         }
     }
 }

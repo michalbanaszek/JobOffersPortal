@@ -1,7 +1,7 @@
 ﻿using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace JobOffersPortal.WebUI.SwaggerExamples.Requests
+namespace JobOffersPortal.API.SwaggerExamples.Commands
 {
     public class CreateCompanyCommandExample : IExamplesProvider<CreateCompanyCommand>
     {

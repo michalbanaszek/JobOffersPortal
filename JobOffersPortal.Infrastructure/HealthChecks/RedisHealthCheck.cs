@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Infrastructure.HealthChecks
+namespace JobOffersPortal.Persistance.EF.HealthChecks
 {
     public class RedisHealthCheck : IHealthCheck
     {

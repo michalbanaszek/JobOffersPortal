@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Security.Claims;
 
-namespace WebUI.Services
+namespace JobOffersPortal.API.Services
 {
     public class CurrentUserService : ICurrentUserService
     {
@@ -14,6 +14,6 @@ namespace WebUI.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue("id");        
+        public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue("id");
     }
 }

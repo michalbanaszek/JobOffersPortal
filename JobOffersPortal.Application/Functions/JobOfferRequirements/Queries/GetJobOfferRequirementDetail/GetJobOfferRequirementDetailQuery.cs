@@ -1,9 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.GetJobOfferRequirementDetail;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,12 +15,12 @@ namespace Application.JobOfferRequirements.Queries.GetJobOfferRequirement
 
     public class GetJobOfferRequirementQueryHandler : IRequestHandler<GetJobOfferRequirementDetailQuery, JobOfferRequirementDetailViewModel>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferRequirementRepository _jobOfferRequirementRepository;
         private readonly IMapper _mapper;
 
-        public GetJobOfferRequirementQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetJobOfferRequirementQueryHandler(IJobOfferRequirementRepository jobOfferRequirementRepository, IMapper mapper)
         {
-            _context = context;
+            _jobOfferRequirementRepository = jobOfferRequirementRepository;
             _mapper = mapper;
         }
 
@@ -32,7 +31,7 @@ namespace Application.JobOfferRequirements.Queries.GetJobOfferRequirement
                 throw new NotFoundException();
             }
 
-            var entities = await _context.JobOfferRequirements.FirstOrDefaultAsync(m => m.Id == request.Id);
+            var entities = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
 
             if (entities == null)
             {

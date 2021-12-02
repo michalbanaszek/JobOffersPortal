@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domain.Common
+namespace JobOffersPortal.Domain.Common
 {
     public abstract class AuditableEntity
     {

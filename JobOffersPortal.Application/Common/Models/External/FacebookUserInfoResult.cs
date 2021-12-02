@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Application.Common.Models.External
+namespace JobOffersPortal.Application.Common.Models.External
 {
     public class FacebookUserInfoResult
     {

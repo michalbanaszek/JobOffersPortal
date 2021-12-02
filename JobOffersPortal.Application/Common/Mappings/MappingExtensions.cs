@@ -1,13 +1,13 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Common.Mappings
+namespace JobOffersPortal.Application.Common.Mappings
 {
     public static class MappingExtensions
     {

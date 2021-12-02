@@ -1,16 +1,16 @@
-﻿using Application.Identity.Commands;
+﻿using JobOffersPortal.Application.Common.Models.Requests;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace JobOffersPortal.WebUI.SwaggerExamples.Requests
+namespace JobOffersPortal.API.SwaggerExamples.Commands
 {
-    public class RegisterCommandExample : IExamplesProvider<RegisterCommand>
+    public class RegisterCommandExample : IExamplesProvider<RegisterRequest>
     {
-        public RegisterCommand GetExamples()
+        public RegisterRequest GetExamples()
         {
-            return new RegisterCommand()
+            return new RegisterRequest()
             {
-                 Email = "user3@gmail.com",
-                 Password = "Qwerty!1"
+                Email = "user3@gmail.com",
+                Password = "Qwerty!1"
             };
         }
     }

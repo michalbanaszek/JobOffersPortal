@@ -1,8 +1,8 @@
-using Application;
-using Application.HealthChecks;
-using Infrastructure.DependencyInjections;
-using Infrastructure.Options;
-using JobOffersPortal.WebUI.Installers;
+using JobOffersPortal.API.Installers;
+using JobOffersPortal.Application;
+using JobOffersPortal.Application.HealthChecks;
+using JobOffersPortal.Persistance.EF.InfrastructureInstallation;
+using JobOffersPortal.Persistance.EF.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
 
-namespace JobOffersPortal.WebUI
+namespace JobOffersPortal.API
 {
     public class Startup
     {
@@ -80,8 +80,8 @@ namespace JobOffersPortal.WebUI
             app.UseCors(x => x
                .AllowAnyMethod()
                .AllowAnyHeader()
-               .SetIsOriginAllowed(origin => true) 
-               .AllowCredentials()); 
+               .SetIsOriginAllowed(origin => true)
+               .AllowCredentials());
 
             app.UseAuthorization();
 

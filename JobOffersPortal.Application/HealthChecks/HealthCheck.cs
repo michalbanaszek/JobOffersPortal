@@ -1,4 +1,4 @@
-﻿namespace Application.HealthChecks
+﻿namespace JobOffersPortal.Application.HealthChecks
 {
     public class HealthCheck
     {

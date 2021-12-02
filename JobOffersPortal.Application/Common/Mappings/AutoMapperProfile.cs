@@ -1,11 +1,11 @@
 ﻿using Application.JobOfferPropositions.Commands.CreateJobOfferProposition;
 using Application.JobOffers.Commands.CreateJobOffer;
 using AutoMapper;
-using Domain.Entities;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
+using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.CreateJobOfferProposition;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.GetJobOfferPropositionDetail;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.GetJobOfferPropositionList;
@@ -14,6 +14,7 @@ using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
 using JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers;
 using JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJobOfferSkill;
 using JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOfferSkillDetail;
+using JobOffersPortal.Domain.Entities;
 using System;
 using System.Linq;
 
@@ -23,6 +24,11 @@ namespace JobOffersPortal.Application.Common.Mappings
     {
         public AutoMapperProfile()
         {
+            CreateMap<Company, CompanyListViewModel>();
+
+            CreateMap<Company, CompanyDetailViewModel>();
+            CreateMap<JobOffer, JobOfferDto>();
+
             CreateMap<Company, CompanyJobOfferListViewModel>();
             CreateMap<JobOfferProposition, JobOfferPropositionDto>();
             CreateMap<JobOfferRequirement, JobOfferRequirementDto>();
@@ -58,6 +64,11 @@ namespace JobOffersPortal.Application.Common.Mappings
             CreateMap<CreateJobOfferSkillCommand, CreateJobOfferSkillResponse>();
 
             CreateMap<JobOfferSkill, JobOfferSkillDetailViewModel>();
+
+            CreateMap<JobOffer, JobOfferWithRequirementWithSkillWithPropositionDto>();
+            CreateMap<JobOfferProposition, JobOfferWithPropositionDto>();
+            CreateMap<JobOfferRequirement,JobOfferWithRequirementDto>();
+            CreateMap<JobOfferSkill,JobOfferWithSkillDto>();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Application
+﻿namespace JobOffersPortal.Application
 {
     public static class ApiRoutes
     {
@@ -6,7 +6,9 @@
 
         public static class CompanyRoute
         {
-            public const string GetAll = Base + "/company";
+            public const string GetAllCompanies = Base + "/companies";
+
+            public const string GetJustCompanies = Base + "/onlycompanies";
 
             public const string Update = Base + "/company/{id}";
 
@@ -19,7 +21,7 @@
 
         public static class JobOfferRoute
         {
-            public const string GetAll = Base + "/joboffer";
+            public const string GetJobOffers = Base + "/joboffer";
 
             public const string Update = Base + "/joboffer/{id}";
 

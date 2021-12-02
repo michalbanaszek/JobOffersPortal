@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
+using JobOffersPortal.Application.Common.Exceptions;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ValidationException = Application.Common.Exceptions.ValidationException;
 
-namespace Application.Common.Behaviours
+
+namespace JobOffersPortal.Application.Common.Behaviours
 {
     public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
@@ -28,7 +29,7 @@ namespace Application.Common.Behaviours
 
                 if (failures.Count != 0)
                 {
-                    throw new ValidationException(failures);
+                    throw new ValidationCustomException(failures);
                 }
             }
 

@@ -1,10 +1,10 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
-namespace JobOffersPortal.WebUI.Installers
+namespace JobOffersPortal.API.Installers
 {
     public static class InstallerExtensions
     {

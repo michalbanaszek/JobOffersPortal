@@ -1,33 +1,47 @@
-﻿using Application.Common.Models;
+﻿using JobOffersPortal.API.Filters.Cache;
+using JobOffersPortal.Application;
+using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
+using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using WebUI;
-using WebUI.Controllers;
-using WebUI.Filters.Cache;
 
-namespace JobOffersPortal.WebUI.Controllers
+namespace JobOffersPortal.API.Controllers
 {
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class CompanyController : ApiControllerBase
     {
         /// <summary>
-        /// Get list of items in the system
+        /// Get company list and all offers in the system
         /// </summary>
-        /// <response code="200">Get list of items in the system</response>       
-        [HttpGet(ApiRoutes.CompanyRoute.GetCompanies)]       
-        [ProducesResponseType(StatusCodes.Status200OK)]      
+        /// <response code="200">Get list of items in the system</response>    
+        [HttpGet(ApiRoutes.CompanyRoute.GetAllCompanies)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Cached(50)]
-        public async Task<ActionResult<PaginatedList<CompanyJobOfferListViewModel>>> GetAll([FromQuery] GetCompaniesWithJobOffersListWithPaginationQuery query)
+        public async Task<ActionResult<PaginatedList<CompanyJobOfferListViewModel>>> GetAllCompaniesWithJobs([FromQuery] GetCompaniesWithJobOffersListWithPaginationQuery query)
         {
             var response = await Mediator.Send(query);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get all company in the system
+        /// </summary>
+        /// <response code="200">Get list of items in the system</response>    
+        [HttpGet(ApiRoutes.CompanyRoute.GetJustCompanies)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Cached(50)]
+        public async Task<ActionResult<CompanyListViewModel>> GetAll()
+        {
+            var response = await Mediator.Send(new GetCompanyListQuery());
 
             return Ok(response);
         }
@@ -43,7 +57,7 @@ namespace JobOffersPortal.WebUI.Controllers
         [Cached(50)]
         public async Task<ActionResult<CompanyJobOfferListViewModel>> Get([FromRoute] string id)
         {
-            var response = await Mediator.Send(new GetCompanyQuery() { Id = id });          
+            var response = await Mediator.Send(new GetCompanyQuery() { Id = id });
 
             return Ok(response);
         }
@@ -56,13 +70,13 @@ namespace JobOffersPortal.WebUI.Controllers
         [HttpPost(ApiRoutes.CompanyRoute.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<(Uri, CreateCompanyResponse)>> Create([FromBody] CreateCompanyCommand command)
+        public async Task<ActionResult<CreateCompanyResponse>> Create([FromBody] CreateCompanyCommand command)
         {
             try
             {
                 var response = await Mediator.Send(command);
 
-                return Created(response.Item1, response.Item2.Id);
+                return Created(response.Id.ToString(), response.Id);
             }
             catch (Exception)
             {

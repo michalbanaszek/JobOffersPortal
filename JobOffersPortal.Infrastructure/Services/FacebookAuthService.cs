@@ -1,11 +1,11 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Models.External;
-using Infrastructure.Options;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models.External;
+using JobOffersPortal.Persistance.EF.Options;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace JobOffersPortal.Persistance.EF.Services
 {
     public class FacebookAuthService : IFacebookAuthService
     {

@@ -1,9 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
-using Domain.Entities;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -15,19 +14,19 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
     {
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferRequirementCommandHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferRepository _jobOfferRepository;
 
-        public CreateJobOfferRequirementCommandHandler(IMapper mapper, ILogger<CreateJobOfferRequirementCommandHandler> logger, IApplicationDbContext context)
+        public CreateJobOfferRequirementCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<CreateJobOfferRequirementCommandHandler> logger)
         {
+            _jobOfferRepository = jobOfferRepository;
             _mapper = mapper;
-            _logger = logger;
-            _context = context;
+            _logger = logger;          
         }
 
         public async Task<CreateJobOfferRequirementResponse> Handle(CreateJobOfferRequirementCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobOffers.Include(x => x.Requirements)
-                                                  .SingleOrDefaultAsync(x => x.Id == request.JobOfferId);
+            var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
+
             if (entity == null)
             {
                 throw new NotFoundException();
@@ -40,8 +39,6 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
             };
 
             entity.Requirements.Add(jobOfferRequirement);
-
-            await _context.SaveChangesAsync(new CancellationToken());
 
             _logger.LogInformation("Created JobOfferRequirement for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
 

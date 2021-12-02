@@ -1,5 +1,6 @@
-﻿using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -11,22 +12,21 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.De
     {
         private readonly IMapper _mapper;
         private readonly ILogger<DeleteOfferPropositionCommandHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferPropositionRepository _jobOfferPropositionRepository;
 
-        public DeleteOfferPropositionCommandHandler(IMapper mapper, ILogger<DeleteOfferPropositionCommandHandler> logger, IApplicationDbContext context, ICurrentUserService currentUserService)
+        public DeleteOfferPropositionCommandHandler(IMapper mapper, ILogger<DeleteOfferPropositionCommandHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository, ICurrentUserService currentUserService)
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _jobOfferPropositionRepository = jobOfferPropositionRepository;
         }
 
         public async Task<Unit> Handle(DeleteOfferPropositionCommand request, CancellationToken cancellationToken)
         {
-            var jobOfferProposition = await _context.JobOfferPropositions.FindAsync(request.Id);
+            
+            var jobOfferProposition = await _jobOfferPropositionRepository.GetByIdAsync(request.Id);
 
-            _context.JobOfferPropositions.Remove(jobOfferProposition);
-
-            await _context.SaveChangesAsync(new CancellationToken());
+            await _jobOfferPropositionRepository.DeleteAsync(jobOfferProposition);
 
             _logger.LogInformation("Deleted JobOfferProposition Id: {0}", request.Id);
 

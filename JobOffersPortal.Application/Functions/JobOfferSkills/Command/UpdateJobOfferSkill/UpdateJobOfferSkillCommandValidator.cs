@@ -7,8 +7,11 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.UpdateJob
         public UpdateJobOfferSkillCommandValidator()
         {
             RuleFor(x => x.Content)
-           .NotEmpty()
-           .Matches("^[a-zA-Z0-9 ]*$");
+                .NotEmpty()
+                .NotNull()
+                .MinimumLength(2).MaximumLength(50)
+                .WithMessage("{PropertName} Length is beewten 2 and 50")
+                .Matches("^[a-zA-Z0-9 ]*$");
         }
     }
 }

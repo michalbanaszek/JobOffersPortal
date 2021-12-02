@@ -1,7 +1,6 @@
-﻿using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,18 +12,18 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.Get
     {
         private readonly IMapper _mapper;
         private readonly ILogger<GetListJobOfferRequirementQueryHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferRequirementRepository _jobOfferRequirementRepository;
 
-        public GetListJobOfferRequirementQueryHandler(IMapper mapper, ILogger<GetListJobOfferRequirementQueryHandler> logger, IApplicationDbContext context)
+        public GetListJobOfferRequirementQueryHandler(IMapper mapper, ILogger<GetListJobOfferRequirementQueryHandler> logger, IJobOfferRequirementRepository jobOfferRequirementRepository)
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _jobOfferRequirementRepository = jobOfferRequirementRepository;
         }
 
         public async Task<List<JobOfferRequirementViewModel>> Handle(GetJobOfferRequirementListQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobOfferRequirements.ToListAsync();
+            var entity = await _jobOfferRequirementRepository.GetAllAsync();
 
             return _mapper.Map<List<JobOfferRequirementViewModel>>(entity);
         }

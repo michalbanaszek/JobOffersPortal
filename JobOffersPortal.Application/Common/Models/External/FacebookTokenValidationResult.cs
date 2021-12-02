@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Application.Common.Models.External
+namespace JobOffersPortal.Application.Common.Models.External
 {
     public class FacebookTokenValidationResult
     {

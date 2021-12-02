@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Identity
+namespace JobOffersPortal.Persistance.EF.Identity
 {
     public class ApplicationUser : IdentityUser
     {

@@ -1,10 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Domain.Entities;
+﻿using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,29 +11,30 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany
 {
     public class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand>
     {
-        private readonly ILogger<DeleteCompanyCommandHandler> _logger;
-        private readonly ICompanyService _companyService;
-        private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ILogger<DeleteCompanyCommandHandler> _logger;    
 
-        public DeleteCompanyCommandHandler(ICompanyService companyService, ILogger<DeleteCompanyCommandHandler> logger, IApplicationDbContext context, ICurrentUserService currentUserService)
+        private readonly ICurrentUserService _currentUserService;
+        private readonly ICompanyRepository _companyRepository;
+   
+
+        public DeleteCompanyCommandHandler(ICompanyRepository companyRepository, ILogger<DeleteCompanyCommandHandler> logger, ICurrentUserService currentUserService)
         {
-            _logger = logger;
-            _companyService = companyService;
-            _context = context;
+            _logger = logger;     
+        
             _currentUserService = currentUserService;
+            _companyRepository = companyRepository;
         }
 
         public async Task<Unit> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Companies.Where(x => x.Id == request.Id).SingleOrDefaultAsync(cancellationToken);
+            var entity = await _companyRepository.GetByIdAsync(request.Id);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(Company), request.Id);
             }
 
-            var userOwns = await _companyService.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
+            var userOwns = await _companyRepository.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
 
             if (!userOwns)
             {
@@ -43,9 +43,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany
                 throw new NotFoundUserOwnException(nameof(Company), _currentUserService.UserId);
             }
 
-            _context.Companies.Remove(entity);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            await _companyRepository.DeleteAsync(entity);
 
             _logger.LogInformation("Deleted company Id: {0}", request.Id);
 

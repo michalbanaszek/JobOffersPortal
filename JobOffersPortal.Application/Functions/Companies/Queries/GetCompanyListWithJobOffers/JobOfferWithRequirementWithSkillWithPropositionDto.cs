@@ -1,7 +1,7 @@
-﻿using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
-namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
+namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers
 {
     public class JobOfferWithRequirementWithSkillWithPropositionDto
     {
@@ -11,8 +11,8 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
         public string Salary { get; set; }
         public DateTime Date { get; set; }
         public bool IsAvailable { get; set; }
-        public JobOfferWithPropositionDto Proposition { get; set; }
-        public JobOfferWithRequirementDto Requirement { get; set; }
-        public JobOfferWithSkillDto Skill { get; set; }
+        public List<JobOfferWithPropositionDto> Propositions { get; set; }
+        public List<JobOfferWithRequirementDto> Requirements { get; set; }
+        public List<JobOfferWithSkillDto> Skills { get; set; }
     }
 }

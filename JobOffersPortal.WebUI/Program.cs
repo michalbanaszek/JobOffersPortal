@@ -1,13 +1,13 @@
 using App.Metrics.AspNetCore;
 using App.Metrics.Formatters.Prometheus;
-using Infrastructure.Persistence;
+using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
-namespace JobOffersPortal.WebUI
+namespace JobOffersPortal.API
 {
     public class Program
     {
@@ -33,7 +33,7 @@ namespace JobOffersPortal.WebUI
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseMetricsWebTracking()
-                .UseMetrics(options => 
+                .UseMetrics(options =>
                 {
                     options.EndpointOptions = endpointsOptions =>
                     {

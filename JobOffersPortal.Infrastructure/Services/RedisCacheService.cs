@@ -1,10 +1,10 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace JobOffersPortal.Persistance.EF.Services
 {
     public class RedisCacheService : ICacheService
     {

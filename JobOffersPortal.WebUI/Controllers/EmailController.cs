@@ -1,14 +1,14 @@
-﻿using Application.Common.Interfaces;
-using Application.Emails.Commands;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace WebUI.Controllers
+namespace JobOffersPortal.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmailController : ApiControllerBase
+    public class EmailController : ControllerBase
     {
         private readonly IEmailService _emailService;
 
@@ -18,11 +18,11 @@ namespace WebUI.Controllers
         }
 
         [HttpPost("Send")]
-        public async Task<IActionResult> Send([FromForm] SendEmailCommand command)
+        public async Task<IActionResult> Send([FromForm] SendEmailRequest emailRequest)
         {
-                await Mediator.Send(command);
-             
-                return Ok();
+            await _emailService.SendEmailAsync(emailRequest);
+
+            return Ok();
         }
     }
 }

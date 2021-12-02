@@ -1,11 +1,11 @@
-﻿using Application.Common.Exceptions;
+﻿using JobOffersPortal.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
 
-namespace WebUI.Filters
+namespace JobOffersPortal.API.Filters
 {
     public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
@@ -17,7 +17,7 @@ namespace WebUI.Filters
             // Register known exception types and handlers.
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
-                { typeof(ValidationException), HandleValidationException },
+                { typeof(ValidationCustomException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(NotFoundUserOwnException), HandleNotFoundUserOwnException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
@@ -52,7 +52,7 @@ namespace WebUI.Filters
 
         private void HandleValidationException(ExceptionContext context)
         {
-            var exception = context.Exception as ValidationException;
+            var exception = context.Exception as ValidationCustomException;
 
             var details = new ValidationProblemDetails(exception.Errors)
             {

@@ -1,6 +1,7 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Domain.Entities;
+﻿using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -10,29 +11,27 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
 {
     public class DeleteJobOfferCommandHandler : IRequestHandler<DeleteJobOfferCommand>
     {
-        private readonly IJobOfferService _jobOfferService;
         private readonly ILogger<DeleteJobOfferCommandHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferRepository _jobOfferRepository;
         private readonly ICurrentUserService _currentUserService;
 
-        public DeleteJobOfferCommandHandler(IJobOfferService jobOfferService, ILogger<DeleteJobOfferCommandHandler> logger, IApplicationDbContext context, ICurrentUserService currentUserService)
+        public DeleteJobOfferCommandHandler(IJobOfferRepository jobOfferRepository, ILogger<DeleteJobOfferCommandHandler> logger, ICurrentUserService currentUserService)
         {
-            _jobOfferService = jobOfferService;
-            _logger = logger;
-            _context = context;
+            _jobOfferRepository = jobOfferRepository;
+            _logger = logger;        
             _currentUserService = currentUserService;
         }
 
         public async Task<Unit> Handle(DeleteJobOfferCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobOffers.FindAsync(request.Id);
+            var entity = await _jobOfferRepository.GetByIdAsync(request.Id);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(JobOffer), request.Id);
             }
 
-            var userOwns = await _jobOfferService.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
+            var userOwns = await _jobOfferRepository.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
 
             if (!userOwns)
             {
@@ -41,9 +40,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
                 throw new NotFoundUserOwnException(nameof(Company), _currentUserService.UserId);
             }
 
-            _context.JobOffers.Remove(entity);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            await _jobOfferRepository.DeleteAsync(entity);
 
             _logger.LogInformation("Deleted JobOffer Id: {0}", entity.Id);
 

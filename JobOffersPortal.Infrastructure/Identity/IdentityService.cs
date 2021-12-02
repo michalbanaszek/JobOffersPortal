@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Models;
-using Domain.Entities;
-using Infrastructure.Options;
-using Infrastructure.Persistence;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models.Responses;
+using JobOffersPortal.Domain.Entities;
+using JobOffersPortal.Persistance.EF.Options;
+using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Identity
+namespace JobOffersPortal.Persistance.EF.Identity
 {
     public class IdentityService : IIdentityService
     {
@@ -91,7 +91,7 @@ namespace Infrastructure.Identity
                 return await DeleteUserAsync(user);
             }
 
-            return Result.Success();
+            return Result.Failure(new[] { "User not found." });
         }
 
         public async Task<Result> DeleteUserAsync(ApplicationUser user)

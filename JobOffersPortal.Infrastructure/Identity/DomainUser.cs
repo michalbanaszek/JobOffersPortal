@@ -1,6 +1,6 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 
-namespace Infrastructure.Identity
+namespace JobOffersPortal.Persistance.EF.Identity
 {
     public class DomainUser : IAppUser
     {

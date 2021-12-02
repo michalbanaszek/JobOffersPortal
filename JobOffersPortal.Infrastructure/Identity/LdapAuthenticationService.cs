@@ -1,13 +1,12 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Models;
-using Infrastructure.Options;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models.Responses;
+using JobOffersPortal.Persistance.EF.Options;
 using Microsoft.Extensions.Options;
 using Novell.Directory.Ldap;
-using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Infrastructure.Identity
+namespace JobOffersPortal.Persistance.EF.Identity
 {
     public class LdapAuthenticationService : IAuthenticationService
     {
@@ -30,7 +29,7 @@ namespace Infrastructure.Identity
             _connection.Connect(_config.Url, LdapConnection.DEFAULT_PORT);
             _connection.Bind(_config.Username, _config.Password);
 
-            var searchFilter = String.Format(_config.SearchFilter, username);
+            var searchFilter = string.Format(_config.SearchFilter, username);
             var result = _connection.Search(
                 _config.SearchBase,
                 LdapConnection.SCOPE_SUB,

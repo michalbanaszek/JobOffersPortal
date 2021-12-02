@@ -1,11 +1,11 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Common.Models
+namespace JobOffersPortal.Application.Common.Models
 {
     public class PaginatedList<T>
     {

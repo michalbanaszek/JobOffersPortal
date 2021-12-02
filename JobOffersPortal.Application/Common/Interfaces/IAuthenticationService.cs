@@ -1,6 +1,6 @@
-﻿using Application.Common.Models;
+﻿using JobOffersPortal.Application.Common.Models.Responses;
 
-namespace Application.Common.Interfaces
+namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IAuthenticationService
     {

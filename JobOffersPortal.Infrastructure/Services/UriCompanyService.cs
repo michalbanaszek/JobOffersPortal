@@ -1,16 +1,13 @@
-﻿using Application;
-using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application;
+using JobOffersPortal.Application.Common.Interfaces;
 using System;
 
-namespace Infrastructure.Services
+namespace JobOffersPortal.Persistance.EF.Services
 {
     public class UriCompanyService : UriService, IUriCompanyService
     {
-        private readonly string _baseUri;
-
         public UriCompanyService(string baseUri) : base(baseUri)
-        {
-            _baseUri = baseUri;
+        {  
         }
 
         public Uri GetCompanyUri(string companyId)

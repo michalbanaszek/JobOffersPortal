@@ -1,43 +1,41 @@
-﻿using Application.Common.Interfaces;
-using Application.JobOffers.Commands.CreateJobOffer;
+﻿using Application.JobOffers.Commands.CreateJobOffer;
 using AutoMapper;
-using Domain.Entities;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer
 {
-    public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferCommand, (Uri, CreateJobOfferResponse)>
+    public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferCommand, CreateJobOfferResponse>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferRepository _jobOfferRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferCommandHandler> _logger;
         private readonly IUriJobOfferService _uriJobOfferService;
 
-        public CreateJobOfferCommandHandler(IMapper mapper, ILogger<CreateJobOfferCommandHandler> logger, IApplicationDbContext context, IUriJobOfferService uriJobOfferService)
+        public CreateJobOfferCommandHandler(IMapper mapper, ILogger<CreateJobOfferCommandHandler> logger, IJobOfferRepository jobOfferRepository, IUriJobOfferService uriJobOfferService)
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _jobOfferRepository = jobOfferRepository;
             _uriJobOfferService = uriJobOfferService;
         }
 
-        public async Task<(Uri, CreateJobOfferResponse)> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
+        public async Task<CreateJobOfferResponse> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<JobOffer>(request);
 
-            _context.JobOffers.Add(entity);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            await _jobOfferRepository.AddAsync(entity);
 
             _logger.LogInformation("Created JobOffer Id: {0}", entity.Id);
 
             var uri = _uriJobOfferService.GetJobOfferUri(entity.Id);
 
-            return (uri, new CreateJobOfferResponse() { Id = entity.Id });
+            return new CreateJobOfferResponse() { Id = entity.Id, Url = uri };
         }
     }
 }

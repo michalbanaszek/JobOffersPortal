@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Application.Common.Exceptions
+namespace JobOffersPortal.Application.Common.Exceptions
 {
     public class NotFoundUserOwnException : Exception
     {

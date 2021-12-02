@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
-using Domain.Entities;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,35 +12,29 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
 {
     public class UpdateJobOfferCommandHandler : IRequestHandler<UpdateJobOfferCommand, string>
     {
-        private readonly IJobOfferService _jobOfferService;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateJobOfferCommandHandler> _logger;
-        private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IJobOfferRepository _jobOfferRepository;       
 
-        public UpdateJobOfferCommandHandler(IJobOfferService jobOfferService, IMapper mapper, ILogger<UpdateJobOfferCommandHandler> logger, IApplicationDbContext context, ICurrentUserService currentUserService)
+        public UpdateJobOfferCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<UpdateJobOfferCommandHandler> logger, ICurrentUserService currentUserService)
         {
-            _jobOfferService = jobOfferService;
+            _currentUserService = currentUserService;
             _mapper = mapper;
             _logger = logger;
-            _context = context;
-            _currentUserService = currentUserService;
+            _jobOfferRepository = jobOfferRepository;           
         }
 
         public async Task<string> Handle(UpdateJobOfferCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobOffers
-                                       .Include(x => x.Requirements)
-                                       .Include(x => x.Skills)
-                                       .Include(x => x.Propositions)
-                                       .SingleOrDefaultAsync(x => x.Id == request.Id);
+            var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.Id);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(JobOffer), request.Id);
             }
 
-            var userOwns = await _jobOfferService.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
+            var userOwns = await _jobOfferRepository.UserOwnsEntityAsync(request.Id, _currentUserService.UserId);
 
             if (!userOwns)
             {
@@ -51,7 +45,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
 
             _mapper.Map(request, entity);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _jobOfferRepository.UpdateAsync(entity);
 
             _logger.LogInformation("Updated JobOffer Id: {0}", request.Id);
 

@@ -1,9 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using AutoMapper;
-using Domain.Entities;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -15,19 +14,19 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
     {
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferSkillCommandHandler> _logger;
-        private readonly IApplicationDbContext _context;
+        private readonly IJobOfferRepository _jobOfferRepository;
 
-        public CreateJobOfferSkillCommandHandler(IMapper mapper, ILogger<CreateJobOfferSkillCommandHandler> logger, IApplicationDbContext context)
+        public CreateJobOfferSkillCommandHandler(IMapper mapper, ILogger<CreateJobOfferSkillCommandHandler> logger, IJobOfferRepository jobOfferRepository)
         {
             _mapper = mapper;
             _logger = logger;
-            _context = context;
+            _jobOfferRepository = jobOfferRepository;
         }
 
         public async Task<CreateJobOfferSkillResponse> Handle(CreateJobOfferSkillCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.JobOffers.Include(x => x.Skills)
-                                                  .SingleOrDefaultAsync(x => x.Id == request.JobOfferId);
+            var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
+
             if (entity == null)
             {
                 throw new NotFoundException();
@@ -40,8 +39,6 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
             };
 
             entity.Skills.Add(jobOfferSkill);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Created JobOfferRequirement for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
 

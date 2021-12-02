@@ -1,8 +1,8 @@
-﻿using Domain.Common;
+﻿using JobOffersPortal.Domain.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities
+namespace JobOffersPortal.Domain.Entities
 {
     public class RefreshToken : AuditableEntity
     {

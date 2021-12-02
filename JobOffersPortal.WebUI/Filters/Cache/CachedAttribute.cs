@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces;
-using Infrastructure.Options;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Persistance.EF.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -8,7 +8,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebUI.Filters.Cache
+namespace JobOffersPortal.API.Filters.Cache
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CachedAttribute : Attribute, IAsyncActionFilter

@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using JobOffersPortal.Domain.Entities;
 
 namespace JobOffersPortal.Application.Common.Interfaces.Persistance
 {

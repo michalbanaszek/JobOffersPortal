@@ -1,12 +1,12 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 
-namespace Infrastructure.Services
+namespace JobOffersPortal.Persistance.EF.Services
 {
     public class UriService : IUriService
     {
-        private readonly string _baseUri;
+        protected readonly string _baseUri;
 
         public UriService(string baseUri)
         {

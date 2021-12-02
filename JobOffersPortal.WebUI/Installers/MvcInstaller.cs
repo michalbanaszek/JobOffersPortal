@@ -1,11 +1,11 @@
-﻿using Application.Common.Interfaces;
+﻿using JobOffersPortal.API.Filters;
+using JobOffersPortal.API.Services;
+using JobOffersPortal.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebUI.Filters;
-using WebUI.Services;
 
-namespace WebUI.Installers
+namespace JobOffersPortal.API.Installers
 {
     public class MvcInstaller : IInstaller
     {
@@ -21,7 +21,7 @@ namespace WebUI.Installers
             });
 
             services.AddControllersWithViews(options =>
-                options.Filters.Add<ApiExceptionFilterAttribute>());                   
+                options.Filters.Add<ApiExceptionFilterAttribute>());
         }
     }
 }

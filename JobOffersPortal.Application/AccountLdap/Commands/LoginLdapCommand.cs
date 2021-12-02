@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Models;
+﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Models.Responses;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace Application.AccountLdap.Commands
+namespace JobOffersPortal.Application.AccountLdap.Commands
 {
     public class LoginLdapCommand : IRequest<AuthenticationLdapResult>
     {

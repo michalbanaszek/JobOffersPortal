@@ -1,8 +1,8 @@
-﻿using Application.Common.Models;
+﻿using JobOffersPortal.Application.Common.Models.Responses;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 
-namespace Infrastructure.Identity
+namespace JobOffersPortal.Persistance.EF.Identity
 {
     public static class IdentityResultExtensions
     {

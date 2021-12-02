@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application.Common.Interfaces
+namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IInstaller
     {

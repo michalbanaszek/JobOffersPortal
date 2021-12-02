@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Application.HealthChecks
+namespace JobOffersPortal.Application.HealthChecks
 {
     public class HealthCheckResponse
     {

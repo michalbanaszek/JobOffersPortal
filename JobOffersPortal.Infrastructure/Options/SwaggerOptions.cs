@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Options
+﻿namespace JobOffersPortal.Persistance.EF.Options
 {
     public class SwaggerOptions
     {

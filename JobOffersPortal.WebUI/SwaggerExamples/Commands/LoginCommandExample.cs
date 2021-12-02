@@ -1,13 +1,13 @@
-﻿using Application.Identity.Commands;
+﻿using JobOffersPortal.Application.Common.Models.Requests;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace JobOffersPortal.WebUI.SwaggerExamples.Requests
+namespace JobOffersPortal.API.SwaggerExamples.Commands
 {
-    public class LoginCommandExample : IExamplesProvider<LoginCommand>
+    public class LoginCommandExample : IExamplesProvider<LoginRequest>
     {
-        public LoginCommand GetExamples()
+        public LoginRequest GetExamples()
         {
-            return new LoginCommand()
+            return new LoginRequest()
             {
                 Email = "user1@gmail.com",
                 Password = "Qwerty!1"
