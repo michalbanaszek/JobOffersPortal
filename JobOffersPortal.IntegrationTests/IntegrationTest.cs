@@ -1,9 +1,9 @@
-﻿using Application;
-using Application.Identity.Commands;
-using Application.Identity.Response;
-using Infrastructure.Persistence;
+﻿using JobOffersPortal.API;
+using JobOffersPortal.Application;
+using JobOffersPortal.Application.Common.Models.Requests;
+using JobOffersPortal.Application.Common.Models.Responses;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
-using JobOffersPortal.WebUI;
+using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,7 +61,7 @@ namespace JobOffersPortal.IntegrationTests
 
         private async Task<string> GetJwtAsync()
         {
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.IdentityRoute.Register, new RegisterCommand()
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.IdentityRoute.Register, new RegisterRequest()
             {
                 Email = "test123@gmail.com",
                 Password = "Qwerty!1"

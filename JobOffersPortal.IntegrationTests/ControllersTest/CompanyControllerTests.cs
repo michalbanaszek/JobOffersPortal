@@ -1,10 +1,10 @@
-﻿using Application;
-using Application.Common.Models;
-using FluentAssertions;
+﻿using FluentAssertions;
+using JobOffersPortal.Application;
+using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
-using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
+using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -22,7 +22,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
             await AuthenticateAsync();
 
             // Act
-            var response = await _httpClient.GetAsync(ApiRoutes.CompanyRoute.GetAll);
+            var response = await _httpClient.GetAsync(ApiRoutes.CompanyRoute.GetAllCompanies);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
