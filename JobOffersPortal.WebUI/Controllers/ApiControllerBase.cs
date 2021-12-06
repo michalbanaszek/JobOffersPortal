@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace JobOffersPortal.API.Controllers
 {
-    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public abstract class ApiControllerBase : ControllerBase
     {

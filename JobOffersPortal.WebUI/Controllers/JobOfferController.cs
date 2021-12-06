@@ -15,8 +15,7 @@ using System.Threading.Tasks;
 namespace JobOffersPortal.API.Controllers
 {
     [Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [EnableCors("CorsPolicy")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]   
     public class JobOfferController : ApiControllerBase
     {
         /// <summary>

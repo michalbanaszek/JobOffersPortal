@@ -9,6 +9,7 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <UserSecretsId>29b8f3a9-83f6-4492-aa39-028c2cf4529b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyName>JobOffersPortal.API</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,16 +18,12 @@
     <PackageReference Include="App.Metrics.AspNetCore.Tracking" Version="4.2.0" />
     <PackageReference Include="App.Metrics.Formatters.Prometheus" Version="4.2.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.9" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
   </ItemGroup>

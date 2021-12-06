@@ -1,7 +1,7 @@
 ﻿using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace JobOffersPortal.API.SwaggerExamples.Commands
+namespace JobOffersPortal.API.SwaggerExamples
 {
     public class UpdateJobOfferCommandExample : IExamplesProvider<UpdateJobOfferCommand>
     {

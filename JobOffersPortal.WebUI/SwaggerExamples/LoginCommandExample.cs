@@ -1,7 +1,7 @@
-﻿using JobOffersPortal.Application.Common.Models.Requests;
+﻿using JobOffersPortal.Application.Security.Models.AuthResult;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace JobOffersPortal.API.SwaggerExamples.Commands
+namespace JobOffersPortal.API.SwaggerExamples
 {
     public class LoginCommandExample : IExamplesProvider<LoginRequest>
     {

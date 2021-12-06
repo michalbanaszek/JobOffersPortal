@@ -1,7 +1,7 @@
 ﻿using JobOffersPortal.Application;
-using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Application.Common.Models.Requests;
-using JobOffersPortal.Application.Common.Models.Responses;
+using JobOffersPortal.Application.Security.Contracts;
+using JobOffersPortal.Application.Security.Models.AuthResult;
+using JobOffersPortal.Application.Security.Models.External;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

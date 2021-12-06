@@ -1,5 +1,5 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Application.Common.Models.Requests;
+using JobOffersPortal.Application.Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

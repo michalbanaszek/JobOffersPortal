@@ -1,6 +1,7 @@
 using JobOffersPortal.API.Installers;
 using JobOffersPortal.Application;
-using JobOffersPortal.Application.HealthChecks;
+using JobOffersPortal.Infrastructure.Security.InfrastructureSecurityInstallation;
+using JobOffersPortal.Persistance.EF.HealthChecks;
 using JobOffersPortal.Persistance.EF.InfrastructureInstallation;
 using JobOffersPortal.Persistance.EF.Options;
 using Microsoft.AspNetCore.Builder;
@@ -30,9 +31,15 @@ namespace JobOffersPortal.API
         {
             services.AddApplication();
             services.AddInfrastructure(Configuration);
+            services.AddInfrastructureSecurity(Configuration);
             services.InstallServicesInAssembly(Configuration);
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Open", builder => builder.AllowAnyOrigin()
+                                                            .AllowAnyHeader()
+                                                            .AllowAnyMethod());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,11 +84,7 @@ namespace JobOffersPortal.API
 
             app.UseRouting();
 
-            app.UseCors(x => x
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .SetIsOriginAllowed(origin => true)
-               .AllowCredentials());
+            app.UseCors("Open");
 
             app.UseAuthorization();
 
