@@ -1,4 +1,4 @@
-﻿using JobOffersPortal.Application.SearchOptions;
+﻿using JobOffersPortal.Application.Common.Options;
 using JobOffersPortal.Domain.Entities;
 using System.Linq;
 using System.Threading.Tasks;
