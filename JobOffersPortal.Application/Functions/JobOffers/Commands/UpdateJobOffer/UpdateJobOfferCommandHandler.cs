@@ -4,6 +4,7 @@ using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,12 +41,21 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
             {
                 _logger.LogWarning("Update company failed - NotFoundUserOwnException, Id: {0}, UserId: {1}", request.Id, _currentUserService.UserId);
 
-                throw new NotFoundUserOwnException(nameof(Company), _currentUserService.UserId);
+                throw new NotFoundUserOwnException(nameof(JobOffer), _currentUserService.UserId);
             }
 
             _mapper.Map(request, entity);
 
-            await _jobOfferRepository.UpdateAsync(entity);
+            try
+            {
+                await _jobOfferRepository.UpdateAsync(entity);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                    _logger.LogWarning("UpdateJobOfferCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                    throw;
+            }
 
             _logger.LogInformation("Updated JobOffer Id: {0}", request.Id);
 

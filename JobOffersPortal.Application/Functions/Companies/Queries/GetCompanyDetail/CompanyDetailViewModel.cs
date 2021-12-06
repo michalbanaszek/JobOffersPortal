@@ -6,7 +6,6 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDeta
     {
         public string Id { get; set; }
         public string Name { get; set; }
-
         public IList<JobOfferDto> JobOffers { get; set; } = new List<JobOfferDto>();
     }
 }

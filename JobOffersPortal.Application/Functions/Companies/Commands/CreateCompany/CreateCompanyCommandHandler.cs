@@ -3,6 +3,7 @@ using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
         {
             _companyRepository = companyRepository;
             _mapper = mapper;
-            _logger = logger;         
+            _logger = logger;
             _uriCompanyService = uriCompanyService;
         }
 
@@ -28,17 +29,22 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
         {
             var entity = _mapper.Map<Company>(request);
 
-            await _companyRepository.AddAsync(entity);
+            try
+            {
+                await _companyRepository.AddAsync(entity);
 
-            //_context.Companies.Add(entity);
+                _logger.LogInformation("Created company Id: {0}, Name: {1}", entity.Id, entity.Name);             
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("CreateCompanyCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
 
-            //await _context.SaveChangesAsync(cancellationToken);
+                throw;
+            }
 
-            //_logger.LogInformation("Created company Id: {0}, Name: {1}", entity.Id, entity.Name);
+            var uri = _uriCompanyService.GetCompanyUri(entity.Id);
 
-            // var uri = _uriCompanyService.GetCompanyUri(entity.Id);
-
-            return new CreateCompanyResponse(entity.Id);
+            return new CreateCompanyResponse(entity.Id, uri);
         }
     }
 }

@@ -2,6 +2,7 @@
 using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,14 +24,14 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.Get
         {
             if (request.Id == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(request.Id);
             }
 
             var entities = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
 
             if (entities == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOfferRequirement), request.Id);
             }
 
             return _mapper.Map<JobOfferRequirementDetailViewModel>(entities);

@@ -1,6 +1,9 @@
 ﻿using Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
+using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,9 +25,23 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.De
         {
             var entity = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
 
-            await _jobOfferRequirementRepository.DeleteAsync(entity);
+            if (entity == null)
+            {
+                throw new NotFoundException(nameof(JobOfferRequirement), request.Id);
+            }
 
-            _logger.LogInformation("Deleted JobOfferRequirement Id: {0}", request.Id);
+            try
+            {
+                await _jobOfferRequirementRepository.DeleteAsync(entity);
+
+                _logger.LogInformation("Deleted JobOfferRequirement Id: {0}", request.Id);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("DeleteOfferRequirementCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }         
 
             return Unit.Value;
         }

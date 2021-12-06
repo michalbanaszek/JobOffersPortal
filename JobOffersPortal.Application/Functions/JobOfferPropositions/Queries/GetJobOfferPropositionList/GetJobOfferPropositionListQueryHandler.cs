@@ -10,14 +10,12 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.Get
 {
     public class GetJobOfferPropositionListQueryHandler : IRequestHandler<GetJobOfferPropositionListQuery, List<JobOfferPropositionViewModel>>
     {
-        private readonly IMapper _mapper;
-        private readonly ILogger<GetJobOfferPropositionListQueryHandler> _logger;
+        private readonly IMapper _mapper;     
         private readonly IJobOfferPropositionRepository _jobOfferPropositionRepository;
 
         public GetJobOfferPropositionListQueryHandler(IMapper mapper, ILogger<GetJobOfferPropositionListQueryHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository)
         {
-            _mapper = mapper;
-            _logger = logger;
+            _mapper = mapper;          
             _jobOfferPropositionRepository = jobOfferPropositionRepository;
         }
 

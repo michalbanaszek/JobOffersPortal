@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,14 +9,12 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.Get
 {
     public class GetListJobOfferRequirementQueryHandler : IRequestHandler<GetJobOfferRequirementListQuery, List<JobOfferRequirementViewModel>>
     {
-        private readonly IMapper _mapper;
-        private readonly ILogger<GetListJobOfferRequirementQueryHandler> _logger;
+        private readonly IMapper _mapper;       
         private readonly IJobOfferRequirementRepository _jobOfferRequirementRepository;
 
-        public GetListJobOfferRequirementQueryHandler(IMapper mapper, ILogger<GetListJobOfferRequirementQueryHandler> logger, IJobOfferRequirementRepository jobOfferRequirementRepository)
+        public GetListJobOfferRequirementQueryHandler(IMapper mapper, IJobOfferRequirementRepository jobOfferRequirementRepository)
         {
-            _mapper = mapper;
-            _logger = logger;
+            _mapper = mapper;          
             _jobOfferRequirementRepository = jobOfferRequirementRepository;
         }
 

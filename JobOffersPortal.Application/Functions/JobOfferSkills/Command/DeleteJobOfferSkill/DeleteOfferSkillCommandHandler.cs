@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,11 +24,25 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.DeleteJob
 
         public async Task<Unit> Handle(DeleteOfferSkillCommand request, CancellationToken cancellationToken)
         {
-            var jobOfferSkill = await _jobOfferSkillRepository.GetByIdAsync(request.Id);
+            var entity = await _jobOfferSkillRepository.GetByIdAsync(request.Id);
 
-            await _jobOfferSkillRepository.DeleteAsync(jobOfferSkill);
+            if (entity == null)
+            {
+                throw new NotFoundException(nameof(JobOfferSkill), request.Id);
+            }
 
-            _logger.LogInformation("Deleted JobOfferSkill Id: {0}", request.Id);
+            try
+            {
+                await _jobOfferSkillRepository.DeleteAsync(entity);
+
+                _logger.LogInformation("Deleted JobOfferSkill Id: {0}", request.Id);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("DeleteOfferSkillCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }
 
             return Unit.Value;
         }

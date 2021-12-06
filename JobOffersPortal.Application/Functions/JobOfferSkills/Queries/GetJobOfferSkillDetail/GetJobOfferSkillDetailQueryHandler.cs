@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,14 +23,14 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOff
         {
             if (request.Id == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(request.Id);
             }
 
             var entities = await _jobOfferSkillRepository.GetByIdAsync(request.Id);
 
             if (entities == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOfferSkill), request.Id);
             }
 
             return _mapper.Map<JobOfferSkillDetailViewModel>(entities);

@@ -25,31 +25,31 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Up
 
         public async Task<Unit> Handle(UpdateJobOfferRequirementCommand request, CancellationToken cancellationToken)
         {
+            JobOfferRequirement entity = new JobOfferRequirement()
+            {
+                Id = request.Id,
+                Content = request.Content
+            };
+
             try
             {
-                JobOfferRequirement entity = new JobOfferRequirement()
-                {
-                    Id = request.Id,
-                    Content = request.Content
-                };
-
                 await _jobOfferRequirementRepository.UpdateAsync(entity);
 
                 _logger.LogInformation("UpdateJobOfferRequirementCommand execuded.");
 
                 return Unit.Value;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 if ((await _jobOfferRequirementRepository.GetByIdAsync(request.Id)) == null)
                 {
                     _logger.LogWarning("UpdateJobOfferRequirementCommand - NotFoundException execuded.");
 
-                    throw new NotFoundException();
+                    throw new NotFoundException(nameof(JobOfferRequirement), request.Id);
                 }
                 else
                 {
-                    _logger.LogWarning("UpdateJobOfferRequirementCommand - Exception execuded.");
+                    _logger.LogWarning("UpdateJobOfferRequirementCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
 
                     throw;
                 }

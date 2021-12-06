@@ -25,31 +25,31 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.UpdateJob
 
         public async Task<Unit> Handle(UpdateJobOfferSkillCommand request, CancellationToken cancellationToken)
         {
+            JobOfferSkill entity = new JobOfferSkill()
+            {
+                Id = request.Id,
+                Content = request.Content
+            };
+
             try
             {
-                JobOfferSkill entity = new JobOfferSkill()
-                {
-                    Id = request.Id,
-                    Content = request.Content
-                };
-
                 await _jobOfferSkillRepository.UpdateAsync(entity);
 
                 _logger.LogInformation("UpdateJobOfferSkillCommand execuded.");
 
                 return Unit.Value;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 if ((await _jobOfferSkillRepository.GetByIdAsync(request.Id)) == null)
                 {
-                    _logger.LogWarning("UpdateJobOfferPropositionCommand - NotFoundException execuded.");
+                    _logger.LogWarning("UpdateJobOfferSkillCommand - NotFoundException execuded.");
 
-                    throw new NotFoundException();
+                    throw new NotFoundException(nameof(JobOfferSkill), request.Id);
                 }
                 else
                 {
-                    _logger.LogWarning("UpdateJobOfferPropositionCommand - Exception execuded.");
+                    _logger.LogWarning("UpdateJobOfferSkillCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
 
                     throw;
                 }

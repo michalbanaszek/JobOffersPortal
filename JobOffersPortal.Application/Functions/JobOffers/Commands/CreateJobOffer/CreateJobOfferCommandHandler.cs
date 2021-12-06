@@ -4,6 +4,7 @@ using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,9 +30,18 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
         {
             var entity = _mapper.Map<JobOffer>(request);
 
-            await _jobOfferRepository.AddAsync(entity);
+            try
+            {
+                await _jobOfferRepository.AddAsync(entity);
 
-            _logger.LogInformation("Created JobOffer Id: {0}", entity.Id);
+                _logger.LogInformation("Created JobOffer Id: {0}", entity.Id);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("CreateJobOfferCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }
 
             var uri = _uriJobOfferService.GetJobOfferUri(entity.Id);
 

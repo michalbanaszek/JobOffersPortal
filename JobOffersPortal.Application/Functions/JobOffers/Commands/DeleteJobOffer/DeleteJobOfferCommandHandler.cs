@@ -3,6 +3,7 @@ using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,12 +38,21 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
             {
                 _logger.LogWarning("Delete company failed - NotFoundUserOwnException, Id: {0}, UserId: {1}", request.Id, _currentUserService.UserId);
 
-                throw new NotFoundUserOwnException(nameof(Company), _currentUserService.UserId);
+                throw new NotFoundUserOwnException(nameof(JobOffer), _currentUserService.UserId);
             }
 
-            await _jobOfferRepository.DeleteAsync(entity);
+            try
+            {
+                await _jobOfferRepository.DeleteAsync(entity);
 
-            _logger.LogInformation("Deleted JobOffer Id: {0}", entity.Id);
+                _logger.LogInformation("Deleted JobOffer Id: {0}", entity.Id);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("DeleteJobOfferCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }
 
             return Unit.Value;
         }

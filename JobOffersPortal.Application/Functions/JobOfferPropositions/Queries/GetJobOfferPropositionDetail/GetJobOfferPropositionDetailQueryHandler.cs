@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.Get
     public class GetJobOfferPropositionDetailQueryHandler : IRequestHandler<GetJobOfferPropositionDetailQuery, JobOfferPropositionDetailViewModel>
     {       
         private readonly IMapper _mapper;
-        private IJobOfferPropositionRepository _jobOfferPropositionRepository;
+        private readonly IJobOfferPropositionRepository _jobOfferPropositionRepository;
 
         public GetJobOfferPropositionDetailQueryHandler(IJobOfferPropositionRepository jobOfferPropositionRepository, IMapper mapper)
         {
@@ -23,14 +23,14 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.Get
         {
             if (request.Id == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOfferProposition), request.Id);
             }
 
             var entities = await _jobOfferPropositionRepository.GetByIdAsync(request.Id);
 
             if (entities == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOfferProposition), request.Id);
             }
 
             return _mapper.Map<JobOfferPropositionDetailViewModel>(entities);         

@@ -21,9 +21,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
 
         public async Task<List<CompanyListViewModel>> Handle(GetCompanyListQuery request, CancellationToken cancellationToken)
         {
-            var entities = await _companyRepository.GetAllAsync();
-
-            entities.OrderBy(x => x.Name);
+            var entities = (await _companyRepository.GetAllAsync()).OrderBy(x => x.Name);
 
             var response = _mapper.Map<List<CompanyListViewModel>>(entities);
 

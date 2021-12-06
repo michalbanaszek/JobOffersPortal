@@ -3,6 +3,7 @@ using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -29,7 +30,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
 
             if (entity == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
             }
 
             JobOfferSkill jobOfferSkill = new JobOfferSkill()
@@ -38,9 +39,18 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
                 Content = request.Content
             };
 
-            entity.Skills.Add(jobOfferSkill);
+            try
+            {
+                entity.Skills.Add(jobOfferSkill);
 
-            _logger.LogInformation("Created JobOfferRequirement for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
+                _logger.LogInformation("Created JobOfferSkill for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("CreateJobOfferSkillCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }          
 
             return _mapper.Map<CreateJobOfferSkillResponse>(entity);
         }

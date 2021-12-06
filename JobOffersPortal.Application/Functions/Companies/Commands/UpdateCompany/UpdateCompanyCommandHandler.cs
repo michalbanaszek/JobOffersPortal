@@ -4,6 +4,7 @@ using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +46,16 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
 
             _mapper.Map(request, entity);
 
-            await _companyRepository.UpdateAsync(entity);
+            try
+            {
+                await _companyRepository.UpdateAsync(entity);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("UpdateCompanyCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }
 
             _logger.LogInformation("Updated Company Id: {0}", request.Id);
 

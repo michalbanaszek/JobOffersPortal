@@ -2,6 +2,7 @@
 using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -30,7 +31,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Queries.GetJobOfferDet
             {
                 _logger.LogWarning("Get JobOffer Id: {0}", request.Id);
 
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOffer), request.Id);
             }
 
             return _mapper.Map<JobOfferViewModel>(entity);

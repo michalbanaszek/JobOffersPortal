@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -26,6 +28,11 @@ namespace Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement
         public async Task<Unit> Handle(DeleteOfferRequirementCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
+
+            if (entity == null)
+            {
+                throw new NotFoundException(nameof(JobOfferRequirement), request.Id);
+            }
 
             await _jobOfferRequirementRepository.DeleteAsync(entity);
 

@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,11 +25,24 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.De
         }
 
         public async Task<Unit> Handle(DeleteOfferPropositionCommand request, CancellationToken cancellationToken)
-        {
-            
+        {            
             var jobOfferProposition = await _jobOfferPropositionRepository.GetByIdAsync(request.Id);
 
-            await _jobOfferPropositionRepository.DeleteAsync(jobOfferProposition);
+            if (jobOfferProposition == null)
+            {
+                throw new NotFoundException(nameof(JobOfferProposition), request.Id);
+            }
+
+            try
+            {
+                await _jobOfferPropositionRepository.DeleteAsync(jobOfferProposition);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("DeleteOfferPropositionCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }
 
             _logger.LogInformation("Deleted JobOfferProposition Id: {0}", request.Id);
 

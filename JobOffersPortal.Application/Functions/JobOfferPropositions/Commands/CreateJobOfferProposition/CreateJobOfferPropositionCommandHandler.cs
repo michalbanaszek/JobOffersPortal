@@ -4,6 +4,7 @@ using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -15,13 +16,13 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
     {
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferPropositionCommandHandler> _logger;
-        private IJobOfferRepository _jobOfferRepository;
+        private readonly IJobOfferRepository _jobOfferRepository;
 
         public CreateJobOfferPropositionCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<CreateJobOfferPropositionCommandHandler> logger)
         {
             _jobOfferRepository = jobOfferRepository;
             _mapper = mapper;
-            _logger = logger;         
+            _logger = logger;
         }
 
         public async Task<CreateJobOfferPropositionResponse> Handle(CreateJobOfferPropositionCommand request, CancellationToken cancellationToken)
@@ -30,7 +31,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
 
             if (entity == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
             }
 
             JobOfferProposition jobOfferProposition = new JobOfferProposition()
@@ -39,11 +40,20 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
                 Content = request.Content
             };
 
-            entity.Propositions.Add(jobOfferProposition);
-            
+            try
+            {
+                entity.Propositions.Add(jobOfferProposition);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("CreateJobOfferPropositionCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }
+
             _logger.LogInformation("Created JobOfferProposition for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
 
-            return _mapper.Map<CreateJobOfferPropositionResponse>(entity);      
+            return _mapper.Map<CreateJobOfferPropositionResponse>(entity);
         }
     }
 }

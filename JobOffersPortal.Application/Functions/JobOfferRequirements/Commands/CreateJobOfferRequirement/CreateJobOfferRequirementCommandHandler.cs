@@ -3,6 +3,7 @@ using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -20,7 +21,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
         {
             _jobOfferRepository = jobOfferRepository;
             _mapper = mapper;
-            _logger = logger;          
+            _logger = logger;
         }
 
         public async Task<CreateJobOfferRequirementResponse> Handle(CreateJobOfferRequirementCommand request, CancellationToken cancellationToken)
@@ -29,7 +30,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
 
             if (entity == null)
             {
-                throw new NotFoundException();
+                throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
             }
 
             JobOfferRequirement jobOfferRequirement = new JobOfferRequirement()
@@ -38,9 +39,18 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
                 Content = request.Content
             };
 
-            entity.Requirements.Add(jobOfferRequirement);
+            try
+            {
+                entity.Requirements.Add(jobOfferRequirement);
 
-            _logger.LogInformation("Created JobOfferRequirement for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
+                _logger.LogInformation("Created CreateJobOfferRequirementCommand for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                _logger.LogWarning("CreateJobOfferRequirementCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+
+                throw;
+            }
 
             return _mapper.Map<CreateJobOfferRequirementResponse>(entity);
         }

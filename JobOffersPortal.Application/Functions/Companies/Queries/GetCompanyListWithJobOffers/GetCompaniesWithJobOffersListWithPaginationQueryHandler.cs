@@ -21,8 +21,6 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
             _companyRepository = companyRepository;
             _mapper = mapper;
             _uriService = uriService;
-
-
         }
 
         public async Task<PaginatedList<CompanyJobOfferListViewModel>> Handle(GetCompaniesWithJobOffersListWithPaginationQuery request, CancellationToken cancellationToken)
@@ -33,7 +31,6 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
                           .PaginatedListAsync(request.PageNumber, request.PageSize, _uriService);
 
             return paginatedEntities;
-
         }
     }
 }

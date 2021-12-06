@@ -5,7 +5,6 @@ using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,31 +25,31 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Up
 
         public async Task<Unit> Handle(UpdateJobOfferPropositionCommand request, CancellationToken cancellationToken)
         {
-            try
+            JobOfferProposition entity = new JobOfferProposition()
             {
-                JobOfferProposition entity = new JobOfferProposition()
-                {
-                    Id = request.Id,
-                    Content = request.Content
-                };
+                Id = request.Id,
+                Content = request.Content
+            };
 
+            try
+            {            
                 await _jobOfferPropositionRepository.UpdateAsync(entity);
 
                 _logger.LogInformation("UpdateJobOfferPropositionCommand execuded.");
 
                 return Unit.Value;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 if ((await _jobOfferPropositionRepository.GetByIdAsync(request.Id)) == null)
                 {
                     _logger.LogWarning("UpdateJobOfferPropositionCommand - NotFoundException execuded.");
 
-                    throw new NotFoundException();
+                    throw new NotFoundException(nameof(JobOfferProposition), request.Id);
                 }
                 else
                 {
-                    _logger.LogWarning("UpdateJobOfferPropositionCommand - Exception execuded.");
+                    _logger.LogWarning("UpdateJobOfferPropositionCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
 
                     throw;
                 }
