@@ -10,18 +10,18 @@ namespace JobOffersPortal.Persistance.EF.InfrastructureInstallation
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            var redisCacheSettings = new RedisCacheOptions();
+            var redisCacheOptions = new RedisCacheOptions();
 
-            configuration.GetSection(nameof(RedisCacheOptions)).Bind(redisCacheSettings);
+            configuration.GetSection(nameof(RedisCacheOptions)).Bind(redisCacheOptions);
 
-            services.AddSingleton(redisCacheSettings);
+            services.AddSingleton(redisCacheOptions);
 
-            if (!redisCacheSettings.Enabled)
+            if (!redisCacheOptions.Enabled)
             {
                 return;
             }
 
-            services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheSettings.ConnectionString);
+            services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheOptions.ConnectionString);
 
             services.AddSingleton<ICacheService, RedisCacheService>();
         }

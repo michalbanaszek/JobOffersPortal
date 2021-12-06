@@ -1,6 +1,7 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
-using JobOffersPortal.Persistance.EF.Identity;
+using JobOffersPortal.Application.Security.Contracts;
+using JobOffersPortal.Infrastructure.Security.Services;
 using JobOffersPortal.Persistance.EF.Repositories;
 using JobOffersPortal.Persistance.EF.Services;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,8 @@ namespace JobOffersPortal.Persistance.EF.InfrastructureInstallation
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped(typeof(IRepositoryAsync<>), typeof(BaseRepository<>));
+
             services.AddScoped<ICompanyRepository, CompanyRepository>();
 
             services.AddScoped<IJobOfferRepository, JobOfferRepository>();

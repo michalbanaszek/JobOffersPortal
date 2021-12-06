@@ -1,7 +1,7 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Domain.Common;
 using JobOffersPortal.Domain.Entities;
-using JobOffersPortal.Persistance.EF.Identity;
+using JobOffersPortal.Infrastructure.Security.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -64,9 +64,9 @@ namespace JobOffersPortal.Persistance.EF.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-
             base.OnModelCreating(builder);
+
+            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);            
                         
             foreach (var foreignKey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {

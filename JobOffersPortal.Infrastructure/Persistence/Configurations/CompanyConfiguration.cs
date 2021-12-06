@@ -10,6 +10,10 @@ namespace Infrastructure.Persistence.Configurations
         {
             builder.Property(p => p.Id)
                    .ValueGeneratedOnAdd();
+
+            builder.Property(x => x.Name)
+                   .IsRequired()
+                   .HasMaxLength(50);
         }
     }
 }

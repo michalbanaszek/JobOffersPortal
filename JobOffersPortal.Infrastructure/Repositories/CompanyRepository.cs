@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
-using JobOffersPortal.Application.Common.Options;
+using JobOffersPortal.Application.SearchOptions;
 using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.EntityFrameworkCore;

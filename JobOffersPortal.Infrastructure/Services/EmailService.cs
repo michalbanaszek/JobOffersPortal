@@ -1,5 +1,5 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Application.Common.Models.Requests;
+using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Persistance.EF.Options;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;

@@ -1,5 +1,5 @@
 ﻿using JobOffersPortal.Domain.Entities;
-using JobOffersPortal.Persistance.EF.Identity;
+using JobOffersPortal.Infrastructure.Security.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
