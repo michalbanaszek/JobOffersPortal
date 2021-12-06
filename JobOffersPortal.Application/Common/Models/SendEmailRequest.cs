@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
-namespace JobOffersPortal.Application.Common.Models.Requests
+namespace JobOffersPortal.Application.Common.Models
 {
     public class SendEmailRequest
     {

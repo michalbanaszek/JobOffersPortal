@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JobOffersPortal.Application.Common.Models.Responses
+namespace JobOffersPortal.Application.Common.Models
 {
     public class Result
     {

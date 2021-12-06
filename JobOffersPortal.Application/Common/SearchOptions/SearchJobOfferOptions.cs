@@ -1,4 +1,4 @@
-﻿namespace JobOffersPortal.Application.Common.Options
+﻿namespace JobOffersPortal.Application.Common.SearchOptions
 {
     public enum SearchJobOfferOptions
     {

@@ -1,5 +1,5 @@
 ﻿using JobOffersPortal.Application.Common.Models;
-using JobOffersPortal.Application.SearchOptions;
+using JobOffersPortal.Application.Common.SearchOptions;
 using MediatR;
 
 namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers
