@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JobOffersPortal.Application.Common.Models.Responses
+namespace JobOffersPortal.Application.Common.Models
 {
     public class Result
     {
@@ -23,7 +23,7 @@ namespace JobOffersPortal.Application.Common.Models.Responses
 
         public static Result Success()
         {
-            return new Result(true, new string[] { });
+            return new Result(true, Array.Empty<string>());
         }
 
         public static Result Failure(IEnumerable<string> errors)

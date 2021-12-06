@@ -1,4 +1,4 @@
-﻿using JobOffersPortal.Application.Common.Models.Requests;
+﻿using JobOffersPortal.Application.Common.Models;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Common.Interfaces
