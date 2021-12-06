@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
-using JobOffersPortal.Application.SearchOptions;
+using JobOffersPortal.Application.Common.SearchOptions;
 using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,7 @@ namespace JobOffersPortal.Persistance.EF.Repositories
 {
     public class CompanyRepository : BaseRepository<Company>, ICompanyRepository
     {
-        public CompanyRepository(ApplicationDbContext context, IMapper mapper, IUriService uriService) : base(context) 
+        public CompanyRepository(ApplicationDbContext context) : base(context) 
         {          
         }
 
