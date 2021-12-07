@@ -1,4 +1,6 @@
-﻿using JobOffersPortal.Application.Common.Interfaces;
+﻿
+
+using JobOffersPortal.Application.Common.Interfaces;
 
 namespace JobOffersPortal.Infrastructure.Security.Models
 {

@@ -29,7 +29,9 @@
     <ProjectReference Include="..\JobOffersPortal.Application.Security\JobOffersPortal.Application.Security.csproj" />
     <ProjectReference Include="..\JobOffersPortal.Application\JobOffersPortal.Application.csproj" />
     <ProjectReference Include="..\JobOffersPortal.Domain\JobOffersPortal.Domain.csproj" />
-    <ProjectReference Include="..\JobOffersPortal.Security\JobOffersPortal.Infrastructure.Security.csproj" />
+    <ProjectReference Include="..\JobOffersPortal.Infrastructure.Security\JobOffersPortal.Infrastructure.Security.csproj" />
   </ItemGroup>
+
+
 
 </Project>

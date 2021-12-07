@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JobOffersPortal.WebUI\JobOffersPortal.API.csproj" />
+    <ProjectReference Include="..\JobOffersPortal.API\JobOffersPortal.API.csproj" />  
   </ItemGroup>
 
 </Project>

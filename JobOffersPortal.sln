@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.API", "JobOffersPortal.WebUI\JobOffersPortal.API.csproj", "{716DDDAC-CBF8-4102-B788-E1BEEE295CDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.API", "JobOffersPortal.API\JobOffersPortal.API.csproj", "{716DDDAC-CBF8-4102-B788-E1BEEE295CDB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{57D041CA-7D2E-4987-8433-6097267FDD7E}"
 EndProject
@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Application.Security", "JobOffersPortal.Application.Security\JobOffersPortal.Application.Security.csproj", "{62950EEB-C442-4AD5-95E1-5756F4BB641D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Infrastructure.Security", "JobOffersPortal.Security\JobOffersPortal.Infrastructure.Security.csproj", "{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Infrastructure.Security", "JobOffersPortal.Infrastructure.Security\JobOffersPortal.Infrastructure.Security.csproj", "{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
