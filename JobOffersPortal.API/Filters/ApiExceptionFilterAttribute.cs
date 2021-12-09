@@ -18,10 +18,9 @@ namespace JobOffersPortal.API.Filters
             _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
                 { typeof(ValidationCustomException), HandleValidationException },
-                { typeof(NotFoundException), HandleNotFoundException },
-                { typeof(NotFoundUserOwnException), HandleNotFoundUserOwnException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
+                { typeof(NotFoundException), HandleNotFoundException },
             };
         }
 
@@ -50,6 +49,21 @@ namespace JobOffersPortal.API.Filters
             HandleUnknownException(context);
         }
 
+        private void HandleNotFoundException(ExceptionContext context)
+        {
+            var exception = context.Exception as NotFoundException;
+
+            var details = new ProblemDetails()
+            {              
+                Title = "The specified resource was not found.",
+                Detail = exception.Message
+            };
+
+            context.Result = new NotFoundObjectResult(details);
+
+            context.ExceptionHandled = true;
+        }
+
         private void HandleValidationException(ExceptionContext context)
         {
             var exception = context.Exception as ValidationCustomException;
@@ -69,37 +83,6 @@ namespace JobOffersPortal.API.Filters
             var details = new ValidationProblemDetails(context.ModelState)
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
-            };
-
-            context.Result = new BadRequestObjectResult(details);
-
-            context.ExceptionHandled = true;
-        }
-
-        private void HandleNotFoundException(ExceptionContext context)
-        {
-            var exception = context.Exception as NotFoundException;
-
-            var details = new ProblemDetails()
-            {
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
-                Title = "The specified resource was not found.",
-                Detail = exception.Message
-            };
-
-            context.Result = new NotFoundObjectResult(details);
-
-            context.ExceptionHandled = true;
-        }
-
-        private void HandleNotFoundUserOwnException(ExceptionContext context)
-        {
-            var exception = context.Exception as NotFoundUserOwnException;
-
-            var details = new ProblemDetails()
-            {
-                Title = "This user do not own this entity.",
-                Detail = exception.Message
             };
 
             context.Result = new BadRequestObjectResult(details);
