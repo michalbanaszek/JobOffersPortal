@@ -2,7 +2,7 @@
 
 namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.DeleteJobOfferProposition
 {
-    public class DeleteOfferPropositionCommand : IRequest<Unit>
+    public class DeleteJobOfferPropositionCommand : IRequest<DeleteJobOfferPropositionCommandResponse>
     {
         public string Id { get; set; }
     }

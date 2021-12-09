@@ -5,12 +5,13 @@ using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
 {
-    public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, CreateCompanyResponse>
+    public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, CreateCompanyCommandResponse>
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
@@ -25,26 +26,32 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
             _uriCompanyService = uriCompanyService;
         }
 
-        public async Task<CreateCompanyResponse> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
-        {
-            var entity = _mapper.Map<Company>(request);
-
+        public async Task<CreateCompanyCommandResponse> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
+        {            
             try
             {
+                var entity = _mapper.Map<Company>(request);
+
                 await _companyRepository.AddAsync(entity);
 
-                _logger.LogInformation("Created company Id: {0}, Name: {1}", entity.Id, entity.Name);             
+                _logger.LogInformation("Created company Id: {0}, Name: {1}", entity.Id, entity.Name);
+
+                var uri = _uriCompanyService.GetCompanyUri(entity.Id);
+
+                return new CreateCompanyCommandResponse(entity.Id, uri);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                _logger.LogWarning("CreateCompanyCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);               
 
-                throw;
+                return new CreateCompanyCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
+            catch(Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-            var uri = _uriCompanyService.GetCompanyUri(entity.Id);
-
-            return new CreateCompanyResponse(entity.Id, uri);
+                return new CreateCompanyCommandResponse(false, new string[] { "Cannot add entity to database." });
+            }
         }
     }
 }

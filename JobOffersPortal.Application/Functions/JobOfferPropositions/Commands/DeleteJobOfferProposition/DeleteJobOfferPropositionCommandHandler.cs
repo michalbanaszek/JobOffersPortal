@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
@@ -9,23 +10,23 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition
+namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.DeleteJobOfferProposition
 {
-    public class UpdateJobOfferPropositionCommandHandler : IRequestHandler<UpdateJobOfferPropositionCommand, UpdateJobOfferPropositionCommandResponse>
+    public class DeleteJobOfferPropositionCommandHandler : IRequestHandler<DeleteJobOfferPropositionCommand, DeleteJobOfferPropositionCommandResponse>
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<UpdateJobOfferPropositionCommandHandler> _logger;
+        private readonly ILogger<DeleteJobOfferPropositionCommandHandler> _logger;
         private readonly IJobOfferPropositionRepository _jobOfferPropositionRepository;
 
-        public UpdateJobOfferPropositionCommandHandler(IMapper mapper, ILogger<UpdateJobOfferPropositionCommandHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository)
+        public DeleteJobOfferPropositionCommandHandler(IMapper mapper, ILogger<DeleteJobOfferPropositionCommandHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository, ICurrentUserService currentUserService)
         {
             _mapper = mapper;
             _logger = logger;
             _jobOfferPropositionRepository = jobOfferPropositionRepository;
         }
 
-        public async Task<UpdateJobOfferPropositionCommandResponse> Handle(UpdateJobOfferPropositionCommand request, CancellationToken cancellationToken)
-        {
+        public async Task<DeleteJobOfferPropositionCommandResponse> Handle(DeleteJobOfferPropositionCommand request, CancellationToken cancellationToken)
+        {            
             var entity = await _jobOfferPropositionRepository.GetByIdAsync(request.Id);
 
             if (entity == null)
@@ -37,25 +38,23 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Up
 
             try
             {
-                _mapper.Map(request, entity);
+                await _jobOfferPropositionRepository.DeleteAsync(entity);
 
-                await _jobOfferPropositionRepository.UpdateAsync(entity);
+                _logger.LogInformation("Deleted JobOfferProposition Id: {0}", request.Id);
 
-                _logger.LogInformation("Updated JobOfferProposition Id: {0}", request.Id);
-
-                return new UpdateJobOfferPropositionCommandResponse(request.Id);
+                return new DeleteJobOfferPropositionCommandResponse(request.Id);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                return new UpdateJobOfferPropositionCommandResponse(false, new string[] { "Cannot add entity to database." });
+                return new DeleteJobOfferPropositionCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
             catch (Exception exception)
             {
                 _logger.LogError("Exception execuded, Message:", exception.Message);
 
-                return new UpdateJobOfferPropositionCommandResponse(false, new string[] { "Cannot add entity to database." });
+                return new DeleteJobOfferPropositionCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
         }
     }

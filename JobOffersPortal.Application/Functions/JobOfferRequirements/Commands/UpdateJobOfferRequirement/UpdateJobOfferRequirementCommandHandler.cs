@@ -5,12 +5,13 @@ using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.UpdateJobOfferRequirement
 {
-    public class UpdateJobOfferRequirementCommandHandler : IRequestHandler<UpdateJobOfferRequirementCommand, Unit>
+    public class UpdateJobOfferRequirementCommandHandler : IRequestHandler<UpdateJobOfferRequirementCommand, UpdateJobOfferRequirementCommandResponse>
     {
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateJobOfferRequirementCommandHandler> _logger;
@@ -23,36 +24,38 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Up
             _jobOfferRequirementRepository = jobOfferRequirementRepository;
         }
 
-        public async Task<Unit> Handle(UpdateJobOfferRequirementCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateJobOfferRequirementCommandResponse> Handle(UpdateJobOfferRequirementCommand request, CancellationToken cancellationToken)
         {
-            JobOfferRequirement entity = new JobOfferRequirement()
+            var entity = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
+
+            if (entity == null)
             {
-                Id = request.Id,
-                Content = request.Content
-            };
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
+
+                throw new NotFoundException(nameof(JobOfferRequirement), request.Id);
+            }
 
             try
             {
+                _mapper.Map(request, entity);
+
                 await _jobOfferRequirementRepository.UpdateAsync(entity);
 
-                _logger.LogInformation("UpdateJobOfferRequirementCommand execuded.");
+                _logger.LogInformation("Updated JobOfferRequirement Id: {0}", request.Id);
 
-                return Unit.Value;
+                return new UpdateJobOfferRequirementCommandResponse(request.Id);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                if ((await _jobOfferRequirementRepository.GetByIdAsync(request.Id)) == null)
-                {
-                    _logger.LogWarning("UpdateJobOfferRequirementCommand - NotFoundException execuded.");
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                    throw new NotFoundException(nameof(JobOfferRequirement), request.Id);
-                }
-                else
-                {
-                    _logger.LogWarning("UpdateJobOfferRequirementCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                return new UpdateJobOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-                    throw;
-                }
+                return new UpdateJobOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
         }
     }

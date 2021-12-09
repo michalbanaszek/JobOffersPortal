@@ -5,12 +5,13 @@ using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffer
 {
-    public class DeleteJobOfferCommandHandler : IRequestHandler<DeleteJobOfferCommand>
+    public class DeleteJobOfferCommandHandler : IRequestHandler<DeleteJobOfferCommand, DeleteJobOfferCommandResponse>
     {
         private readonly ILogger<DeleteJobOfferCommandHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
@@ -23,12 +24,14 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
             _currentUserService = currentUserService;
         }
 
-        public async Task<Unit> Handle(DeleteJobOfferCommand request, CancellationToken cancellationToken)
+        public async Task<DeleteJobOfferCommandResponse> Handle(DeleteJobOfferCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRepository.GetByIdAsync(request.Id);
 
             if (entity == null)
             {
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
+
                 throw new NotFoundException(nameof(JobOffer), request.Id);
             }
 
@@ -36,9 +39,9 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
 
             if (!userOwns)
             {
-                _logger.LogWarning("Delete company failed - NotFoundUserOwnException, Id: {0}, UserId: {1}", request.Id, _currentUserService.UserId);
+                _logger.LogWarning("User is not own for this entity, Id: {0}, UserId: {1}", request.Id, _currentUserService.UserId);
 
-                throw new NotFoundUserOwnException(nameof(JobOffer), _currentUserService.UserId);
+                throw new ForbiddenAccessException(nameof(JobOffer), request.Id);
             }
 
             try
@@ -46,15 +49,21 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
                 await _jobOfferRepository.DeleteAsync(entity);
 
                 _logger.LogInformation("Deleted JobOffer Id: {0}", entity.Id);
+
+                return new DeleteJobOfferCommandResponse(entity.Id);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                _logger.LogWarning("DeleteJobOfferCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                throw;
+                return new DeleteJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
+            catch (Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-            return Unit.Value;
+                return new DeleteJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
+            }
         }
     }
 }

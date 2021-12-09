@@ -12,10 +12,10 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDeta
     public class GetCompanyQueryHandler : IRequestHandler<GetCompanyQuery, CompanyDetailViewModel>
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<GetCompanyQueryHandler> _logger;      
+        private readonly ILogger<GetCompanyQueryHandler> _logger;
         private readonly ICompanyRepository _companyRepository;
 
-        public GetCompanyQueryHandler(ICompanyRepository companyRepository ,IMapper mapper, ILogger<GetCompanyQueryHandler> logger)
+        public GetCompanyQueryHandler(ICompanyRepository companyRepository, IMapper mapper, ILogger<GetCompanyQueryHandler> logger)
         {
             _mapper = mapper;
             _logger = logger;
@@ -24,11 +24,11 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDeta
 
         public async Task<CompanyDetailViewModel> Handle(GetCompanyQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _companyRepository.GetByIdIncludeEntitiesAsync(request.Id);            
+            var entity = await _companyRepository.GetByIdIncludeEntitiesAsync(request.Id);
 
             if (entity == null)
             {
-                _logger.LogWarning("Get JobOffer failed - NotFoundException, Id: {0}", request.Id);
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
 
                 throw new NotFoundException(nameof(Company), request.Id);
             }

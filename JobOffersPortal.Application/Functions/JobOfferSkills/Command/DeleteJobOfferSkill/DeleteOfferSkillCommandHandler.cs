@@ -6,12 +6,13 @@ using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.DeleteJobOfferSkill
 {
-    public class DeleteOfferSkillCommandHandler : IRequestHandler<DeleteOfferSkillCommand, Unit>
+    public class DeleteOfferSkillCommandHandler : IRequestHandler<DeleteOfferSkillCommand, DeleteOfferSkillCommandResponse>
     {       
         private readonly ILogger<DeleteOfferSkillCommandHandler> _logger;
         private readonly IJobOfferSkillRepository _jobOfferSkillRepository;
@@ -22,12 +23,14 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.DeleteJob
             _jobOfferSkillRepository = jobOfferSkillRepository;
         }
 
-        public async Task<Unit> Handle(DeleteOfferSkillCommand request, CancellationToken cancellationToken)
+        public async Task<DeleteOfferSkillCommandResponse> Handle(DeleteOfferSkillCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferSkillRepository.GetByIdAsync(request.Id);
 
             if (entity == null)
             {
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
+
                 throw new NotFoundException(nameof(JobOfferSkill), request.Id);
             }
 
@@ -36,15 +39,21 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.DeleteJob
                 await _jobOfferSkillRepository.DeleteAsync(entity);
 
                 _logger.LogInformation("Deleted JobOfferSkill Id: {0}", request.Id);
+
+                return new DeleteOfferSkillCommandResponse(request.Id);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                _logger.LogWarning("DeleteOfferSkillCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                throw;
+                return new DeleteOfferSkillCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
+            catch (Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-            return Unit.Value;
+                return new DeleteOfferSkillCommandResponse(false, new string[] { "Cannot add entity to database." });
+            }
         }
     }
 }

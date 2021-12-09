@@ -6,12 +6,13 @@ using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer
 {
-    public class UpdateJobOfferCommandHandler : IRequestHandler<UpdateJobOfferCommand, string>
+    public class UpdateJobOfferCommandHandler : IRequestHandler<UpdateJobOfferCommand, UpdateJobOfferCommandResponse>
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
@@ -26,12 +27,14 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
             _jobOfferRepository = jobOfferRepository;           
         }
 
-        public async Task<string> Handle(UpdateJobOfferCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateJobOfferCommandResponse> Handle(UpdateJobOfferCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.Id);
 
             if (entity == null)
             {
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
+
                 throw new NotFoundException(nameof(JobOffer), request.Id);
             }
 
@@ -39,27 +42,33 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
 
             if (!userOwns)
             {
-                _logger.LogWarning("Update company failed - NotFoundUserOwnException, Id: {0}, UserId: {1}", request.Id, _currentUserService.UserId);
+                _logger.LogWarning("User is not own for this entity, Id: {0}, UserId: {1}", request.Id, _currentUserService.UserId);
 
-                throw new NotFoundUserOwnException(nameof(JobOffer), _currentUserService.UserId);
+                throw new ForbiddenAccessException(nameof(JobOffer), request.Id);
             }
-
-            _mapper.Map(request, entity);
 
             try
             {
+                _mapper.Map(request, entity);
+
                 await _jobOfferRepository.UpdateAsync(entity);
+
+                _logger.LogInformation("Updated JobOffer Id: {0}", request.Id);
+
+                return new UpdateJobOfferCommandResponse(entity.Id);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                    _logger.LogWarning("UpdateJobOfferCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                    throw;
+                return new UpdateJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
+            catch (Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-            _logger.LogInformation("Updated JobOffer Id: {0}", request.Id);
-
-            return entity.Id;
+                return new UpdateJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,24 +29,30 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
 
         public async Task<CreateJobOfferResponse> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
         {
-            var entity = _mapper.Map<JobOffer>(request);
-
             try
             {
+                var entity = _mapper.Map<JobOffer>(request);
+
                 await _jobOfferRepository.AddAsync(entity);
 
                 _logger.LogInformation("Created JobOffer Id: {0}", entity.Id);
+
+                var uri = _uriJobOfferService.GetJobOfferUri(entity.Id);
+
+                return new CreateJobOfferResponse(true, new string[] {}) { Id = entity.Id, Uri = uri };
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                _logger.LogWarning("CreateJobOfferCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                throw;
+                return new CreateJobOfferResponse(false, new string[] { "Cannot add entity to database." });
             }
+            catch (Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-            var uri = _uriJobOfferService.GetJobOfferUri(entity.Id);
-
-            return new CreateJobOfferResponse() { Id = entity.Id, Url = uri };
+                return new CreateJobOfferResponse(false, new string[] { "Cannot add entity to database." });
+            }
         }
     }
 }

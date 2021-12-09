@@ -20,7 +20,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
                 .WithMessage("Company cannot be empty.")
                 .NotNull()
                 .MinimumLength(2).MaximumLength(30)
-                .WithMessage("{PropertName} Length is beewten 2 and 30")
+                .WithMessage("Company Length is beewten 2 and 30")
                 .Matches("^[a-zA-Z0-9 ]*$");
         }
 

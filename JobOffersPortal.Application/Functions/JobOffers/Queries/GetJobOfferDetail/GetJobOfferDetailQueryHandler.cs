@@ -29,7 +29,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Queries.GetJobOfferDet
 
             if (entity == null)
             {
-                _logger.LogWarning("Get JobOffer Id: {0}", request.Id);
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
 
                 throw new NotFoundException(nameof(JobOffer), request.Id);
             }

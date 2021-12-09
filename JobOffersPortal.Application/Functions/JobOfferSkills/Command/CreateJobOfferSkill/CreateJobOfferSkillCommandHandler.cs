@@ -30,7 +30,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
 
             if (entity == null)
             {
-                throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
+                throw new NotFoundException(nameof(JobOffer), request.JobOfferId);                
             }
 
             JobOfferSkill jobOfferSkill = new JobOfferSkill()
@@ -44,15 +44,21 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
                 entity.Skills.Add(jobOfferSkill);
 
                 _logger.LogInformation("Created JobOfferSkill for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
+
+                return _mapper.Map<CreateJobOfferSkillResponse>(entity);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                _logger.LogWarning("CreateJobOfferSkillCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                throw;
-            }          
+                return new CreateJobOfferSkillResponse(false, new string[] { "Cannot add entity to database." });
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-            return _mapper.Map<CreateJobOfferSkillResponse>(entity);
+                return new CreateJobOfferSkillResponse(false, new string[] { "Cannot add entity to database." });
+            }
         }
     }
 }

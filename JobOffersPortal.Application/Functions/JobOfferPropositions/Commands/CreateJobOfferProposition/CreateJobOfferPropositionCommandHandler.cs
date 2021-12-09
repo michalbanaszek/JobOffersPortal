@@ -31,6 +31,8 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
 
             if (entity == null)
             {
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.JobOfferId);
+
                 throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
             }
 
@@ -43,17 +45,23 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
             try
             {
                 entity.Propositions.Add(jobOfferProposition);
+
+                _logger.LogInformation("Created JobOfferProposition for JobOffer Id: {0}, Name: {1}, JobOfferId: {2}", entity.Id, entity.Position);
+
+                return _mapper.Map<CreateJobOfferPropositionResponse>(entity);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
-                _logger.LogWarning("CreateJobOfferPropositionCommand - Exception execuded, Exception Message:", dbUpdateConcurrencyException.Message);
+                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                throw;
+                return new CreateJobOfferPropositionResponse(false, new string[] { "Cannot add entity to database." });
             }
+            catch (Exception exception)
+            {
+                _logger.LogError("Exception execuded, Message:", exception.Message);
 
-            _logger.LogInformation("Created JobOfferProposition for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
-
-            return _mapper.Map<CreateJobOfferPropositionResponse>(entity);
+                return new CreateJobOfferPropositionResponse(false, new string[] { "Cannot add entity to database." });
+            }
         }
     }
 }
