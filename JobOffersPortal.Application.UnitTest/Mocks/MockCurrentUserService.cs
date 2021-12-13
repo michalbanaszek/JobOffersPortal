@@ -3,7 +3,7 @@ using Moq;
 
 namespace JobOffersPortal.Application.UnitTest.Mocks
 {
-    internal static class MockCurrentUserService
+    internal class MockCurrentUserService
     {
         public static Mock<ICurrentUserService> GetCurrentUserService()
         {

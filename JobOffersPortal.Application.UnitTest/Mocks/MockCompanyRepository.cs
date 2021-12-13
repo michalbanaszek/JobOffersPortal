@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace JobOffersPortal.Application.UnitTest.Mocks
 {
-    internal static class MockCompanyRepository
+    internal class MockCompanyRepository
     {
         public static Mock<ICompanyRepository> GetCompanyRepository()
         {
@@ -48,8 +48,6 @@ namespace JobOffersPortal.Application.UnitTest.Mocks
                 {
                     return false;
                 }
-
-                userId = userId ?? "user1";
 
                 return entity.CreatedBy != userId ? false : true;
             });
