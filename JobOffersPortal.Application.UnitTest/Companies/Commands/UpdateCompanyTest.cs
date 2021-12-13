@@ -18,7 +18,6 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public UpdateCompanyTest()
         {
             _logger = (new Mock<ILogger<UpdateCompanyCommandHandler>>()).Object;
-
             _validator = new UpdateCompanyCommandValidator(_mockCompanyRepository.Object);
         }
 
@@ -39,7 +38,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_InvalidEmptyCompany_NotUpdatedToCompanyRepo()
+        public async Task HandleValidator_InvalidEmptyCompany_NotUpdatedToCompanyRepo()
         {
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
 
@@ -61,7 +60,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_InvalidMaxLengthCompany_NotUpdatedToCompanyRepo()
+        public async Task HandleValidator_InvalidMaxLengthCompany_NotUpdatedToCompanyRepo()
         {
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
 
@@ -82,7 +81,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_InvalidFormatCompany_NotUpdatedToCompanyRepo()
+        public async Task HandleValidator_InvalidFormatCompany_NotUpdatedToCompanyRepo()
         {
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
 
@@ -98,7 +97,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_IsAlreadyNameExistCompany_NotUpdatedToCompanyRepo()
+        public async Task HandleValidator_IsAlreadyNameExistCompany_NotUpdatedToCompanyRepo()
         {
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
 
@@ -114,7 +113,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_NotFoundException_InvalidCompanyId_NotUpdatedToCompanyRepo()
+        public async Task HandleNotFoundException_InvalidCompanyId_NotUpdatedToCompanyRepo()
         {
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
 
@@ -138,7 +137,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_ForbiddenAccessException_NotOwnUser_NotUpdatedToCompanyRepo()
+        public async Task HandleForbiddenAccessException_NotOwnUser_NotUpdatedToCompanyRepo()
         {
             _currentUserServiceMock.SetupGet(x => x.UserId).Returns("user2");
 

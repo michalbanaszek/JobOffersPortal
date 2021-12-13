@@ -12,7 +12,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         protected readonly Mock<ICompanyRepository> _mockCompanyRepository;
         protected readonly Mock<ICurrentUserService> _currentUserServiceMock;
         protected readonly ICurrentUserService _currentUserService;
-        protected IMapper _mapper;
+        protected readonly IMapper _mapper;
 
         protected BaseCompanyInitialization()
         {

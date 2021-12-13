@@ -19,7 +19,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_ValidCompanyId_DeletedToCompanyRepo()
+        public async Task Handle_ValidCompany_DeletedToCompanyRepo()
         {
             var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger, _currentUserService);
 
@@ -35,7 +35,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_NotFoundException_InvalidCompanyId_NotDeletedToCompanyRepo()
+        public async Task HandleNotFoundException_InvalidCompanyId_NotDeletedToCompanyRepo()
         {
             var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger, _currentUserService);
 
@@ -59,7 +59,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_ForbiddenAccessException_NotOwnUser_NotDeletedToCompanyRepo()
+        public async Task HandleForbiddenAccessException_NotOwnUser_NotDeletedToCompanyRepo()
         {
             _currentUserServiceMock.SetupGet(x => x.UserId).Returns("user2");
 

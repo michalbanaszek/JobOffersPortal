@@ -18,12 +18,8 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
 
         public CreateCompanyTest()
         {
-            var mockLogger = new Mock<ILogger<CreateCompanyCommandHandler>>();
-            _logger = mockLogger.Object;
-
-            var mockUriService = new Mock<IUriCompanyService>();
-            _uriCompanyService = mockUriService.Object;
-
+            _logger = (new Mock<ILogger<CreateCompanyCommandHandler>>()).Object;
+            _uriCompanyService = (new Mock<IUriCompanyService>()).Object;  
             _validator = new CreateCompanyCommandValidator(_mockCompanyRepository.Object);
         }
 
@@ -52,7 +48,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_InvalidEmptyCompany_NotAddedToCompanyRepo()
+        public async Task HandleValidator_InvalidEmptyCompany_NotAddedToCompanyRepo()
         {
             var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _uriCompanyService);
 
@@ -77,7 +73,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_InvalidMaxLengthCompany_NotAddedToCompanyRepo()
+        public async Task HandleValidator_InvalidMaxLengthCompany_NotAddedToCompanyRepo()
         {
             var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _uriCompanyService);
 
@@ -98,7 +94,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_InvalidFormatCompany_NotAddedToCompanyRepo()
+        public async Task HandleValidator_InvalidFormatCompany_NotAddedToCompanyRepo()
         {
             var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _uriCompanyService);
 
@@ -122,7 +118,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task Handle_IsAlreadyNameExistCompany_NotAddedToCompanyRepo()
+        public async Task HandleValidator_IsAlreadyNameExistCompany_NotAddedToCompanyRepo()
         {
             var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _uriCompanyService);
 
