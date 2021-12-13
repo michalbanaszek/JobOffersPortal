@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Application.JobOffers.Commands.CreateJobOffer
 {
-    public class CreateJobOfferCommand : IRequest<CreateJobOfferResponse>
+    public class CreateJobOfferCommand : IRequest<CreateJobOfferCommandResponse>
     {
         public string CompanyId { get; set; }
         public string Position { get; set; }

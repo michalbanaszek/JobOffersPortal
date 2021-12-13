@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer
 {
-    public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferCommand, CreateJobOfferResponse>
+    public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferCommand, CreateJobOfferCommandResponse>
     {
         private readonly IJobOfferRepository _jobOfferRepository;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
             _uriJobOfferService = uriJobOfferService;
         }
 
-        public async Task<CreateJobOfferResponse> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
+        public async Task<CreateJobOfferCommandResponse> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -39,19 +39,19 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
 
                 var uri = _uriJobOfferService.GetJobOfferUri(entity.Id);
 
-                return new CreateJobOfferResponse(true, new string[] {}) { Id = entity.Id, Uri = uri };
+                return new CreateJobOfferCommandResponse(true, new string[] {}) { Id = entity.Id, Uri = uri };
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                return new CreateJobOfferResponse(false, new string[] { "Cannot add entity to database." });
+                return new CreateJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
             catch (Exception exception)
             {
                 _logger.LogError("Exception execuded, Message:", exception.Message);
 
-                return new CreateJobOfferResponse(false, new string[] { "Cannot add entity to database." });
+                return new CreateJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
         }
     }
