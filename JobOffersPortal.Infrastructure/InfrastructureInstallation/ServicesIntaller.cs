@@ -14,18 +14,6 @@ namespace JobOffersPortal.Persistance.EF.InfrastructureInstallation
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped(typeof(IRepositoryAsync<>), typeof(BaseRepository<>));
-
-            services.AddScoped<ICompanyRepository, CompanyRepository>();
-
-            services.AddScoped<IJobOfferRepository, JobOfferRepository>();
-
-            services.AddScoped<IJobOfferSkillRepository, JobOfferSkillRepository>();
-
-            services.AddScoped<IJobOfferPropositionRepository, JobOfferPropositionRepository>();
-
-            services.AddScoped<IJobOfferRequirementRepository, JobOfferRequirementRepository>();
-
             services.AddTransient<IDateTime, DateTimeService>();
 
             services.AddScoped<IIdentityService, IdentityService>();
