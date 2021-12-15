@@ -329,6 +329,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             var refreshToken = new RefreshToken()
             {
+                Token = Guid.NewGuid().ToString(),
                 JwtId = token.Id,
                 CreatedBy = user.Id,
                 CreationDate = DateTime.UtcNow,
