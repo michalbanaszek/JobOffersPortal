@@ -66,6 +66,8 @@ namespace JobOffersPortal.Persistance.EF.Persistence
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<RefreshToken>().HasKey(x => x.Token);
+
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);            
                         
             foreach (var foreignKey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
