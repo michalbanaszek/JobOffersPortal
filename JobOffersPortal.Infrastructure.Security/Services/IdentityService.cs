@@ -27,7 +27,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
         private readonly IAuthorizationService _authorizationService;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IApplicationDbContext _context;
-        private readonly IFacebookAuthService _facebookAuthService;
+        private readonly IFacebookAuthService _facebookAuthService;    
 
         public IdentityService(
             UserManager<ApplicationUser> userManager,
@@ -43,7 +43,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             _facebookAuthService = facebookAuthService;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
             _authorizationService = authorizationService;
-            _jwtOptions = jwtOptions;
+            _jwtOptions = jwtOptions;       
         }
 
         public async Task<string> GetUserNameAsync(string userId)
@@ -111,7 +111,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             {
                 return new AuthenticationResult()
                 {
-                    Errors = new[] { "User with this email address is not exists." }
+                    Errors = new[] { "email or password is wrong." }
                 };
             }
 
@@ -121,7 +121,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             {
                 return new AuthenticationResult()
                 {
-                    Errors = new[] { "email or password is wrong" }
+                    Errors = new[] { "email or password is wrong." }
                 };
             }
 
