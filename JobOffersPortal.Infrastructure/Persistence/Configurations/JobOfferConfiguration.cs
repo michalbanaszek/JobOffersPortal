@@ -9,7 +9,21 @@ namespace Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<JobOffer> builder)
         {
             builder.Property(p => p.Id)
-                 .ValueGeneratedOnAdd();
+                .ValueGeneratedOnAdd();
+
+            builder.Property(x => x.Position)
+                .IsRequired()
+                .HasMaxLength(30);
+
+            builder.Property(x => x.Salary)
+                .IsRequired()
+                .HasMaxLength(30);
+
+            builder.Property(x => x.CompanyId)
+                .IsRequired();
+
+            builder.Property(x => x.Date)
+                .IsRequired();
         }
     }
 }
