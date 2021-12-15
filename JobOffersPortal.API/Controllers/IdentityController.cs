@@ -4,6 +4,7 @@ using JobOffersPortal.Application.Security.Models.AuthResult;
 using JobOffersPortal.Application.Security.Models.External;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.API.Controllers
@@ -11,10 +12,12 @@ namespace JobOffersPortal.API.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
+        private readonly ILogger<IdentityController> _logger;
 
-        public IdentityController(IIdentityService identityService)
+        public IdentityController(IIdentityService identityService, ILogger<IdentityController> logger)
         {
             _identityService = identityService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -27,6 +30,8 @@ namespace JobOffersPortal.API.Controllers
         [HttpPost(ApiRoutes.IdentityRoute.Register), AllowAnonymous]
         public async Task<ActionResult<AuthSuccessResponse>> Register([FromBody] RegisterRequest request)
         {
+            _logger.LogInformation("Invoked Register endpoint");
+
             var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
 
             return CheckAuthenticationResult(authResponse);
@@ -42,6 +47,8 @@ namespace JobOffersPortal.API.Controllers
         [HttpPost(ApiRoutes.IdentityRoute.Login), AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
+            _logger.LogInformation("Invoked Login endpoint");
+
             var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
 
             return CheckAuthenticationResult(authResponse);
@@ -57,6 +64,8 @@ namespace JobOffersPortal.API.Controllers
         [HttpPost(ApiRoutes.IdentityRoute.FacebookAuth), AllowAnonymous]
         public async Task<IActionResult> FacebookAuth([FromBody] LoginFacebookRequest request)
         {
+            _logger.LogInformation("Invoked FacebookAuth endpoint");
+
             var authResponse = await _identityService.LoginWithFacebookAsync(request.TokenAccess);
 
             return CheckAuthenticationResult(authResponse);
@@ -73,6 +82,8 @@ namespace JobOffersPortal.API.Controllers
         [HttpPost(ApiRoutes.IdentityRoute.RefreshToken), AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {
+            _logger.LogInformation("Invoked RefreshToken endpoint");
+
             var authResponse = await _identityService.RefreshTokenAsync(request.Token, request.RefreshToken);
 
             return CheckAuthenticationResult(authResponse);
@@ -82,6 +93,11 @@ namespace JobOffersPortal.API.Controllers
         {
             if (!authResponse.Success)
             {
+                foreach (var error in authResponse.Errors)
+                {
+                    _logger.LogError(error);
+                }
+
                 return BadRequest(new AuthFailedResponse()
                 {
                     Errors = authResponse.Errors
