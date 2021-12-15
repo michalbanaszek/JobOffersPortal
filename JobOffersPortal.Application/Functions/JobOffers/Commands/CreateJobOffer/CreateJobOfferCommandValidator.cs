@@ -22,6 +22,10 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
                 .NotEmpty()
                 .NotNull();
 
+            RuleFor(x => x.Date)
+                .NotEmpty()
+                .NotNull();
+
             RuleFor(x => x.Requirements)
                 .NotEmpty()
                 .NotNull();

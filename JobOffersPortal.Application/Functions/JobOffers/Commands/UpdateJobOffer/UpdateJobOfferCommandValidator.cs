@@ -16,6 +16,10 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
             RuleFor(x => x.Salary)
                 .NotEmpty()
                 .NotNull();
+
+            RuleFor(x => x.Date)
+                .NotEmpty()
+                .NotNull();
         }
     }
 }
