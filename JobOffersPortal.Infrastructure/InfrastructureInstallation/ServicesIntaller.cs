@@ -16,8 +16,6 @@ namespace JobOffersPortal.Persistance.EF.InfrastructureInstallation
         {
             services.AddTransient<IDateTime, DateTimeService>();
 
-            services.AddScoped<IIdentityService, IdentityService>();
-
             services.AddSingleton<IUriService>(provider =>
             {
                 var accessor = provider.GetRequiredService<IHttpContextAccessor>();

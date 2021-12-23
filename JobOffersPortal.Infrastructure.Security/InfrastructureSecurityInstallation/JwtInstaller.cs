@@ -1,5 +1,7 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Security.Contracts;
 using JobOffersPortal.Infrastructure.Security.Options;
+using JobOffersPortal.Infrastructure.Security.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,8 @@ namespace JobOffersPortal.Infrastructure.Security.InfrastructureSecurityInstalla
             };
 
             services.AddSingleton(tokenValidationParameters);
+
+            services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddAuthentication(x =>
             {
