@@ -20,7 +20,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers
 
         public CreateJobOfferTest()
         {
-            _logger = (new Mock<ILogger<CreateJobOfferCommandHandler>>()).Object;  
+            _logger = (new Mock<ILogger<CreateJobOfferCommandHandler>>()).Object;
             _uriJobOfferService = (new Mock<IUriJobOfferService>()).Object;
             _validator = new CreateJobOfferCommandValidator();
         }
@@ -114,7 +114,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers
 
             response.ShouldBeNull();
             validatorResult.IsValid.ShouldBe(false);
-            validatorResult.Errors[0].ErrorMessage.ShouldBe("'Salary' must not be empty.");           
+            validatorResult.Errors[0].ErrorMessage.ShouldBe("'Salary' must not be empty.");
             jobListBeforeAdd.ShouldBe(jobListAfterAdd);
         }
 
@@ -129,7 +129,10 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers
                 Position = "PositionTest",
                 Salary = "1000",
                 IsAvailable = true,
-                Date = DateTime.Now
+                Date = DateTime.Now,
+                Propositions = null,
+                Requirements = null,
+                Skills = null
             };
 
             var jobListBeforeAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
@@ -141,7 +144,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers
             var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
             response.ShouldBeNull();
-            validatorResult.IsValid.ShouldBe(false);        
+            validatorResult.IsValid.ShouldBe(false);
             validatorResult.Errors[0].ErrorMessage.ShouldBe("'Requirements' must not be empty.");
             validatorResult.Errors[1].ErrorMessage.ShouldBe("'Skills' must not be empty.");
             validatorResult.Errors[2].ErrorMessage.ShouldBe("'Propositions' must not be empty.");
