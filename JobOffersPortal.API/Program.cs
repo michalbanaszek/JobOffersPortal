@@ -1,15 +1,12 @@
 using App.Metrics.AspNetCore;
 using App.Metrics.Formatters.Prometheus;
-using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using NLog.Web;
-using System.Threading.Tasks;
 using NLog;
+using NLog.Web;
+using System;
+using System.Threading.Tasks;
 
 namespace JobOffersPortal.API
 {
@@ -23,19 +20,7 @@ namespace JobOffersPortal.API
             {
                 logger.Debug("init main function");
 
-                var host = CreateHostBuilder(args).Build();
-
-                using (var serviceScope = host.Services.CreateScope())
-                {
-                    var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                    if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
-                    {
-                        await context.Database.MigrateAsync();
-                    }
-
-                    await ApplicationDbContextSeed.Initialize(serviceScope);
-                }
+                var host = CreateHostBuilder(args).Build();                         
 
                 await host.RunAsync();
             }
