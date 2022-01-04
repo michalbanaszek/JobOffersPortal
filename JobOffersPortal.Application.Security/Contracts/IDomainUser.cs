@@ -1,6 +1,6 @@
 ﻿namespace JobOffersPortal.Application.Common.Interfaces
 {
-    public interface IAppUser
+    public interface IDomainUser
     {
         public string Username { get; set; }
         public string DisplayName { get; set; }

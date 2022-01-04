@@ -5,6 +5,6 @@ namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IAuthenticationLdapService
     {
-        Task<AuthenticationLdapResult> Login(string username, string password);
+        Task<AuthenticationLdapResult> LoginAsync(string username, string password);
     }
 }
