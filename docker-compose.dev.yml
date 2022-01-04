@@ -33,7 +33,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty!2
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/JobOffersPortal.API.pfx
     volumes:
-      - ${APPDATA}\Microsoft\UserSecrets\29b8f3a9-83f6-4492-aa39-028c2cf4529b\:/root/.microsoft/usersecrets/29b8f3a9-83f6-4492-aa39-028c2cf4529b
+      - ${APPDATA}\Microsoft\UserSecrets\{UserSecretId}\:/root/.microsoft/usersecrets/{UserSecretId}
       - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/:ro
     ports:
       - 8080:80
