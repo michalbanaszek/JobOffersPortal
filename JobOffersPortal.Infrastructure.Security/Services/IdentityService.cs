@@ -1,11 +1,9 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Application.Security.Contracts;
 using JobOffersPortal.Application.Security.Models.AuthResult;
 using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Infrastructure.Security.Models;
 using JobOffersPortal.Infrastructure.Security.Options;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,9 +20,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly JwtOptions _jwtOptions;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly JwtOptions _jwtOptions;          
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IApplicationDbContext _context;
         private readonly IFacebookAuthService _facebookAuthService;    
@@ -34,15 +30,12 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             TokenValidationParameters tokenValidationParameters,
             IApplicationDbContext context,
             IFacebookAuthService facebookAuthService,
-            IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
-            IAuthorizationService authorizationService, JwtOptions jwtOptions)
+            JwtOptions jwtOptions)
         {
             _userManager = userManager;
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
             _facebookAuthService = facebookAuthService;
-            _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-            _authorizationService = authorizationService;
             _jwtOptions = jwtOptions;       
         }
 
@@ -53,7 +46,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             return user.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<bool> CreateUserAsync(string userName, string password)
         {
             var user = new ApplicationUser
             {
@@ -63,7 +56,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             var result = await _userManager.CreateAsync(user, password);
 
-            return (result.ToApplicationResult(), user.Id);
+            return result.Succeeded ? true : false;           
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
@@ -73,18 +66,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             return await _userManager.IsInRoleAsync(user, role);
         }
 
-        public async Task<bool> AuthorizeAsync(string userId, string policyName)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-
-            var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-
-            var result = await _authorizationService.AuthorizeAsync(principal, policyName);
-
-            return result.Succeeded;
-        }
-
-        public async Task<Result> DeleteUserAsync(string userId)
+        public async Task<bool> DeleteUserAsync(string userId)
         {
             var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
 
@@ -93,14 +75,14 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                 return await DeleteUserAsync(user);
             }
 
-            return Result.Failure(new[] { "User not found." });
+            return false;
         }
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        public async Task<bool> DeleteUserAsync(ApplicationUser user)
         {
             var result = await _userManager.DeleteAsync(user);
 
-            return result.ToApplicationResult();
+            return result.Succeeded ? true : false;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -191,6 +173,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             }
 
             storedRefreshToken.Used = true;
+
             _context.RefreshTokens.Update(storedRefreshToken);
 
             var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);

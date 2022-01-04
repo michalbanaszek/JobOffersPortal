@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using JobOffersPortal.Application.Common.Interfaces;
+﻿using JobOffersPortal.Application.Common.Enums;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
-using JobOffersPortal.Application.Common.SearchOptions;
 using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -12,32 +10,32 @@ namespace JobOffersPortal.Persistance.EF.Repositories
 {
     public class CompanyRepository : BaseRepository<Company>, ICompanyRepository
     {
-        public CompanyRepository(ApplicationDbContext context) : base(context) 
-        {          
+        public CompanyRepository(ApplicationDbContext context) : base(context)
+        {
         }
 
-        public IQueryable<Company> GetAllCompaniesIncludeEntitiesWithOptions(SearchJobOfferOptions searchJobOfferOptions)
+        public IQueryable<Company> GetAllCompaniesIncludeEntitiesWithOptions(SearchCompanyOptions searchJobOfferOptions)
         {
             switch (searchJobOfferOptions)
             {
-                case SearchJobOfferOptions.All:
+                case SearchCompanyOptions.All:
                     return _context.Companies
-                                 .Include(x => x.JobOffers)
-                                           .ThenInclude(x => x.Requirements)
-                                 .Include(x => x.JobOffers)
-                                           .ThenInclude(x => x.Skills)
-                                 .Include(x => x.JobOffers)
-                                           .ThenInclude(x => x.Propositions);                          
-                             
+                                   .Include(x => x.JobOffers)
+                                       .ThenInclude(x => x.Requirements)
+                                   .Include(x => x.JobOffers)
+                                       .ThenInclude(x => x.Skills)
+                                   .Include(x => x.JobOffers)
+                                       .ThenInclude(x => x.Propositions);
 
-                case SearchJobOfferOptions.SortByName:
+
+                case SearchCompanyOptions.SortByName:
                     return _context.Companies.Include(x => x.JobOffers)
                                                 .ThenInclude(x => x.Propositions)
                                              .Include(x => x.JobOffers)
                                                 .ThenInclude(x => x.Requirements)
                                              .Include(x => x.JobOffers)
                                                 .ThenInclude(x => x.Skills)
-                                             .OrderBy(x => x.Name);    
+                                             .OrderBy(x => x.Name);
                 default:
                     return _context.Companies;
             }
@@ -45,7 +43,13 @@ namespace JobOffersPortal.Persistance.EF.Repositories
 
         public Task<Company> GetByIdIncludeEntitiesAsync(string id)
         {
-            return _context.Companies.Include(x => x.JobOffers).SingleOrDefaultAsync(x => x.Id == id);
+            return _context.Companies.Include(x => x.JobOffers).Include(x => x.JobOffers)
+                                                                  .ThenInclude(x => x.Propositions)
+                                                               .Include(x => x.JobOffers)
+                                                                  .ThenInclude(x => x.Requirements)
+                                                               .Include(x => x.JobOffers)
+                                                                  .ThenInclude(x => x.Skills)
+                                                               .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> IsNameAlreadyExistAsync(string name)

@@ -4,7 +4,7 @@ using JobOffersPortal.Application.Common.Interfaces;
 
 namespace JobOffersPortal.Infrastructure.Security.Models
 {
-    public class DomainUser : IAppUser
+    public class DomainUser : IDomainUser
     {
         public string Username { get; set; }
         public string DisplayName { get; set; }

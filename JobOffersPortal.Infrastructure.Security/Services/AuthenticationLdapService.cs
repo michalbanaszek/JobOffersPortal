@@ -2,6 +2,7 @@
 using JobOffersPortal.Application.Security.Models.LDAP;
 using JobOffersPortal.Infrastructure.Security.Models;
 using JobOffersPortal.Infrastructure.Security.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Novell.Directory.Ldap;
 using System;
@@ -20,23 +21,23 @@ namespace JobOffersPortal.Infrastructure.Security.Services
         private const string SAMAccountNameAttribute = "sAMAccountName";
         private const string MailAttribute = "mail";
 
-        private readonly LdapOptions _config;
+        private readonly LdapOptions _ldapOptions;
         private readonly LdapConnection _connection;
 
-        public AuthenticationLdapService(IOptions<LdapOptions> configAccessor)
+        public AuthenticationLdapService(LdapOptions ldapOptions)
         {
-            _config = configAccessor.Value;
+            _ldapOptions = ldapOptions;
             _connection = new LdapConnection();
         }
 
-        public Task<AuthenticationLdapResult> Login(string username, string password)
+        public Task<AuthenticationLdapResult> LoginAsync(string username, string password)
         {
-            _connection.Connect(_config.Url, LdapConnection.DEFAULT_PORT);
-            _connection.Bind(_config.Username, _config.Password);
+            _connection.Connect(_ldapOptions.Url, LdapConnection.DEFAULT_PORT);
+            _connection.Bind(_ldapOptions.Username, _ldapOptions.Password);
 
-            var searchFilter = string.Format(_config.SearchFilter, username);
+            var searchFilter = string.Format(_ldapOptions.SearchFilter, username);
             var result = _connection.Search(
-                _config.SearchBase,
+                _ldapOptions.SearchBase,
                 LdapConnection.SCOPE_SUB,
                 searchFilter,
                 new[] {
@@ -133,7 +134,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                     }
 
                     //we can add custom claims based on the AD user's groups
-                    var claimsIdentity = new ClaimsIdentity(userClaims);
+                    var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     if (Array.Exists(authResponse.User.Roles, s => s.Contains("Jobs_App")))
                     {

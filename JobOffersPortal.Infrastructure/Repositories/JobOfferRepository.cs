@@ -16,29 +16,29 @@ namespace JobOffersPortal.Persistance.EF.Repositories
         public IQueryable<JobOffer> GetAllByCategory(string categoryId)
         {
             return _context.JobOffers
-                                  .Include(x => x.Requirements)
-                                  .Include(x => x.Skills)
-                                  .Include(x => x.Propositions)
-                                  .Where(x => x.CompanyId == categoryId)
-                                  .OrderBy(x => !x.IsAvailable);
+                           .Include(x => x.Requirements)
+                           .Include(x => x.Skills)
+                           .Include(x => x.Propositions)
+                           .Where(x => x.CompanyId == categoryId)
+                           .OrderBy(x => !x.IsAvailable);
         }
 
         public async Task<List<JobOffer>> GetAllIncludeAllEntities()
         {
             return await _context.JobOffers
-                                       .Include(x => x.Requirements)
-                                       .Include(x => x.Skills)
-                                       .Include(x => x.Propositions)
-                                      .ToListAsync();
+                                 .Include(x => x.Requirements)
+                                 .Include(x => x.Skills)
+                                 .Include(x => x.Propositions)
+                                 .ToListAsync();
         }
 
         public async Task<JobOffer> GetByIdIncludeAllEntities(string id)
         {
             return await _context.JobOffers
-                                      .Include(x => x.Requirements)
-                                      .Include(x => x.Skills)
-                                      .Include(x => x.Propositions)
-                                      .SingleOrDefaultAsync(x => x.Id == id);
+                                 .Include(x => x.Requirements)
+                                 .Include(x => x.Skills)
+                                 .Include(x => x.Propositions)
+                                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> UserOwnsEntityAsync(string id, string userId)

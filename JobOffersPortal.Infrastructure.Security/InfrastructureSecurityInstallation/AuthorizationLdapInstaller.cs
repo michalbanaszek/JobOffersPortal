@@ -11,11 +11,11 @@ namespace JobOffersPortal.Infrastructure.Security.InfrastructureSecurityInstalla
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            var ldapSettings = new LdapOptions();
+            var ldapOptions = new LdapOptions();
 
-            configuration.GetSection(nameof(LdapOptions)).Bind(ldapSettings);
+            configuration.Bind(nameof(LdapOptions), ldapOptions);
 
-            services.AddSingleton(ldapSettings);
+            services.AddSingleton(ldapOptions);
 
             services.AddScoped<IAuthenticationLdapService, AuthenticationLdapService>();
 
