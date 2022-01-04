@@ -7,22 +7,22 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.GetJobOfferPropositionList
+namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.GetJobOfferRequirementList
 {
-    public class GetJobOfferPropositionListQueryHandler : IRequestHandler<GetJobOfferPropositionListQuery, JobOfferPropositionViewModel>
+    public class GetJobOfferRequirementListQueryHandler : IRequestHandler<GetJobOfferRequirementListQuery, JobOfferRequirementViewModel>
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<GetJobOfferPropositionListQueryHandler> _logger;
+        private readonly ILogger<GetJobOfferRequirementListQueryHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
 
-        public GetJobOfferPropositionListQueryHandler(IMapper mapper, ILogger<GetJobOfferPropositionListQueryHandler> logger, IJobOfferRepository jobOfferRepository = null)
+        public GetJobOfferRequirementListQueryHandler(IMapper mapper, IJobOfferRepository jobOfferRepository, ILogger<GetJobOfferRequirementListQueryHandler> logger)
         {
             _mapper = mapper;
             _jobOfferRepository = jobOfferRepository;
-            _logger = logger;
+            _logger = logger;          
         }
 
-        public async Task<JobOfferPropositionViewModel> Handle(GetJobOfferPropositionListQuery request, CancellationToken cancellationToken)
+        public async Task<JobOfferRequirementViewModel> Handle(GetJobOfferRequirementListQuery request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
 
@@ -33,7 +33,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.Get
                 throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
             }
 
-            return _mapper.Map<JobOfferPropositionViewModel>(entity);
+            return _mapper.Map<JobOfferRequirementViewModel>(entity);
         }
     }
 }

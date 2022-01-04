@@ -7,13 +7,19 @@ using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.CreateJobOfferProposition;
+using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.GetJobOfferPropositionDetail;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.GetJobOfferPropositionList;
+using JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.CreateJobOfferRequirement;
+using JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.UpdateJobOfferRequirement;
 using JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.GetJobOfferRequirementDetail;
+using JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.GetJobOfferRequirementList;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
 using JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers;
 using JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJobOfferSkill;
+using JobOffersPortal.Application.Functions.JobOfferSkills.Command.UpdateJobOfferSkill;
 using JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOfferSkillDetail;
+using JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOfferSkillList;
 using JobOffersPortal.Domain.Entities;
 using System;
 using System.Linq;
@@ -35,7 +41,7 @@ namespace JobOffersPortal.Application.Common.Mappings
             CreateMap<JobOfferSkill, JobOfferSkillDto>();
             CreateMap<JobOffer, JobOfferViewModel>().ReverseMap();
 
-            CreateMap<JobOffer, JobOfferWithRequirementWithSkillWithPropositionDto>();         
+            CreateMap<JobOffer, JobOfferWithRequirementWithSkillWithPropositionDto>();
 
             CreateMap<CreateCompanyCommand, Company>();
             CreateMap<UpdateCompanyCommand, Company>();
@@ -67,8 +73,24 @@ namespace JobOffersPortal.Application.Common.Mappings
 
             CreateMap<JobOffer, JobOfferWithRequirementWithSkillWithPropositionDto>();
             CreateMap<JobOfferProposition, JobOfferWithPropositionDto>();
-            CreateMap<JobOfferRequirement,JobOfferWithRequirementDto>();
-            CreateMap<JobOfferSkill,JobOfferWithSkillDto>();
+            CreateMap<JobOfferRequirement, JobOfferWithRequirementDto>();
+            CreateMap<JobOfferSkill, JobOfferWithSkillDto>();
+
+
+            CreateMap<JobOffer, CreateJobOfferSkillResponse>();
+            CreateMap<JobOffer, JobOfferSkillViewModel>();
+            CreateMap<JobOfferSkill, JobOfferJobOfferSkillDto>();
+            CreateMap<UpdateJobOfferSkillCommand, JobOfferSkill>();
+
+            CreateMap<JobOffer, CreateJobOfferRequirementResponse>();
+            CreateMap<JobOffer, JobOfferRequirementViewModel>();
+            CreateMap<UpdateJobOfferRequirementCommand, JobOfferRequirement>();
+            CreateMap<JobOfferRequirement, JobOfferJobOfferRequirementDto>();
+
+            CreateMap<JobOffer, CreateJobOfferPropositionResponse>();
+            CreateMap<JobOffer, JobOfferPropositionViewModel>();
+            CreateMap<UpdateJobOfferPropositionCommand, JobOfferProposition>();
+            CreateMap<JobOfferProposition, JobOfferJobOfferPropositionDto>();
         }
     }
 }

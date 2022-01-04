@@ -1,31 +1,39 @@
 ﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOfferSkillList
 {
-    public class GetJobOfferSkillListQueryHandler : IRequestHandler<GetJobOfferSkillListQuery, List<JobOfferSkillViewModel>>
+    public class GetJobOfferSkillListQueryHandler : IRequestHandler<GetJobOfferSkillListQuery, JobOfferSkillViewModel>
     {
         private readonly IMapper _mapper;
         private readonly ILogger<GetJobOfferSkillListQueryHandler> _logger;
-        private readonly IJobOfferSkillRepository _jobOfferSkillRepository;
+        private readonly IJobOfferRepository _jobOfferRepository;    
 
-        public GetJobOfferSkillListQueryHandler(IMapper mapper, ILogger<GetJobOfferSkillListQueryHandler> logger, IJobOfferSkillRepository jobOfferSkillRepository)
+        public GetJobOfferSkillListQueryHandler(IMapper mapper, ILogger<GetJobOfferSkillListQueryHandler> logger, IJobOfferSkillRepository jobOfferSkillRepository, IJobOfferRepository jobOfferRepository)
         {
             _mapper = mapper;
-            _logger = logger;
-            _jobOfferSkillRepository = jobOfferSkillRepository;
+            _logger = logger;         
+            _jobOfferRepository = jobOfferRepository;
         }
 
-        public async Task<List<JobOfferSkillViewModel>> Handle(GetJobOfferSkillListQuery request, CancellationToken cancellationToken)
+        public async Task<JobOfferSkillViewModel> Handle(GetJobOfferSkillListQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _jobOfferSkillRepository.GetAllAsync();
+            var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
 
-            return _mapper.Map<List<JobOfferSkillViewModel>>(entity);
+            if (entity == null)
+            {
+                _logger.LogWarning("Entity not found from database. Request ID: {0}", request.JobOfferId);
+
+                throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
+            }
+
+            return _mapper.Map<JobOfferSkillViewModel>(entity);
         }
     }
 }

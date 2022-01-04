@@ -16,12 +16,14 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferRequirementCommandHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
+        private readonly IJobOfferRequirementRepository _jobOfferRequirementRepository;
 
-        public CreateJobOfferRequirementCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<CreateJobOfferRequirementCommandHandler> logger)
+        public CreateJobOfferRequirementCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<CreateJobOfferRequirementCommandHandler> logger, IJobOfferRequirementRepository jobOfferRequirementRepository)
         {
             _jobOfferRepository = jobOfferRepository;
             _mapper = mapper;
             _logger = logger;
+            _jobOfferRequirementRepository = jobOfferRequirementRepository;
         }
 
         public async Task<CreateJobOfferRequirementResponse> Handle(CreateJobOfferRequirementCommand request, CancellationToken cancellationToken)
@@ -45,7 +47,9 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
             {
                 entity.Requirements.Add(jobOfferRequirement);
 
-                _logger.LogInformation("Created CreateJobOfferRequirementCommand for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
+                await _jobOfferRequirementRepository.AddAsync(jobOfferRequirement);
+
+                _logger.LogInformation("Created CreateJobOfferRequirement for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
               
                 return _mapper.Map<CreateJobOfferRequirementResponse>(entity);
             }

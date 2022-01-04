@@ -16,12 +16,14 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferSkillCommandHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
+        private readonly IJobOfferSkillRepository _jobOfferSkillRepository;
 
-        public CreateJobOfferSkillCommandHandler(IMapper mapper, ILogger<CreateJobOfferSkillCommandHandler> logger, IJobOfferRepository jobOfferRepository)
+        public CreateJobOfferSkillCommandHandler(IMapper mapper, ILogger<CreateJobOfferSkillCommandHandler> logger, IJobOfferRepository jobOfferRepository, IJobOfferSkillRepository jobOfferSkillRepository)
         {
             _mapper = mapper;
             _logger = logger;
             _jobOfferRepository = jobOfferRepository;
+            _jobOfferSkillRepository = jobOfferSkillRepository;
         }
 
         public async Task<CreateJobOfferSkillResponse> Handle(CreateJobOfferSkillCommand request, CancellationToken cancellationToken)
@@ -40,8 +42,10 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
             };
 
             try
-            {
+            {     
                 entity.Skills.Add(jobOfferSkill);
+
+                await _jobOfferSkillRepository.AddAsync(jobOfferSkill);
 
                 _logger.LogInformation("Created JobOfferSkill for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
 

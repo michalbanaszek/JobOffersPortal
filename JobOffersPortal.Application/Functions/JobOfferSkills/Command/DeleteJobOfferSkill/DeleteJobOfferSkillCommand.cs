@@ -2,7 +2,7 @@
 
 namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.DeleteJobOfferSkill
 {
-    public class DeleteOfferSkillCommand : IRequest<DeleteOfferSkillCommandResponse>
+    public class DeleteJobOfferSkillCommand : IRequest<DeleteJobOfferSkillCommandResponse>
     {
         public string Id { get; set; }
     }

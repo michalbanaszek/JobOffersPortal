@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.DeleteJobOfferRequirement
 {
-    public class DeleteOfferRequirementCommandHandler : IRequestHandler<DeleteOfferRequirementCommand, DeleteOfferRequirementCommandResponse>
+    public class DeleteJobOfferRequirementCommandHandler : IRequestHandler<DeleteJobOfferRequirementCommand, DeleteJobOfferRequirementCommandResponse>
     {
-        private readonly ILogger<DeleteOfferRequirementCommandHandler> _logger;
+        private readonly ILogger<DeleteJobOfferRequirementCommandHandler> _logger;
         private readonly IJobOfferRequirementRepository _jobOfferRequirementRepository;
 
-        public DeleteOfferRequirementCommandHandler(ILogger<DeleteOfferRequirementCommandHandler> logger, IJobOfferRequirementRepository jobOfferRequirementRepository)
+        public DeleteJobOfferRequirementCommandHandler(ILogger<DeleteJobOfferRequirementCommandHandler> logger, IJobOfferRequirementRepository jobOfferRequirementRepository)
         {
             _logger = logger;
             _jobOfferRequirementRepository = jobOfferRequirementRepository;
         }
 
-        public async Task<DeleteOfferRequirementCommandResponse> Handle(DeleteOfferRequirementCommand request, CancellationToken cancellationToken)
+        public async Task<DeleteJobOfferRequirementCommandResponse> Handle(DeleteJobOfferRequirementCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
 
@@ -39,19 +39,19 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.De
 
                 _logger.LogInformation("Deleted JobOfferRequirement Id: {0}", request.Id);
 
-                return new DeleteOfferRequirementCommandResponse(request.Id);
+                return new DeleteJobOfferRequirementCommandResponse(request.Id);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                return new DeleteOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
+                return new DeleteJobOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
             catch (Exception exception)
             {
                 _logger.LogError("Exception execuded, Message:", exception.Message);
 
-                return new DeleteOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
+                return new DeleteJobOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
         }
     }
