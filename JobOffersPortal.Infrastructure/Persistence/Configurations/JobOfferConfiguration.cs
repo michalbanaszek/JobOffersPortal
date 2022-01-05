@@ -16,7 +16,6 @@ namespace Infrastructure.Persistence.Configurations
                 .HasMaxLength(30);
 
             builder.Property(x => x.Salary)
-                .IsRequired()
                 .HasMaxLength(30);
 
             builder.Property(x => x.CompanyId)
