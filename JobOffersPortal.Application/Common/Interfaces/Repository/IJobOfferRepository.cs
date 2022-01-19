@@ -10,6 +10,6 @@ namespace JobOffersPortal.Application.Common.Interfaces.Persistance
         Task<bool> UserOwnsEntityAsync(string id, string userId);
         Task<List<JobOffer>> GetAllIncludeAllEntities();
         Task<JobOffer> GetByIdIncludeAllEntities(string id);
-        IQueryable<JobOffer> GetAllByCategory(string categoryId);
+        IQueryable<JobOffer> GetAllByCompany(string companyId);
     }
 }

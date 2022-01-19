@@ -1,15 +1,18 @@
 ﻿using JobOffersPortal.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IApplicationDbContext
     {
-        public DbSet<Company> Companies { get; set; }
-        public DbSet<JobOffer> JobOffers { get; set; }
-        public DbSet<JobOfferProposition> JobOfferPropositions { get; set; }
-        public DbSet<JobOfferRequirement> JobOfferRequirements { get; set; }
-        public DbSet<JobOfferSkill> JobOfferSkills { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        DbSet<Company> Companies { get; set; }
+        DbSet<JobOffer> JobOffers { get; set; }
+        DbSet<JobOfferProposition> JobOfferPropositions { get; set; }
+        DbSet<JobOfferRequirement> JobOfferRequirements { get; set; }
+        DbSet<JobOfferSkill> JobOfferSkills { get; set; }
+        DbSet<RefreshToken> RefreshTokens { get; set; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
     }
 }
