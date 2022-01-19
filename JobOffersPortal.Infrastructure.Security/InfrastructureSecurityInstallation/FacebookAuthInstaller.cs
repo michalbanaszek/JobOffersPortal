@@ -1,4 +1,5 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Security.Services;
 using JobOffersPortal.Infrastructure.Security.Options;
 using JobOffersPortal.Infrastructure.Security.Services;
 using Microsoft.Extensions.Configuration;

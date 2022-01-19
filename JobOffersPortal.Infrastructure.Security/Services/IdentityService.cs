@@ -1,9 +1,8 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Application.Security.Contracts;
-using JobOffersPortal.Application.Security.Models.AuthResult;
+using JobOffersPortal.Application.Security.Services;
 using JobOffersPortal.Domain.Entities;
-using JobOffersPortal.Infrastructure.Security.Models;
 using JobOffersPortal.Infrastructure.Security.Options;
+using JobOffersPortal.Infrastructure.Security.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,10 +19,10 @@ namespace JobOffersPortal.Infrastructure.Security.Services
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly JwtOptions _jwtOptions;          
+        private readonly JwtOptions _jwtOptions;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IApplicationDbContext _context;
-        private readonly IFacebookAuthService _facebookAuthService;    
+        private readonly IFacebookAuthService _facebookAuthService;
 
         public IdentityService(
             UserManager<ApplicationUser> userManager,
@@ -36,53 +35,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
             _facebookAuthService = facebookAuthService;
-            _jwtOptions = jwtOptions;       
-        }
-
-        public async Task<string> GetUserNameAsync(string userId)
-        {
-            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
-
-            return user.UserName;
-        }
-
-        public async Task<bool> CreateUserAsync(string userName, string password)
-        {
-            var user = new ApplicationUser
-            {
-                UserName = userName,
-                Email = userName,
-            };
-
-            var result = await _userManager.CreateAsync(user, password);
-
-            return result.Succeeded ? true : false;           
-        }
-
-        public async Task<bool> IsInRoleAsync(string userId, string role)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-
-            return await _userManager.IsInRoleAsync(user, role);
-        }
-
-        public async Task<bool> DeleteUserAsync(string userId)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
-
-            if (user != null)
-            {
-                return await DeleteUserAsync(user);
-            }
-
-            return false;
-        }
-
-        public async Task<bool> DeleteUserAsync(ApplicationUser user)
-        {
-            var result = await _userManager.DeleteAsync(user);
-
-            return result.Succeeded ? true : false;
+            _jwtOptions = jwtOptions;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -312,7 +265,6 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             var refreshToken = new RefreshToken()
             {
-                Token = Guid.NewGuid().ToString(),
                 JwtId = token.Id,
                 CreatedBy = user.Id,
                 CreationDate = DateTime.UtcNow,
@@ -320,6 +272,8 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             };
 
             await _context.RefreshTokens.AddAsync(refreshToken);
+
+            await _context.SaveChangesAsync();
 
             return new AuthenticationResult()
             {

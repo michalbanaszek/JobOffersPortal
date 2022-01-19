@@ -1,5 +1,5 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Infrastructure.Security.AuthSecurity;
+using JobOffersPortal.Infrastructure.Security.Authorization.DomainNameForEmail;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,13 +14,13 @@ namespace JobOffersPortal.Infrastructure.Security.InfrastructureSecurityInstalla
             {
                 options.AddPolicy("DomainNameRequirement", policy =>
                 {
-                    policy.AddRequirements(new WorksForCompanyRequirement("gmail.com"));
+                    policy.AddRequirements(new DomainNameForEmailRequirement("gmail.com"));
                 });
 
                 options.AddPolicy("CanPurge", policy => policy.RequireRole("Administrator"));
             });
 
-            services.AddSingleton<IAuthorizationHandler, WorksForCompanyHandler>();
+            services.AddSingleton<IAuthorizationHandler, DomainNameForEmailHandler>();
         }
     }
 }

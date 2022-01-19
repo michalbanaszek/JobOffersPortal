@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace JobOffersPortal.Application.Security.Models.AuthResult
+namespace JobOffersPortal.Infrastructure.Security.Contracts.Identity.Requests
 {
     public class RefreshTokenRequest
     {

@@ -1,8 +1,6 @@
-﻿
+﻿using JobOffersPortal.Application.Security.Interfaces.User;
 
-using JobOffersPortal.Application.Common.Interfaces;
-
-namespace JobOffersPortal.Infrastructure.Security.Models
+namespace JobOffersPortal.Infrastructure.Security.User
 {
     public class DomainUser : IDomainUser
     {

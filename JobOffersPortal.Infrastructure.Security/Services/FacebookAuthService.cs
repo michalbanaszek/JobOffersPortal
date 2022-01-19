@@ -1,5 +1,5 @@
-﻿using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Application.Security.Models.External;
+﻿using JobOffersPortal.Application.Security.Services;
+using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Infrastructure.Security.Options;
 using Newtonsoft.Json;
 using System.Net.Http;
