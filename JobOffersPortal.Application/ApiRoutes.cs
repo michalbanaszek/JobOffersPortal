@@ -6,9 +6,9 @@
 
         public static class CompanyRoute
         {
-            public const string GetAllCompanies = Base + "/companies";
+            public const string GetAll = Base + "/companies";
 
-            public const string GetJustCompanies = Base + "/onlycompanies";
+            public const string GetAllCompanies = Base + "/onlycompanies";
 
             public const string Update = Base + "/company/{id}";
 
@@ -21,7 +21,7 @@
 
         public static class JobOfferRoute
         {
-            public const string GetJobOffers = Base + "/joboffer";
+            public const string GetAll = Base + "/joboffer";
 
             public const string Update = Base + "/joboffer/{id}";
 
@@ -30,6 +30,45 @@
             public const string Get = Base + "/joboffer/{id}";
 
             public const string Create = Base + "/joboffer";
+        }
+
+        public static class JobOfferPropositionRoute
+        {
+            public const string GetAll = Base + "/jobofferPropositions/{jobOfferId}";
+
+            public const string Update = Base + "/jobofferProposition/{id}";
+
+            public const string Delete = Base + "/jobofferProposition/{id}";
+
+            public const string Get = Base + "/jobofferProposition/{id}";
+
+            public const string Create = Base + "/jobofferProposition";
+        }
+
+        public static class JobOfferRequirementRoute
+        {
+            public const string GetAll = Base + "/jobofferRequirements/{jobOfferId}";
+
+            public const string Update = Base + "/jobofferRequirement/{id}";
+
+            public const string Delete = Base + "/jobofferRequirement/{id}";
+
+            public const string Get = Base + "/jobofferRequirement/{id}";
+
+            public const string Create = Base + "/jobofferRequirement";
+        }
+
+        public static class JobOfferSkillRoute
+        {
+            public const string GetAll = Base + "/jobofferSkills/{jobOfferId}";
+
+            public const string Update = Base + "/jobofferSkill/{id}";
+
+            public const string Delete = Base + "/jobofferSkill/{id}";
+
+            public const string Get = Base + "/jobofferSkill/{id}";
+
+            public const string Create = Base + "/jobofferSkill";
         }
 
         public static class IdentityRoute
@@ -41,6 +80,15 @@
             public const string RefreshToken = Base + "/identity/RefreshToken";
 
             public const string FacebookAuth = Base + "/identity/auth/fb";
+        }
+
+        public static class UserRoute
+        {
+            public const string Get = Base + "/identity/users/{userId}";
+
+            public const string Create = Base + "/identity/users/";
+
+            public const string Delete = Base + "/identity/users/{id}";          
         }
     }
 }
