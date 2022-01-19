@@ -15,5 +15,6 @@ namespace JobOffersPortal.API.Services
         }
 
         public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue("id");
+        public string UserName => _httpContextAccessor.HttpContext?.User?.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).First().Value;
     }
 }
