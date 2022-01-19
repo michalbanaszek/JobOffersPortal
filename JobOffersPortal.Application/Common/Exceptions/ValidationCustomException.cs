@@ -13,6 +13,16 @@ namespace JobOffersPortal.Application.Common.Exceptions
             Errors = new Dictionary<string, string[]>();
         }
 
+        public ValidationCustomException(string message)
+            : base(message)
+        {
+        }
+
+        public ValidationCustomException(string message, Exception innerException)
+          : base(message, innerException)
+        {
+        }
+
         public ValidationCustomException(IEnumerable<ValidationFailure> failures)
          : this()
         {
