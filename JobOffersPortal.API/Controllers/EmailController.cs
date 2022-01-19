@@ -1,7 +1,6 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
-using JobOffersPortal.Application.Common.Models;
+using JobOffersPortal.Persistance.EF.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.API.Controllers
@@ -18,9 +17,9 @@ namespace JobOffersPortal.API.Controllers
         }
 
         [HttpPost("Send")]
-        public async Task<IActionResult> Send([FromForm] SendEmailRequest emailRequest)
+        public async Task<IActionResult> Send([FromForm] SendEmailRequest request)
         {
-            await _emailService.SendEmailAsync(emailRequest);
+            await _emailService.SendEmailAsync(request.ToEmail, request.Subject, request.Content, request.Files);
 
             return Ok();
         }

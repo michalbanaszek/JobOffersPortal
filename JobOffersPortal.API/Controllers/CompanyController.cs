@@ -21,7 +21,7 @@ namespace JobOffersPortal.API.Controllers
         /// Get company list and all offers in the system
         /// </summary>
         /// <response code="200">Get list of items in the system</response>    
-        [HttpGet(ApiRoutes.CompanyRoute.GetAllCompanies)]
+        [HttpGet(ApiRoutes.CompanyRoute.GetAll)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Cached(50)]
         public async Task<ActionResult<PaginatedList<CompanyJobOfferListViewModel>>> GetAllCompaniesWithJobs([FromQuery] GetCompaniesWithJobOffersListWithPaginationQuery query)
@@ -33,7 +33,7 @@ namespace JobOffersPortal.API.Controllers
         /// Get all company in the system
         /// </summary>
         /// <response code="200">Get list of items in the system</response>    
-        [HttpGet(ApiRoutes.CompanyRoute.GetJustCompanies)]
+        [HttpGet(ApiRoutes.CompanyRoute.GetAllCompanies)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Cached(50)]
         public async Task<ActionResult<CompanyListViewModel>> GetAll()
@@ -72,7 +72,7 @@ namespace JobOffersPortal.API.Controllers
                 return BadRequest(response.Errors);
             }
 
-            return Created(response.Id.ToString(), response.Id);
+            return Created(response.Uri, response.Id);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<string>> Update([FromRoute] string id, [FromBody] UpdateCompanyCommand command)
+        public async Task<ActionResult<UpdateCompanyCommandResponse>> Update([FromRoute] string id, [FromBody] UpdateCompanyCommand command)
         {
             if (id != command.Id)
             {
@@ -116,7 +116,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Delete([FromRoute] string id)
+        public async Task<ActionResult<DeleteCompanyCommandResponse>> Delete([FromRoute] string id)
         {
             var response = await Mediator.Send(new DeleteCompanyCommand() { Id = id });
 

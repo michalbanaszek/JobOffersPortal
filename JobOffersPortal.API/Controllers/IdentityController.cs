@@ -1,7 +1,9 @@
 ﻿using JobOffersPortal.Application;
-using JobOffersPortal.Application.Security.Contracts;
-using JobOffersPortal.Application.Security.Models.AuthResult;
-using JobOffersPortal.Application.Security.Models.External;
+using JobOffersPortal.Application.Security.Services;
+using JobOffersPortal.Domain.Entities;
+using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Requests;
+using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Responses;
+using JobOffersPortal.Infrastructure.Security.Contracts.OAuth.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -45,7 +47,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         [HttpPost(ApiRoutes.IdentityRoute.Login), AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<AuthSuccessResponse>> Login([FromBody] LoginRequest request)
         {
             _logger.LogInformation("Invoked Login endpoint");
 
@@ -62,7 +64,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         [HttpPost(ApiRoutes.IdentityRoute.FacebookAuth), AllowAnonymous]
-        public async Task<IActionResult> FacebookAuth([FromBody] LoginFacebookRequest request)
+        public async Task<ActionResult<AuthSuccessResponse>> FacebookAuth([FromBody] LoginFacebookRequest request)
         {
             _logger.LogInformation("Invoked FacebookAuth endpoint");
 
@@ -80,7 +82,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         [ProducesResponseType(typeof(AuthFailedResponse), 400)]
         [HttpPost(ApiRoutes.IdentityRoute.RefreshToken), AllowAnonymous]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        public async Task<ActionResult<AuthSuccessResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
         {
             _logger.LogInformation("Invoked RefreshToken endpoint");
 
