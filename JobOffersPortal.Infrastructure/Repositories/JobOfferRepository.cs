@@ -13,13 +13,13 @@ namespace JobOffersPortal.Persistance.EF.Repositories
         public JobOfferRepository(ApplicationDbContext context) : base(context)
         {}
 
-        public IQueryable<JobOffer> GetAllByCategory(string categoryId)
+        public IQueryable<JobOffer> GetAllByCompany(string companyId)
         {
             return _context.JobOffers
                            .Include(x => x.Requirements)
                            .Include(x => x.Skills)
                            .Include(x => x.Propositions)
-                           .Where(x => x.CompanyId == categoryId)
+                           .Where(x => x.CompanyId == companyId)
                            .OrderBy(x => !x.IsAvailable);
         }
 

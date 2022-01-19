@@ -1,7 +1,7 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Domain.Common;
 using JobOffersPortal.Domain.Entities;
-using JobOffersPortal.Infrastructure.Security.Models;
+using JobOffersPortal.Infrastructure.Security.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -15,9 +15,6 @@ namespace JobOffersPortal.Persistance.EF.Persistence
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
-
-        public ApplicationDbContext() : base()
-        { }
 
         public ApplicationDbContext(
             DbContextOptions options,
@@ -65,8 +62,6 @@ namespace JobOffersPortal.Persistance.EF.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<RefreshToken>().HasKey(x => x.Token);
 
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);            
                         
