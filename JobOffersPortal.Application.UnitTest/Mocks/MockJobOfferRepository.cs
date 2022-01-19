@@ -22,7 +22,7 @@ namespace JobOffersPortal.Application.UnitTest.Mocks
                 return jobOfferList.FirstOrDefault(x => x.Id == id);
             });
 
-            mockJobOffersRepository.Setup(repo => repo.GetAllByCategory(It.IsAny<string>())).Returns((string categoryId) =>
+            mockJobOffersRepository.Setup(repo => repo.GetAllByCompany(It.IsAny<string>())).Returns((string categoryId) =>
             {
                 return jobOfferList.Where(x => x.CompanyId == categoryId).AsQueryable();
             });
