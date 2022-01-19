@@ -1,4 +1,4 @@
-﻿using JobOffersPortal.Application.Security.Models.AuthResult;
+﻿using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Requests;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace JobOffersPortal.API.SwaggerExamples
