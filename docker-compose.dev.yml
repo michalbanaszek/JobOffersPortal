@@ -33,7 +33,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty!2
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/JobOffersPortal.API.pfx
     volumes:
-      - ${APPDATA}\Microsoft\UserSecrets\29b8f3a9-83f6-4492-aa39-028c2cf4529b\:/root/.microsoft/usersecrets/29b8f3a9-83f6-4492-aa39-028c2cf4529b
+      - ${APPDATA}\Microsoft\UserSecrets\{UserSecretId}\:/root/.microsoft/usersecrets/{UserSecretId}
       - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/:ro
     ports:
       - 8080:80
@@ -42,38 +42,3 @@ services:
       - local-network
     depends_on:
       - sql-microsoft
-
-  app-mvc:
-    container_name: mvc-container
-    image: localhost/mvc-dev:1.0
-    build:
-      context: .
-      dockerfile: WebApp/Dockerfile.dev
-    environment:
-      - ASPNETCORE_URLS=https://+;http://+
-      - ASPNETCORE_HTTPS_PORTS=8083
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty!2
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/WebApp.pfx
-    volumes:
-      - ${APPDATA}\Microsoft\UserSecrets\226fb0fa-5cb7-4069-855a-826154d1c44e\:/root/.microsoft/usersecrets/226fb0fa-5cb7-4069-855a-826154d1c44e
-      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/:ro
-    ports:
-      - 8082:80
-      - 8083:443
-    networks:
-      - local-network
-    depends_on:
-      - sql-microsoft
-
-  react-app:
-    container_name: react-container
-    image: localhost/react-dev:1.0
-    # build:
-    #   context: .
-    #   dockerfile: react_zarna/Dockerfile.dev
-    ports:
-      - "8998:80"
-      - "8999:443"
-    networks:
-      - local-network
