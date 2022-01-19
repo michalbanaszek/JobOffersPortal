@@ -50,7 +50,7 @@ namespace JobOffersPortal.Application.Common.Mappings
 
             CreateMap<JobOfferProposition, JobOfferPropositionViewModel>().ReverseMap();
 
-            CreateMap<CreateJobOfferPropositionCommand, CreateJobOfferPropositionResponse>();
+            CreateMap<CreateJobOfferPropositionCommand, CreateJobOfferPropositionCommandResponse>();
 
             CreateMap<JobOfferRequirement, JobOfferRequirementDetailViewModel>().ReverseMap();
 
@@ -67,7 +67,7 @@ namespace JobOffersPortal.Application.Common.Mappings
 
             CreateMap<UpdateJobOfferCommand, JobOffer>();
 
-            CreateMap<CreateJobOfferSkillCommand, CreateJobOfferSkillResponse>();
+            CreateMap<CreateJobOfferSkillCommand, CreateJobOfferSkillCommandResponse>();
 
             CreateMap<JobOfferSkill, JobOfferSkillDetailViewModel>();
 
@@ -77,17 +77,17 @@ namespace JobOffersPortal.Application.Common.Mappings
             CreateMap<JobOfferSkill, JobOfferWithSkillDto>();
 
 
-            CreateMap<JobOffer, CreateJobOfferSkillResponse>();
+            CreateMap<JobOffer, CreateJobOfferSkillCommandResponse>();
             CreateMap<JobOffer, JobOfferSkillViewModel>();
             CreateMap<JobOfferSkill, JobOfferJobOfferSkillDto>();
             CreateMap<UpdateJobOfferSkillCommand, JobOfferSkill>();
 
-            CreateMap<JobOffer, CreateJobOfferRequirementResponse>();
+            CreateMap<JobOffer, CreateJobOfferRequirementCommandResponse>();
             CreateMap<JobOffer, JobOfferRequirementViewModel>();
             CreateMap<UpdateJobOfferRequirementCommand, JobOfferRequirement>();
             CreateMap<JobOfferRequirement, JobOfferJobOfferRequirementDto>();
 
-            CreateMap<JobOffer, CreateJobOfferPropositionResponse>();
+            CreateMap<JobOffer, CreateJobOfferPropositionCommandResponse>();
             CreateMap<JobOffer, JobOfferPropositionViewModel>();
             CreateMap<UpdateJobOfferPropositionCommand, JobOfferProposition>();
             CreateMap<JobOfferProposition, JobOfferJobOfferPropositionDto>();
