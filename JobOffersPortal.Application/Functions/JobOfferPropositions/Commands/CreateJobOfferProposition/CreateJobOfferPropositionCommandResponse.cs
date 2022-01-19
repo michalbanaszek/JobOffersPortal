@@ -4,17 +4,17 @@ using System.Linq;
 
 namespace Application.JobOfferPropositions.Commands.CreateJobOfferProposition
 {
-    public class CreateJobOfferPropositionResponse : BaseResponse
+    public class CreateJobOfferPropositionCommandResponse : BaseResponse
     {
         public string Id { get; set; }
 
-        public CreateJobOfferPropositionResponse(bool succeeded, IEnumerable<string> errors) : base(succeeded, errors)
+        public CreateJobOfferPropositionCommandResponse(bool succeeded, IEnumerable<string> errors) : base(succeeded, errors)
         {
             Succeeded = succeeded;
             Errors = errors.ToArray();
         }
 
-        public CreateJobOfferPropositionResponse(string id) : base()
+        public CreateJobOfferPropositionCommandResponse(string id) : base()
         {
             Id = id;
         }

@@ -32,7 +32,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffe
 
         public async Task<PaginatedList<JobOfferViewModel>> Handle(GetJobOffersWithPaginationQuery request, CancellationToken cancellationToken)
         {           
-            var companies = _jobOfferRepository.GetAllByCategory(request.CompanyId);
+            var companies = _jobOfferRepository.GetAllByCompany(request.CompanyId);
 
             if (companies.Count() == 0 || request.CompanyId == null || companies == null)
             {

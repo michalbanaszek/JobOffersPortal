@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.CreateJobOfferRequirement
 {
-    public class CreateJobOfferRequirementCommandHandler : IRequestHandler<CreateJobOfferRequirementCommand, CreateJobOfferRequirementResponse>
+    public class CreateJobOfferRequirementCommandHandler : IRequestHandler<CreateJobOfferRequirementCommand, CreateJobOfferRequirementCommandResponse>
     {
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferRequirementCommandHandler> _logger;
@@ -26,7 +26,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
             _jobOfferRequirementRepository = jobOfferRequirementRepository;
         }
 
-        public async Task<CreateJobOfferRequirementResponse> Handle(CreateJobOfferRequirementCommand request, CancellationToken cancellationToken)
+        public async Task<CreateJobOfferRequirementCommandResponse> Handle(CreateJobOfferRequirementCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
 
@@ -51,19 +51,19 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
 
                 _logger.LogInformation("Created CreateJobOfferRequirement for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
               
-                return _mapper.Map<CreateJobOfferRequirementResponse>(entity);
+                return _mapper.Map<CreateJobOfferRequirementCommandResponse>(entity);
             }
             catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
             {
                 _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
 
-                return new CreateJobOfferRequirementResponse(false, new string[] { "Cannot add entity to database." });
+                return new CreateJobOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
             catch (Exception exception)
             {
                 _logger.LogError("Exception execuded, Message:", exception.Message);
 
-                return new CreateJobOfferRequirementResponse(false, new string[] { "Cannot add entity to database." });
+                return new CreateJobOfferRequirementCommandResponse(false, new string[] { "Cannot add entity to database." });
             }
         }
     }
