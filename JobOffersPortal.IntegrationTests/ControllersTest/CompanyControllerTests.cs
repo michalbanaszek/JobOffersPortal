@@ -22,7 +22,7 @@ namespace JobOffersPortal.IntegrationTests.ControllersTest
             await AuthenticateAsync();
 
             // Act
-            var response = await _httpClient.GetAsync(ApiRoutes.CompanyRoute.GetAllCompanies);
+            var response = await _httpClient.GetAsync(ApiRoutes.CompanyRoute.GetAll);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);

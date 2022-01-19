@@ -1,7 +1,8 @@
 ﻿using JobOffersPortal.API;
 using JobOffersPortal.Application;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
-using JobOffersPortal.Application.Security.Models.AuthResult;
+using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Requests;
+using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Responses;
 using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
