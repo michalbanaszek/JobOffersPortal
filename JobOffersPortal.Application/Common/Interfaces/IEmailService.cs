@@ -1,10 +1,11 @@
-﻿using JobOffersPortal.Application.Common.Models;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IEmailService
     {
-        public Task SendEmailAsync(SendEmailRequest request);
+        Task SendEmailAsync(string toEmail, string subject, string content, List<IFormFile> files);
     }
 }
