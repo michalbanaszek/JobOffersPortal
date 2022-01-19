@@ -20,13 +20,8 @@ namespace JobOffersPortal.Application.Common.Behaviours
         public Task Process(TRequest request, CancellationToken cancellationToken)
         {
             var requestName = typeof(TRequest).Name;
-            var userId = _currentUserService.UserId ?? string.Empty;
-            string userName = string.Empty;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                userName = _currentUserService.UserId;
-            }
+            var userId = _currentUserService.UserId ?? string.Empty;         
+            var userName = _currentUserService.UserName ?? string.Empty;
 
             _logger.LogInformation("JobOffersPortal Request: {Name} {UserId} {UserName} {Request}",
                 requestName, userId, userName, request);

@@ -34,12 +34,7 @@ namespace JobOffersPortal.Application.Common.Behaviours
             {
                 var requestName = typeof(TRequest).Name;
                 var userId = _currentUserService.UserId ?? string.Empty;
-                var userName = string.Empty;
-
-                if (!string.IsNullOrEmpty(userId))
-                {
-                    userName = _currentUserService.UserId;
-                }
+                var userName = _currentUserService.UserName ?? string.Empty;
 
                 _logger.LogWarning("JobOffersPortal Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
                     requestName, elapsedMilliseconds, userId, userName, request);
