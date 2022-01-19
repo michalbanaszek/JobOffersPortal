@@ -1,4 +1,4 @@
-﻿namespace JobOffersPortal.Application.Common.Interfaces
+﻿namespace JobOffersPortal.Application.Security.Interfaces.User
 {
     public interface IDomainUser
     {

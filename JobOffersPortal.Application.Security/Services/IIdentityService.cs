@@ -1,14 +1,10 @@
-﻿using JobOffersPortal.Application.Security.Models.AuthResult;
+﻿using JobOffersPortal.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace JobOffersPortal.Application.Security.Contracts
+namespace JobOffersPortal.Application.Security.Services
 {
     public interface IIdentityService
     {
-        Task<string> GetUserNameAsync(string userId);
-        Task<bool> IsInRoleAsync(string userId, string role);   
-        Task<bool> CreateUserAsync(string userName, string password);
-        Task<bool> DeleteUserAsync(string userId);
         Task<AuthenticationResult> RegisterAsync(string email, string password);
         Task<AuthenticationResult> LoginAsync(string email, string password);
         Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken);

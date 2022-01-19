@@ -1,7 +1,7 @@
-﻿using JobOffersPortal.Application.Security.Models.External;
+﻿using JobOffersPortal.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace JobOffersPortal.Application.Common.Interfaces
+namespace JobOffersPortal.Application.Security.Services
 {
     public interface IFacebookAuthService
     {
