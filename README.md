@@ -16,7 +16,7 @@ Follow these steps to get your development environment set up:
 
  1. Clone the repository
  1. Open terminal and enter the command `cd JobOffersPortal`
- 1. Next, enter the command `cd JobOffersPortal.WebUI` 
+ 1. Next, enter the command `cd JobOffersPortal.API` 
  1. Build solution `dotnet build`
  1. Run app `dotnet run` 
  
