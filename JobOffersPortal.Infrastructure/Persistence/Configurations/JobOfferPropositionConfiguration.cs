@@ -9,7 +9,8 @@ namespace JobOffersPortal.Persistance.EF.Persistence.Configurations
         public void Configure(EntityTypeBuilder<JobOfferProposition> builder)
         {
             builder.Property(x => x.Content)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(50);
         }
     }
 }
