@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.JobOffers
+namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
 {
     public class DeleteJobOfferTest : BaseJobOfferInitialization
     {
@@ -15,7 +15,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers
 
         public DeleteJobOfferTest()
         {
-            _logger = (new Mock<ILogger<DeleteJobOfferCommandHandler>>()).Object;          
+            _logger = new Mock<ILogger<DeleteJobOfferCommandHandler>>().Object;
         }
 
         [Fact]

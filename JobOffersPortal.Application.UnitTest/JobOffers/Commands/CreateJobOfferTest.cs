@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.JobOffers
+namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
 {
     public class CreateJobOfferTest : BaseJobOfferInitialization
     {
@@ -20,8 +20,8 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers
 
         public CreateJobOfferTest()
         {
-            _logger = (new Mock<ILogger<CreateJobOfferCommandHandler>>()).Object;
-            _uriJobOfferService = (new Mock<IUriJobOfferService>()).Object;
+            _logger = new Mock<ILogger<CreateJobOfferCommandHandler>>().Object;
+            _uriJobOfferService = new Mock<IUriJobOfferService>().Object;
             _validator = new CreateJobOfferCommandValidator();
         }
 
