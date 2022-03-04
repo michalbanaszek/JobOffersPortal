@@ -3,7 +3,7 @@ using JobOffersPortal.Domain.Entities;
 
 namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition
 {
-    public class UpdateJobOfferPropositionCommandValidator : AbstractValidator<JobOfferProposition>
+    public class UpdateJobOfferPropositionCommandValidator : AbstractValidator<UpdateJobOfferPropositionCommand>
     {
         public UpdateJobOfferPropositionCommandValidator()
         {
@@ -11,7 +11,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Up
                .NotEmpty()
                .NotNull()
                .MinimumLength(2).MaximumLength(50)
-               .WithMessage("{PropertName} Length is between 2 and 50")
+               .WithMessage("Content Length is between 2 and 50")
                .Matches("^[a-zA-Z0-9 ]*$");
         }
     }

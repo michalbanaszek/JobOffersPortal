@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
-using JobOffersPortal.Domain.Entities;
 
 namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.CreateJobOfferProposition
 {
-    public class CreateJobOfferPropositionCommandValidator : AbstractValidator<JobOfferProposition>
+    public class CreateJobOfferPropositionCommandValidator : AbstractValidator<CreateJobOfferPropositionCommand>
     {
         public CreateJobOfferPropositionCommandValidator()
         {
@@ -11,7 +10,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
                 .NotEmpty()
                 .NotNull()
                 .MinimumLength(2).MaximumLength(50)
-                .WithMessage("{PropertName} Length is between 2 and 50")
+                .WithMessage("Content Length is between 2 and 50")
                 .Matches("^[a-zA-Z0-9 ]*$");
         }
     }
