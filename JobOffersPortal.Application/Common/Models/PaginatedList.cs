@@ -32,7 +32,8 @@ namespace JobOffersPortal.Application.Common.Models
 
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize, IUriService uriService)
         {
-            var count = await source.CountAsync();
+            var exists = source.Any();
+            var count = exists ? await source.CountAsync() : 0;
             var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             var nextPage = pageNumber >= 1
