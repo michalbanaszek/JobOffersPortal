@@ -2,7 +2,7 @@
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Common.Mappings;
-using JobOffersPortal.Application.UnitTest.Mocks;
+using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
 using Moq;
 
 namespace JobOffersPortal.Application.UnitTest.Companies.Commands
