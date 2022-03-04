@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Log out";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h4 class="text-success text-center">Zostałeś wylogowany.</h4>
+        <h5 class="text-muted text-center">Proszę kliknąc przycisk aby powrócić do strony głównej.</h5>
+
+        <div class="form-group">
+            <div class="col-md-8 offset-md-2">
+                @Html.ActionLink("Strona główna", "Login", "Account", null, new { @class = "btn btn-block btn-success btn-block" })
+            </div>
+        </div>
+
+
+        <h5 class="text-muted text-center"> <small>Aplikacja ofert pracy</small> </h5>
+    </div>
+</div>

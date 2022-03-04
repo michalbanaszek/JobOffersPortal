@@ -1,0 +1,44 @@
+﻿@model JobOfferDeleteMvcViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1 class="text-center">Usuń</h1>
+
+<h3 class="text-center">Czy jesteś pewien, że chcesz usunać?</h3>
+<div class="col-md-4 offset-md-4">
+    <h4 class="text-center">Oferta Pracy</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Salary)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Salary)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Usuń" class="btn btn-danger btn-block" />
+    </form>
+
+
+</div>
+
+<div>
+    <a asp-action="Index">Wróć</a>
+</div>

@@ -1,0 +1,58 @@
+﻿@model CreateDetailsJobOfferSkillMvcViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<h1 class="text-center">Utwórz nowy rekord opisu stanowiska</h1>
+<hr />
+
+<div class="col-md-6 offset-md-3">
+    <form asp-action="CreateShowDetails">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="JobOfferId" value="@Model.JobOfferId" />    
+        <div class="form-group text-center">
+            <label asp-for="Content" class="control-label">Content</label>
+            @Html.TextAreaFor(e => e.Content, 5, 20, new { @class = "form-control" })
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Utwórz" class="btn btn-primary btn-block" />
+        </div>
+    </form>
+</div>
+<br />
+<h1 class="text-center">Szczegóły</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Opis Stanowiska")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Skills)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edycja</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index" asp-controller="JobOffer">Wróć</a>
+</div>
