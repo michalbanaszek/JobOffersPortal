@@ -1,7 +1,7 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
 using Moq;
 
-namespace JobOffersPortal.Application.UnitTest.Mocks
+namespace JobOffersPortal.Application.UnitTest.Mocks.MockServices
 {
     internal class MockCurrentUserService
     {

@@ -1,0 +1,121 @@
+﻿@model JobOfferMvcViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="text-center">Szczegóły oferty pracy</h1>
+<hr />
+
+<div class="col-md-4 offset-md-4">
+    <dl class="row">
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Position)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Salary)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Salary)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.IsAvailable)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.IsAvailable)
+        </dd>
+    </dl>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        @Html.DisplayName("Opis stanowiska")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var offer in Model.Skills)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => offer.Content)
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        @Html.DisplayName("Oferujemy")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var offer in Model.Propositions)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => offer.Content)
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        @Html.DisplayName("Wymagania")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var offer in Model.Requirements)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => offer.Content)
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edytuj</a> |
+    <a asp-action="Index">Wróć</a>
+</div>

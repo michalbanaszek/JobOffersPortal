@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31912.275
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.API", "JobOffersPortal.API\JobOffersPortal.API.csproj", "{716DDDAC-CBF8-4102-B788-E1BEEE295CDB}"
 EndProject
@@ -28,6 +28,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Application.Security", "JobOffersPortal.Application.Security\JobOffersPortal.Application.Security.csproj", "{62950EEB-C442-4AD5-95E1-5756F4BB641D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.Infrastructure.Security", "JobOffersPortal.Infrastructure.Security\JobOffersPortal.Infrastructure.Security.csproj", "{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{C8DE228F-EF90-4042-BA6E-5251E5DD44D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.UI", "JobOffersPortal.UI\JobOffersPortal.UI.csproj", "{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +71,10 @@ Global
 		{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +91,8 @@ Global
 		{087F1DC8-ECB7-4AF7-A9F8-0908F1FBCA6D} = {DF2EAFCE-0378-42AC-874C-A66BB61E8765}
 		{62950EEB-C442-4AD5-95E1-5756F4BB641D} = {8E9E8C41-8875-450F-A738-C6EDAC775C39}
 		{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2} = {3D78851F-55F2-474D-B026-85BBA1E55B9B}
+		{C8DE228F-EF90-4042-BA6E-5251E5DD44D4} = {57D041CA-7D2E-4987-8433-6097267FDD7E}
+		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7} = {C8DE228F-EF90-4042-BA6E-5251E5DD44D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70826AAB-0714-4654-9E78-323657ACBB13}

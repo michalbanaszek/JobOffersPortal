@@ -4,7 +4,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JobOffersPortal.Application.UnitTest.Mocks
+namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 {
     internal class MockCompanyRepository
     {
