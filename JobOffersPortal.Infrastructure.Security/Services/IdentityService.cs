@@ -169,9 +169,9 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
         public async Task<AuthenticationResult> LoginWithFacebookAsync(string accessToken)
         {
-            var validatedTokenResult = await _facebookAuthService.ValidateAccessTokenAsync(accessToken);
+            var validatedTokenResponse = await _facebookAuthService.ValidateAccessTokenAsync(accessToken);
 
-            if (!validatedTokenResult.Data.IsValid)
+            if (!validatedTokenResponse.Success)
             {
                 return new AuthenticationResult()
                 {
@@ -179,17 +179,25 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                 };
             }
 
-            var userInfo = await _facebookAuthService.GetUserInfoAsync(accessToken);
+            var userInfoResponse = await _facebookAuthService.GetUserInfoAsync(accessToken);
 
-            var user = await _userManager.FindByEmailAsync(userInfo.Email);
+            if (!userInfoResponse.Success)
+            {
+                return new AuthenticationResult()
+                {
+                    Errors = new[] { "Invalid user" }
+                };
+            }
+
+            var user = await _userManager.FindByEmailAsync(userInfoResponse.Data.Email);
 
             if (user == null)
             {
                 var identityUser = new ApplicationUser()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Email = userInfo.Email,
-                    UserName = userInfo.Email
+                    Email = userInfoResponse.Data.Email,
+                    UserName = userInfoResponse.Data.Email
                 };
 
                 var createdResult = await _userManager.CreateAsync(identityUser);
