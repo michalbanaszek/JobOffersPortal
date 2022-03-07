@@ -22,7 +22,23 @@ namespace WebApp.Services
         public System.Net.Http.HttpClient HttpClient { get; }
     }
 
-   [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v12.0.0.0))")]
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v12.0.0.0))")]
+    public partial class Client : IClient
+    {
+        private System.Net.Http.HttpClient _httpClient;       
+
+        public Client(System.Net.Http.HttpClient httpClient)
+        {
+            _httpClient = httpClient;          
+        }
+
+        public System.Net.Http.HttpClient HttpClient
+        {
+            get { return _httpClient; }
+        }
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v12.0.0.0))")]
     public partial interface IApiClient : IClient
     {
         /// <summary>
@@ -424,7 +440,7 @@ namespace WebApp.Services
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public ApiClient(System.Net.Http.HttpClient httpClient)
+        public ApiClient(System.Net.Http.HttpClient httpClient) 
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -475,7 +491,7 @@ namespace WebApp.Services
         public virtual async System.Threading.Tasks.Task<CompanyJobOfferListViewModelPaginatedList> CompaniesAsync(SearchCompanyOptions? searchJobOffer, int? pageNumber, int? pageSize, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/companies?");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/company?");
             if (searchJobOffer != null)
             {
                 urlBuilder_.Append(System.Uri.EscapeDataString("SearchJobOffer") + "=").Append(System.Uri.EscapeDataString(ConvertToString(searchJobOffer, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -578,7 +594,7 @@ namespace WebApp.Services
         public virtual async System.Threading.Tasks.Task<CompanyListViewModel> OnlycompaniesAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/onlycompanies");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/company/companies");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
