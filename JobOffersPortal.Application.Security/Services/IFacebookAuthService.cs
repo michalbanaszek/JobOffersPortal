@@ -5,7 +5,7 @@ namespace JobOffersPortal.Application.Security.Services
 {
     public interface IFacebookAuthService
     {
-        Task<FacebookTokenValidationResult> ValidateAccessTokenAsync(string accessToken);
-        Task<FacebookUserInfoResult> GetUserInfoAsync(string accessToken);
+        Task<ResponseFromFacebookApi<FacebookTokenValidationResult>> ValidateAccessTokenAsync(string accessToken);
+        Task<ResponseFromFacebookApi<FacebookUserInfoResult>> GetUserInfoAsync(string accessToken);
     }
 }

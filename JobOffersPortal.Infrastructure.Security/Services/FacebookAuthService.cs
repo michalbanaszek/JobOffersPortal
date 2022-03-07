@@ -20,28 +20,64 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<FacebookUserInfoResult> GetUserInfoAsync(string accessToken)
+        public async Task<ResponseFromFacebookApi<FacebookUserInfoResult>> GetUserInfoAsync(string accessToken)
         {
-            var formattedUrl = string.Format(UserInfoUrl, accessToken);
+            try
+            {
+                var formattedUrl = string.Format(UserInfoUrl, accessToken);
 
-            var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl);
-            result.EnsureSuccessStatusCode();
+                var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl);
 
-            var responseAsString = await result.Content.ReadAsStringAsync();
+                result.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<FacebookUserInfoResult>(responseAsString);
+                var responseAsString = await result.Content.ReadAsStringAsync();
+
+                var response = JsonConvert.DeserializeObject<FacebookUserInfoResult>(responseAsString);
+
+                return new ResponseFromFacebookApi<FacebookUserInfoResult>()
+                {
+                    Success = true,
+                    Data = response
+                };
+            }
+            catch (HttpRequestException exception)
+            {
+                return new ResponseFromFacebookApi<FacebookUserInfoResult>()
+                {
+                    Success = false,
+                    Errors = new string[] { exception.Message }
+                };
+            }
         }
 
-        public async Task<FacebookTokenValidationResult> ValidateAccessTokenAsync(string accessToken)
+        public async Task<ResponseFromFacebookApi<FacebookTokenValidationResult>> ValidateAccessTokenAsync(string accessToken)
         {
-            var formattedUrl = string.Format(TokenValidationUrl, accessToken, _facebookAuthOptions.AppId, _facebookAuthOptions.AppSecret);
+            try
+            {
+                var formattedUrl = string.Format(TokenValidationUrl, accessToken, _facebookAuthOptions.AppId, _facebookAuthOptions.AppSecret);
 
-            var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl);
-            result.EnsureSuccessStatusCode();
+                var result = await _httpClientFactory.CreateClient().GetAsync(formattedUrl);
 
-            var responseAsString = await result.Content.ReadAsStringAsync();
+                result.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<FacebookTokenValidationResult>(responseAsString);
+                var responseAsString = await result.Content.ReadAsStringAsync();
+
+                var response = JsonConvert.DeserializeObject<FacebookTokenValidationResult>(responseAsString);
+
+                return new ResponseFromFacebookApi<FacebookTokenValidationResult>()
+                {
+                    Success = true,
+                    Data = response
+                };
+            }
+            catch (HttpRequestException exception)
+            {
+                return new ResponseFromFacebookApi<FacebookTokenValidationResult>()
+                {
+                    Success = false,
+                    Errors = new string[] { exception.Message }
+                };
+            }
         }
     }
 }
