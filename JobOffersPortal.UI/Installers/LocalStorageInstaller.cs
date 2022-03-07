@@ -7,9 +7,8 @@ namespace JobOffersPortal.UI.Installers
     public class LocalStorageInstaller : IMvcInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
-        {
-            LocalStorage localStorage = new LocalStorage();
-            services.AddSingleton(localStorage);
+        {         
+            services.AddSingleton(new LocalStorage());
         }
     }
 }
