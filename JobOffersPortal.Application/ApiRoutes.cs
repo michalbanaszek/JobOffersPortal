@@ -6,9 +6,9 @@
 
         public static class CompanyRoute
         {
-            public const string GetAll = Base + "/companies";
+            public const string GetAll = Base + "/company";
 
-            public const string GetAllCompanies = Base + "/onlycompanies";
+            public const string GetAllCompanies = Base + "/company/companies";
 
             public const string Update = Base + "/company/{id}";
 
