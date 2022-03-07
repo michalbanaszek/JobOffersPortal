@@ -1,4 +1,4 @@
-﻿using JobOffersPortal.Domain.Entities;
+﻿using JobOffersPortal.Application.Common.Externals.Contracts.Facebook;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Security.Services

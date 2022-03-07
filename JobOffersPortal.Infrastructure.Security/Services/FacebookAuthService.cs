@@ -1,5 +1,5 @@
-﻿using JobOffersPortal.Application.Security.Services;
-using JobOffersPortal.Domain.Entities;
+﻿using JobOffersPortal.Application.Common.Externals.Contracts.Facebook;
+using JobOffersPortal.Application.Security.Services;
 using JobOffersPortal.Infrastructure.Security.Options;
 using Newtonsoft.Json;
 using System.Net.Http;
