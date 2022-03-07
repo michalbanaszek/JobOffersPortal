@@ -15,6 +15,14 @@ namespace JobOffersPortal.Persistance.EF.Repositories
 
         public IQueryable<JobOffer> GetAllByCompany(string companyId)
         {
+            var company = _context.JobOffers
+                            .FirstOrDefault(x => x.CompanyId == companyId);
+
+            if (company == null)
+            {
+                return null;
+            }
+
             return _context.JobOffers
                            .Include(x => x.Requirements)
                            .Include(x => x.Skills)
