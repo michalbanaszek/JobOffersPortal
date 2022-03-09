@@ -53,7 +53,10 @@ namespace WebApp.ClientServices.Security
 
                 if (authResponse.Token != string.Empty)
                 {
+                    _localStorage.Store("token", authResponse.Token);
+
                     _client.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResponse.Token);
+
                     return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
                 }
 
