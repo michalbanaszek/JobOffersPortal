@@ -1,4 +1,7 @@
-﻿using JobOffersPortal.Application;
+﻿using App.Metrics;
+using App.Metrics.Counter;
+using JobOffersPortal.API.Metrics;
+using JobOffersPortal.Application;
 using JobOffersPortal.Application.Security.Services;
 using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Requests;
@@ -15,11 +18,13 @@ namespace JobOffersPortal.API.Controllers
     {
         private readonly IIdentityService _identityService;
         private readonly ILogger<IdentityController> _logger;
+        private readonly IMetrics _metrics;
 
-        public IdentityController(IIdentityService identityService, ILogger<IdentityController> logger)
+        public IdentityController(IIdentityService identityService, ILogger<IdentityController> logger, IMetrics metrics)
         {
             _identityService = identityService;
             _logger = logger;
+            _metrics = metrics;
         }
 
         /// <summary>
@@ -35,6 +40,8 @@ namespace JobOffersPortal.API.Controllers
             _logger.LogInformation("Invoked Register endpoint");
 
             var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
+
+            _metrics.Measure.Counter.Increment(MericsRegistry.CreatedCustomerCounter);
 
             return CheckAuthenticationResult(authResponse);
         }
