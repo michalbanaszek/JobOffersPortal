@@ -48,7 +48,7 @@ namespace JobOffersPortal.API.Controllers
         /// <response code="201">Creates a item in the system</response>       
         /// <response code="400">Unable to create the item due to validation error</response>        
         [HttpPost(ApiRoutes.JobOfferRequirementRoute.Create)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CreateJobOfferRequirementCommandResponse>> Create([FromBody] CreateJobOfferRequirementCommand command)
         {
