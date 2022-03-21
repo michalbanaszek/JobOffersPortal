@@ -6,7 +6,6 @@ using JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
-using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -27,18 +26,6 @@ namespace JobOffersPortal.API.Controllers
         public async Task<ActionResult<PaginatedList<CompanyJobOfferListViewModel>>> GetAllCompaniesWithJobs([FromQuery] GetCompaniesWithJobOffersListWithPaginationQuery query)
         {
             return Ok(await Mediator.Send(query));
-        }
-
-        /// <summary>
-        /// Get all company in the system
-        /// </summary>
-        /// <response code="200">Get list of items in the system</response>    
-        [HttpGet(ApiRoutes.CompanyRoute.GetAllCompanies)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [Cached(50)]
-        public async Task<ActionResult<CompanyListViewModel>> GetAll()
-        {
-            return Ok(await Mediator.Send(new GetCompanyListQuery()));
         }
 
         /// <summary>
