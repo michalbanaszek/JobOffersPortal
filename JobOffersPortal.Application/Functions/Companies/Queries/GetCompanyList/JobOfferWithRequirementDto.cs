@@ -1,4 +1,4 @@
-﻿namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers
+﻿namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
 {
     public class JobOfferWithRequirementDto
     {

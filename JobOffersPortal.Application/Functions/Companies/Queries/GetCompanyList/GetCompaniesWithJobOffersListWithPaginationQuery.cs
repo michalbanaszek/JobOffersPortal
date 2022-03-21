@@ -2,7 +2,7 @@
 using JobOffersPortal.Application.Common.Models;
 using MediatR;
 
-namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers
+namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
 {
     public class GetCompaniesWithJobOffersListWithPaginationQuery : IRequest<PaginatedList<CompanyJobOfferListViewModel>>
     {

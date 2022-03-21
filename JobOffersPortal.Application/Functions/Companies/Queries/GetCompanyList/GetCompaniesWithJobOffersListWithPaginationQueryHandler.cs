@@ -8,12 +8,12 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers
+namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
 {
     public class GetCompaniesWithJobOffersListWithPaginationQueryHandler : IRequestHandler<GetCompaniesWithJobOffersListWithPaginationQuery, PaginatedList<CompanyJobOfferListViewModel>>
-    {      
+    {
         private readonly IMapper _mapper;
-        private readonly ICompanyRepository _companyRepository;        
+        private readonly ICompanyRepository _companyRepository;
         private readonly IUriService _uriService;
 
         public GetCompaniesWithJobOffersListWithPaginationQueryHandler(IMapper mapper, IUriService uriService, ICompanyRepository companyRepository)

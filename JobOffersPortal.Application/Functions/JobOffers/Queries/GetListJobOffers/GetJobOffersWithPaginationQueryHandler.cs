@@ -34,7 +34,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffe
         {           
             var companies = _jobOfferRepository.GetAllByCompany(request.CompanyId);
 
-            if (companies.Count() == 0 || request.CompanyId == null || companies == null)
+            if (request.CompanyId == null || companies == null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.CompanyId);
 
