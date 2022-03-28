@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using WebApp.Services;
+﻿using JobOffersPortal.UI.ClientServices;
 
 namespace WebApp.Interfaces
 {
