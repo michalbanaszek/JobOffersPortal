@@ -1,19 +1,37 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using JobOffersPortal.UI.ClientServices;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net.Http;
 using WebApp.Services;
 
 namespace JobOffersPortal.UI.Installers
 {
     public class HttpClientMvcInstaller : IMvcInstaller
     {
-        public void InstallServices(IServiceCollection services, IConfiguration configuration)
-        {   
-            services.AddHttpClient<IClient, Client>(client => client.BaseAddress = new Uri("https://localhost:5001"));
-            services.AddHttpClient<IApiClient, ApiClient>(client => client.BaseAddress = new Uri("https://localhost:5001"));
-            services.AddHttpClient<IIdentityClient, IdentityClient>(client => client.BaseAddress = new Uri("https://localhost:5001"));
-            services.AddHttpClient<IEmailClient, EmailClient>(client => client.BaseAddress = new Uri("https://localhost:5001"));
-            services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri("https://localhost:5001"));
+        {
+            services.AddSingleton(new HttpClient()
+            {
+                BaseAddress = new Uri("https://main-api:443")
+            });
+
+            services.AddHttpClient<IApiClient, ApiClient>(client => client.BaseAddress = new Uri("https://main-api:443")).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+            });
+            services.AddHttpClient<IIdentityClient, IdentityClient>(client => client.BaseAddress = new Uri("https://main-api:443")).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+            });
+            services.AddHttpClient<IEmailClient, EmailClient>(client => client.BaseAddress = new Uri("https://main-api:443")).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+            });
+            services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri("https://main-api:443")).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+            });
+
         }
     }
 }

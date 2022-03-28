@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
+using System;
 using System.Collections.Generic;
 
 namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers

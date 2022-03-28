@@ -1,12 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using JobOffersPortal.Domain.Models;
+using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IUserService
     {
-        Task<string> GetUserNameAsync(string userId);
+        Task<UserResult> GetUserByIdAsync(string userId);
+        Task<UserResult> GetUserEmailAsync(string email);
+        Task<bool> IsUserEmailAlreadyExistAsync(string email);
         Task<bool> IsInRoleAsync(string userId, string role);
-        Task<bool> CreateUserAsync(string userName, string password);
-        Task<bool> DeleteUserAsync(string userId);
+        Task<string> CreateUserAsync(string userName, string password);
+        Task<bool> DeleteUserAsync(string email);
     }
 }

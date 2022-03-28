@@ -18,7 +18,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
                 .WithMessage("Company cannot be empty.")
                 .NotNull()
                 .MinimumLength(2).MaximumLength(30)
-                .WithMessage("Company Length is beewten 2 and 30")
+                .WithMessage("Company Length is between 2 and 30")
                 .Matches("^[a-zA-Z0-9 ]*$");
 
             _companyRepository = companyRepository;

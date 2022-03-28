@@ -6,9 +6,7 @@
 
         public static class CompanyRoute
         {
-            public const string GetAll = Base + "/company";
-
-            public const string GetAllCompanies = Base + "/company/companies";
+            public const string GetAll = Base + "/company";          
 
             public const string Update = Base + "/company/{id}";
 
@@ -80,15 +78,17 @@
             public const string RefreshToken = Base + "/identity/RefreshToken";
 
             public const string FacebookAuth = Base + "/identity/auth/fb";
+
+            public const string LdapAuth = Base + "/identity/auth/ldap";
         }
 
         public static class UserRoute
-        {
-            public const string Get = Base + "/identity/users/{userId}";
+        {    
+            public const string Get = Base + "/user/{userId}";
 
-            public const string Create = Base + "/identity/users/";
+            public const string Create = Base + "/user/";
 
-            public const string Delete = Base + "/identity/users/{id}";          
+            public const string Delete = Base + "/user/{userId}";          
         }
     }
 }

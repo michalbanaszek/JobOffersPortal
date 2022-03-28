@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using JobOffersPortal.UI.ClientServices;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApp.ClientServices.Responses;
 using WebApp.Interfaces;
-using WebApp.Services;
 using WebApp.ViewModels.JobOfferMvc.CreateJobOfferMvc;
 using WebApp.ViewModels.JobOfferMvc.IndexJobOfferMvc;
 using WebApp.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
@@ -15,12 +16,14 @@ namespace WebApp.ClientServices
         private readonly IMapper _mapper;
         private readonly IApiClient _client;
         private readonly IAddBearerTokenMvcService _addBearerTokenService;
+        private readonly ILogger<JobOfferMvcService> _logger;
 
-        public JobOfferMvcService(IMapper mapper, IApiClient client, IAddBearerTokenMvcService addBearerTokenService)
+        public JobOfferMvcService(IMapper mapper, IApiClient client, IAddBearerTokenMvcService addBearerTokenService, ILogger<JobOfferMvcService> logger)
         {
             _mapper = mapper;
             _client = client;
             _addBearerTokenService = addBearerTokenService;
+            _logger = logger;
         }
 
         public async Task<PaginatedMvcList<JobOfferMvcViewModel>> GetAllByCompany(string companyId)
@@ -76,6 +79,8 @@ namespace WebApp.ClientServices
             } 
             catch (ApiException ex)
             {
+                _logger.LogError(ex.Message);
+
                 return new ResponseFromApi<string>() { Success = false, Errors = new string[] { ex.Message } };
             }
         }
@@ -99,6 +104,8 @@ namespace WebApp.ClientServices
             }
             catch (ApiException ex)
             {
+                _logger.LogError(ex.Message);
+
                 return new ResponseFromApi<string>() { Success = false, Errors = new string[] { ex.Message } };
             }          
         }
@@ -116,6 +123,8 @@ namespace WebApp.ClientServices
 
             catch (ApiException ex)
             {
+                _logger.LogError(ex.Message);
+
                 return new ResponseFromApi<string>() { Success = false, Errors = new string[] { ex.Message } };
             }
         }

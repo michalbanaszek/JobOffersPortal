@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Logging;
 using Novell.Directory.Ldap;
 using System;
 using System.Collections.Generic;
@@ -20,16 +21,18 @@ namespace WebApp.ClientServices.Security
         private const string SAMAccountNameAttribute = "sAMAccountName";
         private const string MailAttribute = "mail";
 
-        private readonly LdapOptions _ldapOptions;
+        private readonly LdapOptions _ldapOptions;       
         private readonly LdapConnection _connection;
 
-        private readonly IIdentityMvcService _identityMvcService;
+        private readonly IIdentityMvcService _identityMvcService;       
+        private readonly ILogger<AuthenticationLdapService> _logger;
 
-        public AuthenticationLdapService(LdapOptions ldapOptions, IIdentityMvcService identityMvcService)
+        public AuthenticationLdapService(LdapOptions ldapOptions, IIdentityMvcService identityMvcService, ILogger<AuthenticationLdapService> logger)
         {
             _ldapOptions = ldapOptions;
             _connection = new LdapConnection();
             _identityMvcService = identityMvcService;
+            _logger = logger;          
         }
 
         public async Task<AuthenticationLdapResult> LoginAsync(string username, string password)
@@ -43,10 +46,10 @@ namespace WebApp.ClientServices.Security
                 LdapConnection.SCOPE_SUB,
                 searchFilter,
                 new[] {
-                    MemberOfAttribute,
-                    DisplayNameAttribute,
-                    SAMAccountNameAttribute,
-                    MailAttribute
+                MemberOfAttribute,
+                DisplayNameAttribute,
+                SAMAccountNameAttribute,
+                MailAttribute
                 },
                 false
             );
@@ -62,6 +65,8 @@ namespace WebApp.ClientServices.Security
 
                     if (_connection.Bound)
                     {
+                        _logger.LogInformation("User exists, success auth to ldap server.");
+
                         var accountNameAttr = user.getAttribute(SAMAccountNameAttribute);
                         if (accountNameAttr == null)
                         {
@@ -132,10 +137,10 @@ namespace WebApp.ClientServices.Security
                 if (authResponse != null && authResponse.Success)
                 {
                     var userClaims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name, authResponse.User.Username),
-                            new Claim(ClaimTypes.Email, authResponse.User.Email)                           
-                        };
+                    {
+                        new Claim(ClaimTypes.Name, authResponse.User.Username),
+                        new Claim(ClaimTypes.Email, authResponse.User.Email)
+                    };
 
                     // Roles
                     foreach (var role in authResponse.User.Roles)
@@ -146,17 +151,14 @@ namespace WebApp.ClientServices.Security
                     //we can add custom claims based on the AD user's groups
                     var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                    _logger.LogInformation("Checking user group to access");
+
                     if (Array.Exists(authResponse.User.Roles, s => s.Contains("Jobs_App")))
                     {
                         //if in the AD the user belongs to the aspnetcore.ldap group, we add a claim
                         claimsIdentity.AddClaim(new Claim("Read", "true"));
 
-                        var registerResult = await _identityMvcService.RegisterAsync(authResponse.User.Email, password);
-
-                        if (!registerResult.Success)
-                        {
-                            await _identityMvcService.LoginAsync(authResponse.User.Email, password);
-                        }
+                        await _identityMvcService.LoginLdapAsync(authResponse.User.Email, password);
                     }
 
                     authResponse.ClaimsIdentity = claimsIdentity;

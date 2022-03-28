@@ -1,4 +1,5 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Domain.Models;
 using JobOffersPortal.Infrastructure.Security.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +17,46 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             _userManager = userManager;
         }
 
-        public async Task<string> GetUserNameAsync(string userId)
+        public async Task<UserResult> GetUserByIdAsync(string userId)
         {
-            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+            var user = await _userManager.FindByIdAsync(userId);
 
-            return user.UserName;
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResult()
+            {
+                Id = user.Id,
+                Email = user.Email
+            };
         }
 
-        public async Task<bool> CreateUserAsync(string userName, string password)
+        public async Task<UserResult> GetUserEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResult()
+            {
+                Id = user.Id,
+                Email = email
+            };
+        }
+
+        public async Task<bool> IsUserEmailAlreadyExistAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            return user == null ? false : true;
+        }
+
+        public async Task<string> CreateUserAsync(string userName, string password)
         {
             var user = new ApplicationUser
             {
@@ -33,7 +66,12 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             var result = await _userManager.CreateAsync(user, password);
 
-            return result.Succeeded ? true : false;
+            if (!result.Succeeded)
+            {
+                return null;
+            }
+
+            return user.Id;
         }
 
         public async Task<bool> IsInRoleAsync(string userId, string role)
@@ -45,21 +83,21 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
         public async Task<bool> DeleteUserAsync(string userId)
         {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+            var user = await _userManager.FindByIdAsync(userId);
 
-            if (user != null)
+            if (user == null)
             {
-                return await DeleteUserAsync(user);
+                return false;
             }
 
-            return false;
-        }
-
-        public async Task<bool> DeleteUserAsync(ApplicationUser user)
-        {
             var result = await _userManager.DeleteAsync(user);
 
-            return result.Succeeded ? true : false;
+            if (!result.Succeeded)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

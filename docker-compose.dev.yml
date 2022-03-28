@@ -1,9 +1,14 @@
 version: "3"
 networks:
-  local-network:
-    name: local-network
+  zarna-network:
+    name: zarna-network
+  elastic-network:
+    name: elastic-network
+  grafana-network:
+    name: grafana-network
 volumes:
   sqlvolume:
+  elasticdata01:
 
 services:
   sql-microsoft:
@@ -17,7 +22,7 @@ services:
     ports:
       - 1431:1433
     networks:
-      - local-network
+      - zarna-network
 
   main-api:
     container_name: api-container
@@ -27,19 +32,20 @@ services:
       dockerfile: JobOffersPortal.API/Dockerfile.dev
     restart: on-failure
     environment:
-      - ASPNETCORE_URLS=http://+
-      # - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_ENVIRONMENT=Development
-      # - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty!2
-      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/JobOffersPortal.API.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty!2
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/JobOffersPortal.API.pfx
     volumes:
       - ${APPDATA}\Microsoft\UserSecrets\29b8f3a9-83f6-4492-aa39-028c2cf4529b\:/root/.microsoft/usersecrets/29b8f3a9-83f6-4492-aa39-028c2cf4529b
-      # - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/:ro
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/:ro
     ports:
       - 8080:80
-      # - 8081:443
+      - 8081:443
     networks:
-      - local-network
+      - zarna-network
+      - elastic-network
     depends_on:
       - sql-microsoft
 
@@ -62,6 +68,56 @@ services:
       - 8082:80
       - 8083:443
     networks:
-      - local-network
+      - zarna-network
+      - elastic-network
     depends_on:
       - sql-microsoft
+
+  elasticsearch:
+    container_name: elasticsearch-container
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+    volumes:
+      - elasticdata01:/usr/share/elasticsearch/data
+    networks:
+      - elastic-network
+    ports:
+      - 9200:9200
+      - 9300:9300
+  kibana:
+    container_name: kibana-container
+    image: docker.elastic.co/kibana/kibana:7.9.0
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - elastic-network
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus-container
+    restart: on-failure
+    ports:
+      - "9090:9090"
+    networks:
+      - zarna-network
+      - grafana-network
+    volumes:
+      - ${USERPROFILE}\prometheus\prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    container_name: grafana-container
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    networks:
+      - grafana-network
+    depends_on:
+      - prometheus

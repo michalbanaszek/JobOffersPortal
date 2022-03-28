@@ -54,7 +54,8 @@ namespace JobOffersPortal.API.Filters
             var exception = context.Exception as NotFoundException;
 
             var details = new ProblemDetails()
-            {              
+            {      
+                Status = StatusCodes.Status404NotFound,
                 Title = "The specified resource was not found.",
                 Detail = exception.Message
             };

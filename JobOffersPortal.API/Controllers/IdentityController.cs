@@ -6,7 +6,8 @@ using JobOffersPortal.Application.Security.Services;
 using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Requests;
 using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Responses;
-using JobOffersPortal.Infrastructure.Security.Contracts.OAuth.Requests;
+using JobOffersPortal.Infrastructure.Security.Contracts.OAuth.Facebook.Requests;
+using JobOffersPortal.Infrastructure.Security.Contracts.OAuth.Ldap.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -75,7 +76,24 @@ namespace JobOffersPortal.API.Controllers
         {
             _logger.LogInformation("Invoked FacebookAuth endpoint");
 
-            var authResponse = await _identityService.LoginWithFacebookAsync(request.TokenAccess);
+            var authResponse = await _identityService.LoginFacebookAsync(request.TokenAccess);
+
+            return CheckAuthenticationResult(authResponse);
+        }
+
+        /// <summary>
+        /// Login ldap user 
+        /// </summary>
+        /// <response code="200">Login ldap user</response>
+        /// <response code="400">Unable to login the user due to validation error</response>   
+        [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
+        [ProducesResponseType(typeof(AuthFailedResponse), 400)]
+        [HttpPost(ApiRoutes.IdentityRoute.LdapAuth), AllowAnonymous]
+        public async Task<ActionResult<AuthSuccessResponse>> LdapAuth([FromBody] LoginLdapRequest request)
+        {
+            _logger.LogInformation("Invoked LdapAuth endpoint");
+
+            var authResponse = await _identityService.LoginLdap(request.Email, request.Password);
 
             return CheckAuthenticationResult(authResponse);
         }

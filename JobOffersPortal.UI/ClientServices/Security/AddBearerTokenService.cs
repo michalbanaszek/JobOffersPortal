@@ -1,7 +1,7 @@
 ﻿using Hanssens.Net;
+using JobOffersPortal.UI.ClientServices;
 using System.Net.Http.Headers;
 using WebApp.Interfaces;
-using WebApp.Services;
 
 namespace WebApp.ClientServices.Security
 {

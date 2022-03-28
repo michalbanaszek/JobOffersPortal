@@ -30,8 +30,6 @@ namespace JobOffersPortal.Application.Common.Mappings
     {
         public AutoMapperProfile()
         {
-            CreateMap<Company, CompanyListViewModel>();
-
             CreateMap<Company, CompanyDetailViewModel>();
             CreateMap<JobOffer, JobOfferDto>();
 

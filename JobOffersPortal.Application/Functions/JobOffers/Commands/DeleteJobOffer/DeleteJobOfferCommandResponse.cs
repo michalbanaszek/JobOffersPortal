@@ -6,7 +6,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
 {
     public class DeleteJobOfferCommandResponse : BaseResponse
     {
-        public string Id { get; set; }
+        public string Id { get; set; }      
 
         public DeleteJobOfferCommandResponse(bool succeeded, IEnumerable<string> errors) : base(succeeded, errors)
         {

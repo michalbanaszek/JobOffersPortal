@@ -1,4 +1,4 @@
-﻿namespace JobOffersPortal.Infrastructure.Security.Contracts.OAuth.Requests
+﻿namespace JobOffersPortal.Infrastructure.Security.Contracts.OAuth.Facebook.Requests
 {
     public class LoginFacebookRequest
     {

@@ -4,7 +4,7 @@ using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
-using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyListWithJobOffers;
+using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;

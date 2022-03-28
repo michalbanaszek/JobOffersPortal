@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using JobOffersPortal.UI.ClientServices;
+using WebApp.ViewModels.JobOfferMvc.CreateJobOfferMvc;
 using WebApp.ViewModels.JobOfferMvc.DeleteJobOfferMvc;
 using WebApp.ViewModels.JobOfferMvc.IndexJobOfferMvc;
 using WebApp.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
@@ -17,8 +19,6 @@ using WebApp.ViewModels.JobOfferSkillMvc.DeleteJobOfferSkillMvc;
 using WebApp.ViewModels.JobOfferSkillMvc.DetailJobOfferSkillMvc;
 using WebApp.ViewModels.JobOfferSkillMvc.IndexJobOfferSkillMvc;
 using WebApp.ViewModels.JobOfferSkillMvc.UpdateJobOfferSkillMvc;
-using WebApp.Services;
-using WebApp.ViewModels.JobOfferMvc.CreateJobOfferMvc;
 
 namespace WebApp.Mappings
 {
