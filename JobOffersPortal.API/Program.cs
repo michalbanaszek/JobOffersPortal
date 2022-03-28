@@ -2,9 +2,8 @@ using App.Metrics.AspNetCore;
 using App.Metrics.Formatters.Prometheus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Web;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using System;
 using System.Threading.Tasks;
 
@@ -14,25 +13,9 @@ namespace JobOffersPortal.API
     {
         public static async Task Main(string[] args)
         {
-            var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-
-            try
-            {
-                logger.Debug("init main function");
-
-                var host = CreateHostBuilder(args).Build();                         
+                var host = CreateHostBuilder(args).Build();
 
                 await host.RunAsync();
-            }
-            catch (Exception exception)
-            {              
-                logger.Error(exception, "Stopped program because of exception");
-                throw;
-            }
-            finally
-            {              
-                NLog.LogManager.Shutdown();
-            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -47,15 +30,24 @@ namespace JobOffersPortal.API
                         endpointsOptions.EnvironmentInfoEndpointEnabled = false;
                     };
                 })
+                .UseSerilog((context, configuration) =>
+                {
+                    configuration.Enrich.FromLogContext()
+                                 .Enrich.WithMachineName()
+                                 .WriteTo.Console()
+                                 .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticSearchOptions:Uri"]))
+                                 {
+                                     IndexFormat = $"{context.Configuration["ApplicationName"]}-logs-{context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+                                     AutoRegisterTemplate = true,
+                                     NumberOfShards = 2,
+                                     NumberOfReplicas = 1
+                                 })
+                                 .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
+                                 .ReadFrom.Configuration(context.Configuration);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-               .ConfigureLogging(logging =>
-               {
-                   logging.ClearProviders();
-                   logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
-               })
-                .UseNLog();  
+                });
     }
 }
