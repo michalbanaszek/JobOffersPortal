@@ -78,6 +78,8 @@
             public const string RefreshToken = Base + "/identity/RefreshToken";
 
             public const string FacebookAuth = Base + "/identity/auth/fb";
+
+            public const string LdapAuth = Base + "/identity/auth/ldap";
         }
 
         public static class UserRoute

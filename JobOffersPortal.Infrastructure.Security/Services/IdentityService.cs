@@ -5,6 +5,7 @@ using JobOffersPortal.Infrastructure.Security.Options;
 using JobOffersPortal.Infrastructure.Security.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace JobOffersPortal.Infrastructure.Security.Services
 {
     public class IdentityService : IIdentityService
@@ -22,7 +24,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
         private readonly JwtOptions _jwtOptions;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IApplicationDbContext _context;
-        private readonly IFacebookAuthService _facebookAuthService;
+        private readonly IFacebookAuthService _facebookAuthService;      
 
         public IdentityService(
             UserManager<ApplicationUser> userManager,
@@ -35,7 +37,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
             _facebookAuthService = facebookAuthService;
-            _jwtOptions = jwtOptions;
+            _jwtOptions = jwtOptions;       
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -60,7 +62,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                 };
             }
 
-            return await GenerateTokenForUserAsync(user);
+            return await GenerateTokenForUserAsync(user.Email);
         }
 
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
@@ -131,7 +133,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
 
-            return await GenerateTokenForUserAsync(user);
+            return await GenerateTokenForUserAsync(user.Email);
         }
 
         public async Task<AuthenticationResult> RegisterAsync(string email, string password)
@@ -164,10 +166,10 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             await _userManager.AddClaimAsync(newUser, new Claim("Create Role", "true"));
 
-            return await GenerateTokenForUserAsync(newUser);
+            return await GenerateTokenForUserAsync(newUser.Email);
         }
 
-        public async Task<AuthenticationResult> LoginWithFacebookAsync(string accessToken)
+        public async Task<AuthenticationResult> LoginFacebookAsync(string accessToken)
         {
             var validatedTokenResult = await _facebookAuthService.ValidateAccessTokenAsync(accessToken);
 
@@ -185,14 +187,14 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             if (user == null)
             {
-                var identityUser = new ApplicationUser()
+                user = new ApplicationUser()
                 {
                     Id = Guid.NewGuid().ToString(),
                     Email = userInfo.Email,
                     UserName = userInfo.Email
                 };
 
-                var createdResult = await _userManager.CreateAsync(identityUser);
+                var createdResult = await _userManager.CreateAsync(user);
 
                 if (!createdResult.Succeeded)
                 {
@@ -202,10 +204,17 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                     };
                 }
 
-                return await GenerateTokenForUserAsync(identityUser);
+                return await GenerateTokenForUserAsync(user.Email);
             }
 
-            return await GenerateTokenForUserAsync(user);
+            return await GenerateTokenForUserAsync(user.Email);
+        }
+
+        public async Task<AuthenticationResult> LoginLdap(string email, string password)
+        {
+            var authResult = await GenerateTokenForUserAsync(email);
+
+            return authResult;
         }
 
         private ClaimsPrincipal GetPrincipalFromToken(string token)
@@ -237,31 +246,46 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                     jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private async Task<AuthenticationResult> GenerateTokenForUserAsync(ApplicationUser user)
+        private async Task<AuthenticationResult> GenerateTokenForUserAsync(string email)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
 
             var claims = new List<Claim>()
             {
-               new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-               new Claim(JwtRegisteredClaimNames.Email, user.Email),
-               new Claim("id", user.Id)
+                new Claim(JwtRegisteredClaimNames.Sub, _jwtOptions.Subject),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, email),
             };
 
-            var userClaims = await _userManager.GetClaimsAsync(user);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            claims.AddRange(userClaims);
+            if (user != null)
+            {
+                var userClaims = await _userManager.GetClaimsAsync(user);
+                userClaims.Add(new Claim("id", user.Id));
+                claims.AddRange(userClaims);
+            }
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.Add(_jwtOptions.TokenLifeTime),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Audience = _jwtOptions.Audience,
+                Issuer = _jwtOptions.Issuer
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            if (user == null)
+            {
+                return new AuthenticationResult()
+                {
+                    Success = true,
+                    Token = tokenHandler.WriteToken(token)
+                };
+            }
 
             var refreshToken = new RefreshToken()
             {
