@@ -7,10 +7,13 @@ namespace WebApp.Validators.JobOfferMvcValidator
     {
         public CreateJobOfferMvcViewModelValidator()
         {
+
             RuleFor(x => x.Position)
                 .NotEmpty()
-                .MinimumLength(2)
-                .MaximumLength(30);
+                .NotNull()
+                .MinimumLength(2).MaximumLength(30)
+                .WithMessage("Position Length is between 2 and 30")
+                .Matches("^[a-zA-Z0-9 ]*$");
         }
     }
 }
