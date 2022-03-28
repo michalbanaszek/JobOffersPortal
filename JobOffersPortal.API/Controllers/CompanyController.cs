@@ -6,6 +6,7 @@ using JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace JobOffersPortal.API.Controllers
         /// </summary>
         /// <response code="200">Get item in the system</response>   
         /// <response code="404">Not found item</response>    
-        [HttpGet(ApiRoutes.CompanyRoute.Get)]
+        [HttpGet(ApiRoutes.CompanyRoute.Get), AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Cached(50)]
