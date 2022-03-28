@@ -8,6 +8,7 @@ namespace JobOffersPortal.Application.Security.Services
         Task<AuthenticationResult> RegisterAsync(string email, string password);
         Task<AuthenticationResult> LoginAsync(string email, string password);
         Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken);
-        Task<AuthenticationResult> LoginWithFacebookAsync(string accessToken);
+        Task<AuthenticationResult> LoginFacebookAsync(string accessToken);
+        Task<AuthenticationResult> LoginLdap(string email, string password);
     }
 }
