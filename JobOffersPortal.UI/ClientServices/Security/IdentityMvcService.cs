@@ -45,6 +45,32 @@ namespace WebApp.ClientServices.Security
             }
         }
 
+        public async Task<ResponseFromApi<string>> LoginLdapAsync(string email, string password)
+        {
+
+            try
+            {
+                LoginLdapRequest loginLdapRequest = new LoginLdapRequest() { Email = email, Password = password };
+
+                var authResponse = await _client.LoginLdapAsync(loginLdapRequest);
+
+                if (authResponse.Token != string.Empty)
+                {
+                    _localStorage.Store("token", authResponse.Token);
+
+                    return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
+                }
+
+                return new ResponseFromApi<string>() { Success = false };
+            }
+            catch (ApiException ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return new ResponseFromApi<string>() { Success = false, Errors = new[] { ex.Message } };
+            }
+        }
+
         public async Task<ResponseFromApi<string>> RegisterAsync(string email, string password)
         {
             try
