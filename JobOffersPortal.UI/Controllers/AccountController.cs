@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -16,18 +17,19 @@ namespace WebApp.Controllers
     {
         private readonly IAuthenticationLdapMvcService _authenticationLdapService;
         private readonly LocalStorage _localStorage;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAuthenticationLdapMvcService authenticationLdapService, IIdentityMvcService identityMvcService, LocalStorage localStorage)
+        public AccountController(IAuthenticationLdapMvcService authenticationLdapService, IIdentityMvcService identityMvcService, LocalStorage localStorage, ILogger<AccountController> logger)
         {
             _authenticationLdapService = authenticationLdapService;
             _localStorage = localStorage;
+            _logger = logger;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
-
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -63,6 +65,8 @@ namespace WebApp.Controllers
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);                  
+
                     ModelState.AddModelError("", ex.Message);
                 }
             }
