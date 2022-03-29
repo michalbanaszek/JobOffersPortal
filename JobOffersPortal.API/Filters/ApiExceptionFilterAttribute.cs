@@ -56,11 +56,13 @@ namespace JobOffersPortal.API.Filters
             var details = new ProblemDetails()
             {      
                 Status = StatusCodes.Status404NotFound,
-                Title = "The specified resource was not found.",
-                Detail = exception.Message
+                Title = "The specified resource was not found."            
             };
 
-            context.Result = new NotFoundObjectResult(details);
+            context.Result = new NotFoundObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status404NotFound,
+            };
 
             context.ExceptionHandled = true;
         }
@@ -71,10 +73,15 @@ namespace JobOffersPortal.API.Filters
 
             var details = new ValidationProblemDetails(exception.Errors)
             {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
             };
 
-            context.Result = new BadRequestObjectResult(details);
+            context.Result = new BadRequestObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+            };
 
             context.ExceptionHandled = true;
         }
@@ -83,10 +90,15 @@ namespace JobOffersPortal.API.Filters
         {
             var details = new ValidationProblemDetails(context.ModelState)
             {
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                Status = StatusCodes.Status400BadRequest,
+                Detail = context.Exception.Message,                
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
             };
 
-            context.Result = new BadRequestObjectResult(details);
+            context.Result = new BadRequestObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+            };
 
             context.ExceptionHandled = true;
         }
