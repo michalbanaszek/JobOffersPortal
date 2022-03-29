@@ -76,7 +76,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
 
             response.ShouldBeNull();
             validatorResult.IsValid.ShouldBe(false);
-            validatorResult.Errors[0].ErrorMessage.ShouldBe("Company Length is beewten 2 and 30");
+            validatorResult.Errors[0].ErrorMessage.ShouldBe("Company Length is between 2 and 30");
             allCompanies.Count.ShouldBe(allCompaniesBeforeCount);
         }
 
