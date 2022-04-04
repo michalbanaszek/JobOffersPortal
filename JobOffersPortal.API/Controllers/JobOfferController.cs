@@ -21,7 +21,7 @@ namespace JobOffersPortal.API.Controllers
         /// <response code="200">Get list of items in the system</response>   
         /// <response code="401">Unauthorized</response>   
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Cached(50)]
         [HttpGet(ApiRoutes.JobOfferRoute.GetAll), AllowAnonymous]
         public async Task<ActionResult<PaginatedList<JobOfferViewModel>>> GetAll([FromQuery] GetJobOffersWithPaginationQuery query)
@@ -36,7 +36,7 @@ namespace JobOffersPortal.API.Controllers
         /// <response code="401">Unauthorized</response>   
         /// <response code="404">Not found item</response> 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Cached(50)]
         [HttpGet(ApiRoutes.JobOfferRoute.Get), AllowAnonymous]

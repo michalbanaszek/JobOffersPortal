@@ -1,5 +1,6 @@
 ﻿using App.Metrics;
 using JobOffersPortal.API.Metrics;
+using JobOffersPortal.Application;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Persistance.EF.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace JobOffersPortal.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [HttpPost(ApiRoutes.CompanyRoute.GetAll)]
     public class EmailController : ControllerBase
     {
         private readonly IEmailService _emailService;
@@ -20,7 +20,7 @@ namespace JobOffersPortal.API.Controllers
             _metrics = metrics;
         }
 
-        [HttpPost("Send")]
+        [HttpPost(ApiRoutes.EmailRoute.Post)]
         public async Task<IActionResult> Send([FromForm] SendEmailRequest request)
         {
             await _emailService.SendEmailAsync(request.ToEmail, request.Subject, request.Content, request.Files);

@@ -1,6 +1,5 @@
 ﻿using JobOffersPortal.API.Filters.Cache;
 using JobOffersPortal.Application;
-using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany;
@@ -10,11 +9,10 @@ using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.API.Controllers
-{     
+{
     public class CompanyController : ApiControllerBase
     {
         /// <summary>
@@ -39,7 +37,7 @@ namespace JobOffersPortal.API.Controllers
         /// <response code="404">Not found item</response>    
         [HttpGet(ApiRoutes.CompanyRoute.Get), AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]      
         [Cached(50)]
         public async Task<ActionResult<CompanyJobOfferListViewModel>> Get([FromRoute] string id)

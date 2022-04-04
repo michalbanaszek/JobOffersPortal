@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.API.Controllers
-{
-    [ApiController]
-    [Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+{      
     public class UserController : ApiControllerBase
     {
         /// <summary>
