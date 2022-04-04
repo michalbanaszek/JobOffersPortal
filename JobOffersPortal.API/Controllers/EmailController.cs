@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.API.Controllers
-{
-    [HttpPost(ApiRoutes.CompanyRoute.GetAll)]
+{   
     public class EmailController : ControllerBase
     {
         private readonly IEmailService _emailService;
