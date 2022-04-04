@@ -1,7 +1,7 @@
 version: "3"
 networks:
-  zarna-network:
-    name: zarna-network
+  job-network:
+    name: job-network
   elastic-network:
     name: elastic-network
   grafana-network:
@@ -22,7 +22,7 @@ services:
     ports:
       - 1431:1433
     networks:
-      - zarna-network
+      - job-network
 
   main-api:
     container_name: api-container
@@ -44,7 +44,7 @@ services:
       - 8080:80
       - 8081:443
     networks:
-      - zarna-network
+      - job-network
       - elastic-network
     depends_on:
       - sql-microsoft
@@ -68,7 +68,7 @@ services:
       - 8082:80
       - 8083:443
     networks:
-      - zarna-network
+      - job-network
       - elastic-network
     depends_on:
       - sql-microsoft
@@ -106,7 +106,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - zarna-network
+      - job-network
       - grafana-network
     volumes:
       - ${USERPROFILE}\prometheus\prometheus.yml:/etc/prometheus/prometheus.yml
