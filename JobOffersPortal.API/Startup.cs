@@ -33,7 +33,9 @@ namespace JobOffersPortal.API
             {
                 services.AddCors(options =>
                 {
-                    options.AddPolicy("Open", builder => builder.WithOrigins("https://www.zarna.eu/backend"));
+                    options.AddPolicy("Open", builder => builder.AllowAnyOrigin()
+                                                                .AllowAnyHeader()
+                                                                .AllowAnyMethod());
                 });
             });
         }
