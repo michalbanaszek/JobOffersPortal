@@ -9,7 +9,7 @@ namespace JobOffersPortal.API.SwaggerExamples
         {
             return new RegisterRequest()
             {
-                Email = "user3@gmail.com",
+                Email = "user1@gmail.com",
                 Password = "Qwerty!1"
             };
         }

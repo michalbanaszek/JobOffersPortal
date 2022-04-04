@@ -12,7 +12,7 @@ namespace JobOffersPortal.Persistance.EF.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly EmailOptions _emailOptions;
+        private readonly EmailOptions _emailOptions;     
         public EmailService(IOptions<EmailOptions> emailOptions)
         {
             _emailOptions = emailOptions.Value;
@@ -56,7 +56,6 @@ namespace JobOffersPortal.Persistance.EF.Services
             smtp.Authenticate(_emailOptions.SmtpUsername, _emailOptions.SmtpPassword);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
-
         }
     }
 }

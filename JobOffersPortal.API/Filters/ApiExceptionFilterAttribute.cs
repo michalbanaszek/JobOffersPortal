@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ namespace JobOffersPortal.API.Filters
     public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
 
-        private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
+        private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;        
 
         public ApiExceptionFilterAttribute()
         {
@@ -21,6 +22,7 @@ namespace JobOffersPortal.API.Filters
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
                 { typeof(NotFoundException), HandleNotFoundException },
+                { typeof(DbUpdateConcurrencyException), HandleDbUpdateConcurrencyException }
             };
         }
 
@@ -56,7 +58,8 @@ namespace JobOffersPortal.API.Filters
             var details = new ProblemDetails()
             {      
                 Status = StatusCodes.Status404NotFound,
-                Title = "The specified resource was not found."            
+                Title = "The specified resource was not found.",
+                Detail = exception.Message
             };
 
             context.Result = new NotFoundObjectResult(details)
@@ -132,6 +135,26 @@ namespace JobOffersPortal.API.Filters
             context.Result = new ObjectResult(details)
             {
                 StatusCode = StatusCodes.Status403Forbidden
+            };
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleDbUpdateConcurrencyException(ExceptionContext context)
+        {
+            var exception = context.Exception as DbUpdateConcurrencyException;
+
+
+            var details = new ProblemDetails
+            {
+                Status = StatusCodes.Status500InternalServerError,
+                Title = "An error occurred while processing your request.",
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            };
+
+            context.Result = new ObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status500InternalServerError
             };
 
             context.ExceptionHandled = true;

@@ -1,6 +1,6 @@
 ﻿using JobOffersPortal.UI.ClientServices;
 
-namespace WebApp.Interfaces
+namespace JobOffersPortal.UI.Interfaces
 {
     public interface IAddBearerTokenMvcService
     {

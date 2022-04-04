@@ -1,4 +1,4 @@
-﻿namespace WebApp.ViewModels.JobOfferPropositionMvc.DeleteJobOfferPropositionMvc
+﻿namespace JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.DeleteJobOfferPropositionMvc
 {
     public class DeleteJobOfferPropositionMvcViewModel
     {

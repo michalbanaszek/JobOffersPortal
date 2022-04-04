@@ -4,30 +4,28 @@ using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer
 {
-    public class UpdateJobOfferCommandHandler : IRequestHandler<UpdateJobOfferCommand, UpdateJobOfferCommandResponse>
+    public class UpdateJobOfferCommandHandler : IRequestHandler<UpdateJobOfferCommand, Unit>
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateJobOfferCommandHandler> _logger;
-        private readonly IJobOfferRepository _jobOfferRepository;       
+        private readonly IJobOfferRepository _jobOfferRepository;
 
         public UpdateJobOfferCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<UpdateJobOfferCommandHandler> logger, ICurrentUserService currentUserService)
         {
             _currentUserService = currentUserService;
             _mapper = mapper;
             _logger = logger;
-            _jobOfferRepository = jobOfferRepository;           
+            _jobOfferRepository = jobOfferRepository;
         }
 
-        public async Task<UpdateJobOfferCommandResponse> Handle(UpdateJobOfferCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateJobOfferCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.Id);
 
@@ -47,28 +45,13 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
                 throw new ForbiddenAccessException(nameof(JobOffer), request.Id);
             }
 
-            try
-            {
-                _mapper.Map(request, entity);
+            _mapper.Map(request, entity);
 
-                await _jobOfferRepository.UpdateAsync(entity);
+            await _jobOfferRepository.UpdateAsync(entity);
 
-                _logger.LogInformation("Updated JobOffer Id: {0}", request.Id);
+            _logger.LogInformation("Updated JobOffer Id: {0}", request.Id);
 
-                return new UpdateJobOfferCommandResponse(entity.Id);
-            }
-            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            {
-                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
-
-                return new UpdateJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Exception execuded, Message:", exception.Message);
-
-                return new UpdateJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
-            }
+            return Unit.Value;
         }
     }
 }

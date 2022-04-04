@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
-namespace JobOffersPortal.API.Installers
+namespace JobOffersPortal.API.Extensions
 {
     public static class InstallerExtensions
     {

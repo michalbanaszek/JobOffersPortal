@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc
 {
     public class UpdateJobOfferPropositionMvcViewModel
     {
-        public string Id { get; set; }    
+        public string Id { get; set; }
         public string Content { get; set; }
     }
 }

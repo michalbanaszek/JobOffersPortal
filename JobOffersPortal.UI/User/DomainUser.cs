@@ -1,6 +1,6 @@
-﻿using WebApp.Interfaces;
+﻿using JobOffersPortal.UI.Interfaces;
 
-namespace WebApp.Models
+namespace JobOffersPortal.UI.User
 {
     public class DomainUser : IMvcDomainUser
     {

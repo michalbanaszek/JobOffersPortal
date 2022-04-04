@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.ViewModels.JobOfferRequirementMvc.CreateDetailsJobOfferRequirrementMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.CreateDetailsJobOfferRequirementMvc
 {
     public class CreateDetailsJobOfferRequirementMvcViewModel
     {

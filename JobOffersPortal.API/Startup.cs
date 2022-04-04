@@ -1,19 +1,14 @@
-using JobOffersPortal.API.Installers;
+using JobOffersPortal.API.Extensions;
+using JobOffersPortal.API.Middleware;
 using JobOffersPortal.Application;
 using JobOffersPortal.Infrastructure.Security.InfrastructureSecurityInstallation;
-using JobOffersPortal.Persistance.EF.HealthChecks;
 using JobOffersPortal.Persistance.EF.InfrastructureInstallation;
 using JobOffersPortal.Persistance.EF.Options;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using System.IO;
-using System.Linq;
 
 namespace JobOffersPortal.API
 {
@@ -36,9 +31,10 @@ namespace JobOffersPortal.API
 
             services.AddCors(options =>
             {
-                options.AddPolicy("Open", builder => builder.AllowAnyOrigin()
-                                                            .AllowAnyHeader()
-                                                            .AllowAnyMethod());
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("Open", builder => builder.WithOrigins("https://www.zarna.eu/backend"));
+                });
             });
         }
 
@@ -51,32 +47,14 @@ namespace JobOffersPortal.API
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();                      
                 app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
                 app.UseSwaggerUI(option => option.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description));
-            }
+            }          
 
-            app.UseHealthChecks("/health", new HealthCheckOptions()
-            {
-                ResponseWriter = async (context, report) =>
-                {
-                    context.Response.ContentType = "application/json";
+            app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 
-                    var response = new HealthCheckResponse()
-                    {
-                        Status = report.Status.ToString(),
-                        Checks = report.Entries.Select(x => new HealthCheck()
-                        {
-                            Component = x.Key,
-                            Status = x.Value.Status.ToString(),
-                            Description = x.Value.Description
-                        }),
-                        Duration = report.TotalDuration
-                    };
-
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-                }
-            });
+            app.UseCustomHealthChecks();
 
             app.UseHttpsRedirection();
 

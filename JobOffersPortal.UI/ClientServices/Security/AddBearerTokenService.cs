@@ -1,13 +1,12 @@
 ﻿using Hanssens.Net;
-using JobOffersPortal.UI.ClientServices;
+using JobOffersPortal.UI.Interfaces;
 using System.Net.Http.Headers;
-using WebApp.Interfaces;
 
-namespace WebApp.ClientServices.Security
+namespace JobOffersPortal.UI.ClientServices.Security
 {
     public class AddBearerTokenService : IAddBearerTokenMvcService
     {
-       private readonly LocalStorage _localStorage;
+        private readonly LocalStorage _localStorage;
 
         public AddBearerTokenService(LocalStorage storage)
         {

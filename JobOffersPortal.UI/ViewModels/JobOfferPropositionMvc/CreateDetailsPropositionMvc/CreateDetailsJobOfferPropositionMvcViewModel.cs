@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebApp.ViewModels.JobOfferPropositionMvc.CreateDetailsPropositionMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.CreateDetailsPropositionMvc
 {
     public class CreateDetailsJobOfferPropositionMvcViewModel
     {

@@ -1,19 +1,15 @@
-﻿using JobOffersPortal.Application.Common.Models;
-using System.Collections.Generic;
+﻿using System;
 
 namespace JobOffersPortal.Application.Functions.Users.Commands.CreateUser
 {
-    public class CreateUserCommandResponse : BaseResponse
+    public class CreateUserCommandResponse
     {
-        public string Id { get; set; }
+        public Uri Uri { get; set; }
 
-        public CreateUserCommandResponse(bool succeeded, IEnumerable<string> errors) : base(succeeded, errors)
-        {
-        }
 
-        public CreateUserCommandResponse(string id) : base()
+        public CreateUserCommandResponse(Uri uri)
         {
-            Id = id;
+            Uri = uri;
         }
     }
 }

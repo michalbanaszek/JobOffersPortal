@@ -1,4 +1,4 @@
-﻿namespace WebApp.Options
+﻿namespace JobOffersPortal.UI.Options
 {
     public class CookiesOptions
     {

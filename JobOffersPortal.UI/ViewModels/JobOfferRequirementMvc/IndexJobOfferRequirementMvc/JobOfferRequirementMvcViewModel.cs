@@ -1,4 +1,4 @@
-﻿namespace WebApp.ViewModels.JobOfferRequirementMvc.IndexJobOfferRequirementMvc
+﻿namespace JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.IndexJobOfferRequirementMvc
 {
     public class JobOfferRequirementMvcViewModel
     {

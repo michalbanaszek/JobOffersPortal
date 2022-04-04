@@ -62,3 +62,7 @@
     <a asp-action="Index" asp-controller="JobOffer">Wróć</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

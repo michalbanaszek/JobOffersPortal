@@ -1,4 +1,4 @@
-﻿namespace WebApp.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc
+﻿namespace JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc
 {
     public class JobOfferJobOfferSkillMvcDto
     {

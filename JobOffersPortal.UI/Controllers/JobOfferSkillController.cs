@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using JobOffersPortal.UI.ClientServices;
+using JobOffersPortal.UI.Interfaces;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.DeleteJobOfferSkillMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.UpdateJobOfferSkillMvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApp.Interfaces;
-using WebApp.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc;
-using WebApp.ViewModels.JobOfferSkillMvc.DeleteJobOfferSkillMvc;
-using WebApp.ViewModels.JobOfferSkillMvc.UpdateJobOfferSkillMvc;
 
-namespace WebApp.Controllers
+namespace JobOffersPortal.UI.Controllers
 {
     public class JobOfferSkillController : WebControllerBase
     {
@@ -35,14 +36,11 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateShowDetails(CreateDetailsJobOfferSkillMvcViewModel viewModel)
         {
+
             if (ModelState.IsValid)
             {
-                var responseFromCommand = await _jobOfferSkillService.AddAsync(viewModel.JobOfferId, viewModel.Content);
-
-                if (responseFromCommand.Success)
-                {
-                    ModelState.Clear();
-                }
+                await _jobOfferSkillService.AddAsync(viewModel.JobOfferId, viewModel.Content);
+                ModelState.Clear();
             }
 
             var responseFromQuery = await _jobOfferService.GetByIdAsync(viewModel.JobOfferId);

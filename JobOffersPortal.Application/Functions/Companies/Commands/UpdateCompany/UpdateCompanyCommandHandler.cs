@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
 {
-    public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand, UpdateCompanyCommandResponse>
+    public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand, Unit>
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly ICurrentUserService _currentUserService;
@@ -27,7 +27,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
             _currentUserService = currentUserService;
         }
 
-        public async Task<UpdateCompanyCommandResponse> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
         {
             var entity = await _companyRepository.GetByIdAsync(request.Id);
 
@@ -47,28 +47,13 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
                 throw new ForbiddenAccessException(nameof(Company), request.Id);
             }
 
-            try
-            {
-                _mapper.Map(request, entity);
+            _mapper.Map(request, entity);
 
-                await _companyRepository.UpdateAsync(entity);
+            await _companyRepository.UpdateAsync(entity);
 
-                _logger.LogInformation("Updated Company Id: {0}", request.Id);
+            _logger.LogInformation("Updated Company Id: {0}", request.Id);
 
-                return new UpdateCompanyCommandResponse(request.Id);
-            }
-            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            {
-                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
-
-                return new UpdateCompanyCommandResponse(false, new string[] { "Cannot update the entity to database." });
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Exception execuded, Message:", exception.Message);
-
-                return new UpdateCompanyCommandResponse(false, new string[] { "Cannot update the entity to database." });
-            }
+            return Unit.Value;
         }
     }
 }

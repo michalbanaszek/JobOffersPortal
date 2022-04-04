@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement
 {
-    public class DeleteJobOfferRequirementCommand : IRequest<DeleteJobOfferRequirementCommandResponse>
+    public class DeleteJobOfferRequirementCommand : IRequest<Unit>
     {
         public string Id { get; set; }
     }

@@ -1,10 +1,10 @@
 ﻿using Application.JobOfferPropositions.Commands.CreateJobOfferProposition;
 using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -18,13 +18,15 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
         private readonly ILogger<CreateJobOfferPropositionCommandHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
         private readonly IJobOfferPropositionRepository _jobOfferPropositionRepository;
+        private readonly IUriService _uriService;
 
-        public CreateJobOfferPropositionCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<CreateJobOfferPropositionCommandHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository)
+        public CreateJobOfferPropositionCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<CreateJobOfferPropositionCommandHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository, IUriService uriService)
         {
             _jobOfferRepository = jobOfferRepository;
             _mapper = mapper;
             _logger = logger;
             _jobOfferPropositionRepository = jobOfferPropositionRepository;
+            _uriService = uriService;
         }
 
         public async Task<CreateJobOfferPropositionCommandResponse> Handle(CreateJobOfferPropositionCommand request, CancellationToken cancellationToken)
@@ -39,33 +41,19 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.Cr
             }
 
             JobOfferProposition jobOfferProposition = new JobOfferProposition()
-            {
-                Id = Guid.NewGuid().ToString(),
+            {              
                 Content = request.Content
             };
 
-            try
-            {
-                entity.Propositions.Add(jobOfferProposition);
+            entity.Propositions.Add(jobOfferProposition);
 
-                await _jobOfferPropositionRepository.AddAsync(jobOfferProposition);
+            await _jobOfferPropositionRepository.AddAsync(jobOfferProposition);
 
-                _logger.LogInformation("Created JobOfferProposition for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
+            _logger.LogInformation("Created JobOfferProposition for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
 
-                return new CreateJobOfferPropositionCommandResponse(true, new string[] { }) { Id = entity.Id };
-            }
-            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            {
-                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
+            var uri = _uriService.Get(jobOfferProposition.Id, nameof(JobOfferProposition));
 
-                return new CreateJobOfferPropositionCommandResponse(false, new string[] { "Cannot add entity to database." });
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Exception execuded, Message:", exception.Message);
-
-                return new CreateJobOfferPropositionCommandResponse(false, new string[] { "Cannot add entity to database." });
-            }
+            return new CreateJobOfferPropositionCommandResponse(uri);
         }
     }
 }

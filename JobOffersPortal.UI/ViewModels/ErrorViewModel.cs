@@ -1,4 +1,4 @@
-namespace WebApp.ViewModels
+namespace JobOffersPortal.UI.ViewModels
 {
     public class ErrorViewModel
     {

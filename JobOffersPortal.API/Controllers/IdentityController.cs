@@ -1,5 +1,4 @@
 ﻿using App.Metrics;
-using App.Metrics.Counter;
 using JobOffersPortal.API.Metrics;
 using JobOffersPortal.Application;
 using JobOffersPortal.Application.Security.Services;

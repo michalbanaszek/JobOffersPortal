@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using JobOffersPortal.UI.Domain;
+using JobOffersPortal.UI.Interfaces;
+using JobOffersPortal.UI.Options;
+using JobOffersPortal.UI.User;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using Novell.Directory.Ldap;
 using System;
@@ -7,12 +11,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WebApp.Domain;
-using WebApp.Interfaces;
-using WebApp.Models;
-using WebApp.Options;
 
-namespace WebApp.ClientServices.Security
+namespace JobOffersPortal.UI.ClientServices.Security
 {
     public class AuthenticationLdapService : IAuthenticationLdapMvcService
     {
@@ -21,10 +21,10 @@ namespace WebApp.ClientServices.Security
         private const string SAMAccountNameAttribute = "sAMAccountName";
         private const string MailAttribute = "mail";
 
-        private readonly LdapOptions _ldapOptions;       
+        private readonly LdapOptions _ldapOptions;
         private readonly LdapConnection _connection;
 
-        private readonly IIdentityMvcService _identityMvcService;       
+        private readonly IIdentityMvcService _identityMvcService;
         private readonly ILogger<AuthenticationLdapService> _logger;
 
         public AuthenticationLdapService(LdapOptions ldapOptions, IIdentityMvcService identityMvcService, ILogger<AuthenticationLdapService> logger)
@@ -32,7 +32,7 @@ namespace WebApp.ClientServices.Security
             _ldapOptions = ldapOptions;
             _connection = new LdapConnection();
             _identityMvcService = identityMvcService;
-            _logger = logger;          
+            _logger = logger;
         }
 
         public async Task<AuthenticationLdapResult> LoginAsync(string username, string password)
@@ -155,10 +155,21 @@ namespace WebApp.ClientServices.Security
 
                     if (Array.Exists(authResponse.User.Roles, s => s.Contains("Jobs_App")))
                     {
+                        _logger.LogInformation("User is in group to access");
+
                         //if in the AD the user belongs to the aspnetcore.ldap group, we add a claim
                         claimsIdentity.AddClaim(new Claim("Read", "true"));
 
-                        await _identityMvcService.LoginLdapAsync(authResponse.User.Email, password);
+                       var response = await _identityMvcService.LoginLdapAsync(authResponse.User.Email, password);
+
+                        if (!response.Success)
+                        {
+                            return authResponse = new AuthenticationLdapResult()
+                            {
+                                Errors = new[] { "Your account can't login in." },
+                                Success = false
+                            };
+                        }
                     }
 
                     authResponse.ClaimsIdentity = claimsIdentity;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebApp.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc
 {
     public class CreateDetailsJobOfferSkillMvcViewModel
     {

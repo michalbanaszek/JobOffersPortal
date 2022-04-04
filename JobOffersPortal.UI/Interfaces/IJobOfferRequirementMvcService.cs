@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.DetailJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.IndexJobOfferRequirementMvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApp.ClientServices.Responses;
-using WebApp.ViewModels.JobOfferRequirementMvc.DetailJobOfferRequirementMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.IndexJobOfferRequirementMvc;
 
-namespace WebApp.Interfaces
+namespace JobOffersPortal.UI.Interfaces
 {
     public interface IJobOfferRequirementMvcService
     {
         Task<List<JobOfferRequirementMvcViewModel>> GetAllAsync(string jobOfferId);
         Task<JobOfferRequirementDetailMvcViewModel> GetByIdAsync(string id);
-        Task<ResponseFromApi<string>> AddAsync(string jobOfferId, string content);
-        Task<ResponseFromApi<string>> UpdateAsync(string id, string content);
-        Task<ResponseFromApi<string>> DeleteAsync(string id);
+        Task AddAsync(string jobOfferId, string content);
+        Task UpdateAsync(string id, string content);
+        Task DeleteAsync(string id);
     }
 }

@@ -27,10 +27,12 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
             var command = new DeleteJobOfferPropositionCommand() { Id = "1" };
 
             //Act
-            var response = await handler.Handle(command, CancellationToken.None);
+            await handler.Handle(command, CancellationToken.None);
 
             //Assert
-            response.Succeeded.ShouldBeTrue();
+            var entity = await _mockJobOfferPropositionRepository.Object.GetByIdAsync("1");
+
+            entity.ShouldBeNull();
         }
 
         [Fact]
@@ -55,6 +57,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
 
             //Assert
             exceptionResponse.ShouldNotBeNull();
+
             exceptionResponse.Message.ShouldBe("Entity \"JobOfferProposition\" (10) was not found.");
         }
     }

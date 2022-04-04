@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using WebApp.Domain;
+﻿using JobOffersPortal.UI.Domain;
+using System.Threading.Tasks;
 
-namespace WebApp.Interfaces
+namespace JobOffersPortal.UI.Interfaces
 {
     public interface IAuthenticationLdapMvcService
     {

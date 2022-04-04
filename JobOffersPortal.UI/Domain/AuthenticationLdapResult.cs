@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using JobOffersPortal.UI.Interfaces;
+using System.Collections.Generic;
 using System.Security.Claims;
-using WebApp.Interfaces;
 
-namespace WebApp.Domain
+namespace JobOffersPortal.UI.Domain
 {
     public class AuthenticationLdapResult
     {

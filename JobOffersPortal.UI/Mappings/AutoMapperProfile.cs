@@ -1,26 +1,26 @@
 ﻿using AutoMapper;
 using JobOffersPortal.UI.ClientServices;
-using WebApp.ViewModels.JobOfferMvc.CreateJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.DeleteJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.IndexJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
-using WebApp.ViewModels.JobOfferPropositionMvc.CreateDetailsPropositionMvc;
-using WebApp.ViewModels.JobOfferPropositionMvc.DeleteJobOfferPropositionMvc;
-using WebApp.ViewModels.JobOfferPropositionMvc.DetailJobOfferPropositionMvc;
-using WebApp.ViewModels.JobOfferPropositionMvc.IndexJobOfferPropositionMvc;
-using WebApp.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.CreateDetailsJobOfferRequirrementMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.DeleteJobOfferRequirementMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.DetailJobOfferRequirementMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.IndexJobOfferRequirementMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.UpdateJobOfferRequirementMvc;
-using WebApp.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc;
-using WebApp.ViewModels.JobOfferSkillMvc.DeleteJobOfferSkillMvc;
-using WebApp.ViewModels.JobOfferSkillMvc.DetailJobOfferSkillMvc;
-using WebApp.ViewModels.JobOfferSkillMvc.IndexJobOfferSkillMvc;
-using WebApp.ViewModels.JobOfferSkillMvc.UpdateJobOfferSkillMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.CreateJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.DeleteJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.IndexJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.CreateDetailsPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.DeleteJobOfferPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.DetailJobOfferPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.IndexJobOfferPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.CreateDetailsJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.DeleteJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.DetailJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.IndexJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.UpdateJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.CreateDetailsJobOfferSkillMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.DeleteJobOfferSkillMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.DetailJobOfferSkillMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.IndexJobOfferSkillMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.UpdateJobOfferSkillMvc;
 
-namespace WebApp.Mappings
+namespace JobOffersPortal.UI.Mappings
 {
     public class AutoMapperProfile : Profile
     {

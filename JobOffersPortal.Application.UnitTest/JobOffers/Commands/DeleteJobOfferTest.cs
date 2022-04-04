@@ -21,29 +21,33 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         [Fact]
         public async Task Handle_ValidJobOffer_DeletedToJobOfferRepo()
         {
+            //Arrange
             var handler = new DeleteJobOfferCommandHandler(_mockJobOfferRepository.Object, _logger, _currentUserService);
 
             var command = new DeleteJobOfferCommand() { Id = "1" };
 
             var jobOffersListCountBeforeDelete = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
-            var response = await handler.Handle(command, CancellationToken.None);
+            //Act
+            await handler.Handle(command, CancellationToken.None);
 
+            //Assert
             var jobOffersListCountAfterDelete = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
             jobOffersListCountAfterDelete.ShouldNotBe(jobOffersListCountBeforeDelete);
-            response.ShouldNotBeNull();
         }
 
         [Fact]
         public async Task HandleNotFoundException_InvalidJobOffer_DeletedToJobOfferRepo()
         {
+            //Arrange
             var handler = new DeleteJobOfferCommandHandler(_mockJobOfferRepository.Object, _logger, _currentUserService);
 
             var command = new DeleteJobOfferCommand() { Id = "99" };
 
             NotFoundException exceptionResponse = null;
 
+            //Act
             try
             {
                 await handler.Handle(command, CancellationToken.None);
@@ -52,16 +56,17 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
             {
                 exceptionResponse = exception;
             }
-            finally
-            {
-                exceptionResponse.ShouldNotBeNull();
-                exceptionResponse.Message.ShouldBe("Entity \"JobOffer\" (99) was not found.");
-            }
+
+            //Assert
+            exceptionResponse.ShouldNotBeNull();
+
+            exceptionResponse.Message.ShouldBe("Entity \"JobOffer\" (99) was not found.");
         }
 
         [Fact]
         public async Task HandleForbiddenAccessException_NotOwnUser_NotDeletedToJobOfferRepo()
         {
+            //Arrange
             _currentUserServiceMock.SetupGet(x => x.UserId).Returns("user2");
 
             var handler = new DeleteJobOfferCommandHandler(_mockJobOfferRepository.Object, _logger, _currentUserService);
@@ -70,6 +75,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
 
             ForbiddenAccessException exceptionResponse = null;
 
+            //Act
             try
             {
                 await handler.Handle(command, CancellationToken.None);
@@ -78,11 +84,11 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
             {
                 exceptionResponse = exception;
             }
-            finally
-            {
-                exceptionResponse.ShouldNotBeNull();
-                exceptionResponse.Message.ShouldBe("Entity \"JobOffer\" (1) do not own this entity.");
-            }
+
+            //Assert
+            exceptionResponse.ShouldNotBeNull();
+
+            exceptionResponse.Message.ShouldBe("Entity \"JobOffer\" (1) do not own this entity.");
         }
     }
 }

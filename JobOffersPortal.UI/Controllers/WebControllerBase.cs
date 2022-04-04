@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WebApp.Controllers
+namespace JobOffersPortal.UI.Controllers
 {
     [Authorize(Policy = "LdapPolicy", AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class WebControllerBase : Controller
-    {    
+    {
         private IMapper _mapper;
         private ISender _sender;
         protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();

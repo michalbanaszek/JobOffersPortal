@@ -37,11 +37,11 @@ namespace JobOffersPortal.Application.Common.Models
             var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             var nextPage = pageNumber >= 1
-                ? uriService.GetAllUri(pageNumber + 1, pageSize).ToString()
+                ? uriService.GetAll(pageNumber + 1, pageSize).ToString()
                 : null;
 
             var previousPage = pageNumber - 1 >= 1
-                ? uriService.GetAllUri(pageNumber - 1, pageSize).ToString()
+                ? uriService.GetAll(pageNumber - 1, pageSize).ToString()
                 : null;
 
             return new PaginatedList<T>(items, count, pageNumber, pageSize, nextPage, previousPage);

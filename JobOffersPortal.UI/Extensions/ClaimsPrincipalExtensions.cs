@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 
-namespace WebApp.Extensions
+namespace JobOffersPortal.UI.Extensions
 {
     public static class ClaimsPrincipalExtensions
     {
@@ -13,7 +13,7 @@ namespace WebApp.Extensions
 
         public static string GetEmail(this ClaimsPrincipal user)
         {
-            var claim = GetClaim(user, ClaimTypes.Email);
+            var claim = user.GetClaim(ClaimTypes.Email);
 
             return claim?.Value;
         }

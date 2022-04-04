@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition;
+﻿using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
@@ -32,16 +31,16 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
                 Content = "Updated 1"
             };
 
-            //Act
             var validatorResult = await _validator.ValidateAsync(command);
 
-            var response = await CheckValidationResult(handler, command, validatorResult);
-
-            var entity = await _mockJobOfferPropositionRepository.Object.GetByIdAsync(command.Id);
+            //Act
+            await handler.Handle(command, CancellationToken.None);
 
             //Assert
-            response.Succeeded.ShouldBeTrue();
+            var entity = await _mockJobOfferPropositionRepository.Object.GetByIdAsync(command.Id);
+
             validatorResult.IsValid.ShouldBeTrue();
+
             entity.Content.ShouldBe("Updated 1");            
         }
 
@@ -56,15 +55,15 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
                 Id = "1",
                 Content = string.Empty
             };
-
-            //Act
+           
             var validatorResult = await _validator.ValidateAsync(command);
 
-            var response = await CheckValidationResult(handler, command, validatorResult);
+            //Act
+            await handler.Handle(command, CancellationToken.None);
 
-            //Assert
-            response.ShouldBeNull();
+            //Assert          
             validatorResult.IsValid.ShouldBeFalse();
+
             validatorResult.Errors[0].ErrorMessage.ShouldBe("'Content' must not be empty.");
         }
 
@@ -79,15 +78,15 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
                 Id = "1",
                 Content = "Test /"
             };
-
-            //Act
+  
             var validatorResult = await _validator.ValidateAsync(command);
 
-            var response = await CheckValidationResult(handler, command, validatorResult);
+            //Act
+            await handler.Handle(command, CancellationToken.None);
 
-            //Assert
-            response.ShouldBeNull();
+            //Assert          
             validatorResult.IsValid.ShouldBeFalse();
+
             validatorResult.Errors[0].ErrorMessage.ShouldBe("'Content' is not in the correct format.");
         }
 
@@ -102,15 +101,15 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
                 Id = "1",
                 Content = new string('a', 1)            
             };
-
-            //Act
+    
             var validatorResult = await _validator.ValidateAsync(command);
 
-            var response = await CheckValidationResult(handler, command, validatorResult);
+            //Act
+            await handler.Handle(command, CancellationToken.None);
 
-            //Assert
-            response.ShouldBeNull();
-            validatorResult.IsValid.ShouldBeFalse();         
+            //Assert          
+            validatorResult.IsValid.ShouldBeFalse();  
+            
             validatorResult.Errors[0].ErrorMessage.ShouldBe("The length of 'Content' must be at least 2 characters. You entered 1 characters.");
         }
 
@@ -126,27 +125,15 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
                 Content = new string('a', 51)
             };
 
-            //Act
             var validatorResult = await _validator.ValidateAsync(command);
 
-            var response = await CheckValidationResult(handler, command, validatorResult);
+            //Act
+            await handler.Handle(command, CancellationToken.None);
 
-            //Assert
-            response.ShouldBeNull();
+            //Assert         
             validatorResult.IsValid.ShouldBeFalse();
+
             validatorResult.Errors[0].ErrorMessage.ShouldBe("Content Length is between 2 and 50");
-        }
-
-        private static async Task<UpdateJobOfferPropositionCommandResponse> CheckValidationResult(UpdateJobOfferPropositionCommandHandler handler, UpdateJobOfferPropositionCommand command, ValidationResult validatorResult)
-        {
-            UpdateJobOfferPropositionCommandResponse response = null;
-
-            if (validatorResult.IsValid)
-            {
-                response = await handler.Handle(command, CancellationToken.None);
-            }
-
-            return response;
         }
     }
 }

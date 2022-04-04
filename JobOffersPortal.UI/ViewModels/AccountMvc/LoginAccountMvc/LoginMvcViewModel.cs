@@ -1,4 +1,4 @@
-﻿namespace WebApp.ViewModels.AccountMvc.LoginAccountMvc
+﻿namespace JobOffersPortal.UI.ViewModels.AccountMvc.LoginAccountMvc
 {
     public class LoginMvcViewModel
     {

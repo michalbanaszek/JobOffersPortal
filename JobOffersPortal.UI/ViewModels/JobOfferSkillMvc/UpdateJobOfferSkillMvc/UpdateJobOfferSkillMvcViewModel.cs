@@ -1,4 +1,4 @@
-﻿namespace WebApp.ViewModels.JobOfferSkillMvc.UpdateJobOfferSkillMvc
+﻿namespace JobOffersPortal.UI.ViewModels.JobOfferSkillMvc.UpdateJobOfferSkillMvc
 {
     public class UpdateJobOfferSkillMvcViewModel
     {

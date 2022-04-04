@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using WebApp.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc;
 
-namespace WebApp.Validators.JobOfferPropositionMvcValidator
+namespace JobOffersPortal.UI.Validators.JobOfferPropositionMvcValidator
 {
     public class UpdateJobOfferPropositionMvcViewModelValidator : AbstractValidator<UpdateJobOfferPropositionMvcViewModel>
     {

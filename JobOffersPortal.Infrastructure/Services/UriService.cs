@@ -13,13 +13,20 @@ namespace JobOffersPortal.Persistance.EF.Services
             _baseUri = baseUri;
         }
 
-        public Uri GetAllUri(int pageNumber, int pageSize)
+        public Uri GetAll(int pageNumber, int pageSize)
         {
             var modifiedUri = QueryHelpers.AddQueryString(_baseUri, "pageNumber", pageNumber.ToString());
 
             modifiedUri = QueryHelpers.AddQueryString(modifiedUri, "pageSize", pageSize.ToString());
 
             return new Uri(modifiedUri);
+        }
+
+        public Uri Get(string id, string controller)
+        {
+            string location = String.Concat(_baseUri, "api", "/", $"{controller}", "/", $"{id}");
+
+            return new Uri(location);
         }
     }
 }

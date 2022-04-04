@@ -4,6 +4,7 @@ namespace JobOffersPortal.Application.Common.Interfaces
 {
     public interface IUriService
     {
-        Uri GetAllUri(int pageNumber, int pageSize);
+        Uri GetAll(int pageNumber, int pageSize);
+        Uri Get(string id, string controller);
     }
 }

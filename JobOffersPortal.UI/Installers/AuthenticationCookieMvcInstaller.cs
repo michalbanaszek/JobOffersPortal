@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using JobOffersPortal.UI.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebApp.Interfaces;
-using WebApp.Options;
 
 namespace JobOffersPortal.UI.Installers
 {

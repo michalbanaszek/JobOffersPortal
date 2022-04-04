@@ -13,9 +13,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffe
                 .WithMessage("Position Length is between 2 and 30")
                 .Matches("^[a-zA-Z0-9 ]*$");
 
-            RuleFor(x => x.Salary)
-                .NotEmpty()
-                .NotNull();
+            RuleFor(x => x.Salary);              
 
             RuleFor(x => x.Date)
                 .NotEmpty()

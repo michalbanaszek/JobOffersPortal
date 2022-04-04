@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using WebApp.ClientServices.Responses;
+﻿using JobOffersPortal.UI.ClientServices.Responses;
+using System.Threading.Tasks;
 
-namespace WebApp.Interfaces
+namespace JobOffersPortal.UI.Interfaces
 {
     public interface IIdentityMvcService
     {

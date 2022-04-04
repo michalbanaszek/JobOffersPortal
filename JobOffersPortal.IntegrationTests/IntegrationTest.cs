@@ -55,9 +55,12 @@ namespace JobOffersPortal.IntegrationTests
         {
             var response = await _httpClient.PostAsJsonAsync(ApiRoutes.CompanyRoute.Create, request);
 
-            return await response.Content.ReadAsAsync<string>();
-        }
+            var splitted = response.Headers.Location.PathAndQuery.Split("/");
 
+            var id = splitted[3];
+
+            return id;
+        }
 
         private async Task<string> GetJwtAsync()
         {
@@ -68,7 +71,6 @@ namespace JobOffersPortal.IntegrationTests
             });
 
             var registrationResponse = await response.Content.ReadAsAsync<AuthSuccessResponse>();
-
 
             return registrationResponse.Token;
         }

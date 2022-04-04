@@ -3,7 +3,7 @@ using System;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer
 {
-    public class UpdateJobOfferCommand : IRequest<UpdateJobOfferCommandResponse>
+    public class UpdateJobOfferCommand : IRequest<Unit>
     {
         public string Id { get; set; }
         public string Position { get; set; }

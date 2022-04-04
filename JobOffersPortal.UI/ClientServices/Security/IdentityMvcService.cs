@@ -1,99 +1,85 @@
 ﻿using Hanssens.Net;
-using JobOffersPortal.UI.ClientServices;
+using JobOffersPortal.UI.ClientServices.Responses;
+using JobOffersPortal.UI.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using WebApp.ClientServices.Responses;
-using WebApp.Interfaces;
 
-namespace WebApp.ClientServices.Security
+namespace JobOffersPortal.UI.ClientServices.Security
 {
     public class IdentityMvcService : IIdentityMvcService
     {
-        private readonly IIdentityClient _client;
+        private readonly IIdentityClient _identityClient;
+        private readonly IAuthClient _authClient;
         private readonly LocalStorage _localStorage;
         private readonly ILogger<IdentityMvcService> _logger;
 
-        public IdentityMvcService(IIdentityClient client, LocalStorage localStorage, ILogger<IdentityMvcService> logger)
+        public IdentityMvcService(IIdentityClient client, LocalStorage localStorage, ILogger<IdentityMvcService> logger, IAuthClient authClient)
         {
-            _client = client;
+            _identityClient = client;
             _localStorage = localStorage;
             _logger = logger;
+            _authClient = authClient;
         }
 
         public async Task<ResponseFromApi<string>> LoginAsync(string email, string password)
         {
-            try
+            LoginRequest loginRequest = new LoginRequest() { Email = email, Password = password };
+
+            var authResponse = await _identityClient.LoginAsync(loginRequest);
+
+            if (authResponse.Token != string.Empty)
             {
-                LoginRequest loginRequest = new LoginRequest() { Email = email, Password = password };
+                _localStorage.Store("token", authResponse.Token);
 
-                var authResponse = await _client.LoginAsync(loginRequest);
+                _logger.LogInformation("Token is generated.");
 
-                if (authResponse.Token != string.Empty)
-                {
-                    _localStorage.Store("token", authResponse.Token);
-
-                    return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
-                }
-
-                return new ResponseFromApi<string>() { Success = false };
+                return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
             }
-            catch (ApiException ex)
-            {
-                _logger.LogError(ex.Message);
 
-                return new ResponseFromApi<string>() { Success = false, Errors = new[] { ex.Message } };
-            }
+            _logger.LogError("Token is not generated.");
+
+            return new ResponseFromApi<string>() { Success = false };
         }
 
         public async Task<ResponseFromApi<string>> LoginLdapAsync(string email, string password)
         {
+            LoginLdapRequest loginLdapRequest = new LoginLdapRequest() { Email = email, Password = password };
 
-            try
+            var authResponse = await _authClient.LdapAsync(loginLdapRequest);
+
+            if (authResponse.Token != string.Empty)
             {
-                LoginLdapRequest loginLdapRequest = new LoginLdapRequest() { Email = email, Password = password };
+                _localStorage.Store("token", authResponse.Token);
 
-                var authResponse = await _client.LoginLdapAsync(loginLdapRequest);
+                _logger.LogInformation("Token is generated.");
 
-                if (authResponse.Token != string.Empty)
-                {
-                    _localStorage.Store("token", authResponse.Token);
-
-                    return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
-                }
-
-                return new ResponseFromApi<string>() { Success = false };
+                return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
             }
-            catch (ApiException ex)
-            {
-                _logger.LogError(ex.Message);
 
-                return new ResponseFromApi<string>() { Success = false, Errors = new[] { ex.Message } };
-            }
+            _logger.LogError("Token is not generated.");
+
+            return new ResponseFromApi<string>() { Success = false };
         }
 
         public async Task<ResponseFromApi<string>> RegisterAsync(string email, string password)
         {
-            try
+
+            RegisterRequest registerRequest = new RegisterRequest() { Email = email, Password = password };
+
+            var authResponse = await _identityClient.RegisterAsync(registerRequest);
+
+            if (authResponse.Token != string.Empty)
             {
-                RegisterRequest registerRequest = new RegisterRequest() { Email = email, Password = password };
+                _localStorage.Store("token", authResponse.Token);
 
-                var authResponse = await _client.RegisterAsync(registerRequest);
+                _logger.LogInformation("Token is generated.");
 
-                if (authResponse.Token != string.Empty)
-                {
-                    _localStorage.Store("token", authResponse.Token);
-
-                    return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
-                }
-
-                return new ResponseFromApi<string>() { Success = false };
+                return new ResponseFromApi<string>() { Success = true, Data = authResponse.Token };
             }
-            catch (ApiException ex)
-            {
-                _logger.LogError(ex.Message);
 
-                return new ResponseFromApi<string>() { Success = false, Errors = new[] { ex.Message } };
-            }
+            _logger.LogError("Token is not generated.");
+
+            return new ResponseFromApi<string>() { Success = false };
         }
     }
 }

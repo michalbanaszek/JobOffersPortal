@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace WebApp.ViewModels.JobOfferMvc.CreateJobOfferMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferMvc.CreateJobOfferMvc
 {
     public class CreateJobOfferMvcViewModel
     {
         public string CompanyId { get; set; }
 
         public string Position { get; set; }
-     
+
         public string Salary { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;

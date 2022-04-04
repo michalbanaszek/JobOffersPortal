@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApp.ViewModels.JobOfferMvc.DeleteJobOfferMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferMvc.DeleteJobOfferMvc
 {
     public class JobOfferDeleteMvcViewModel
     {

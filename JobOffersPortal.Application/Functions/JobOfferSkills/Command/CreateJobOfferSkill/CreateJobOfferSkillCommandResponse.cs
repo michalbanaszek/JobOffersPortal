@@ -1,22 +1,14 @@
-﻿using JobOffersPortal.Application.Common.Models;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJobOfferSkill
 {
-    public class CreateJobOfferSkillCommandResponse : BaseResponse
-    {
-        public string Id { get; set; }
+    public class CreateJobOfferSkillCommandResponse
+    { 
+        public Uri Uri { get; set; }
 
-        public CreateJobOfferSkillCommandResponse(bool succeeded, IEnumerable<string> errors) : base(succeeded, errors)
+        public CreateJobOfferSkillCommandResponse(Uri uri)
         {
-            Succeeded = succeeded;
-            Errors = errors.ToArray();
-        }
-
-        public CreateJobOfferSkillCommandResponse(string id) : base()
-        {
-            Id = id;
+            Uri = uri;
         }
     }
 }

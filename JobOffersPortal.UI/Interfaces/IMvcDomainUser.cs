@@ -1,4 +1,4 @@
-﻿namespace WebApp.Interfaces
+﻿namespace JobOffersPortal.UI.Interfaces
 {
     public interface IMvcDomainUser
     {

@@ -19,7 +19,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.Get
         {
             _mapper = mapper;
             _jobOfferRepository = jobOfferRepository;
-            _logger = logger;          
+            _logger = logger;
         }
 
         public async Task<JobOfferRequirementViewModel> Handle(GetJobOfferRequirementListQuery request, CancellationToken cancellationToken)

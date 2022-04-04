@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System;
 
 namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
 {

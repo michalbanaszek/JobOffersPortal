@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
-using WebApp;
 
 namespace JobOffersPortal.UI.Installers
 {

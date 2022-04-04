@@ -1,10 +1,8 @@
 ﻿using JobOffersPortal.UI.ClientServices;
+using JobOffersPortal.UI.ClientServices.Security;
 using JobOffersPortal.UI.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebApp.ClientServices;
-using WebApp.ClientServices.Security;
-using WebApp.Interfaces;
 
 namespace JobOffersPortal.UI.Installers
 {

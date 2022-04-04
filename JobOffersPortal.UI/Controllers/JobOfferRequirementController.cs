@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using JobOffersPortal.UI.Interfaces;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.CreateDetailsJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.DeleteJobOfferRequirementMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferRequirementMvc.UpdateJobOfferRequirementMvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApp.Interfaces;
-using WebApp.ViewModels.JobOfferRequirementMvc.CreateDetailsJobOfferRequirrementMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.DeleteJobOfferRequirementMvc;
-using WebApp.ViewModels.JobOfferRequirementMvc.UpdateJobOfferRequirementMvc;
 
-namespace WebApp.Controllers
+namespace JobOffersPortal.UI.Controllers
 {
     public class JobOfferRequirementController : WebControllerBase
     {
@@ -37,12 +37,8 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var responseFromCommand = await _jobOfferRequirementService.AddAsync(viewModel.JobOfferId, viewModel.Content);
-
-                if (responseFromCommand.Success)
-                {
-                    ModelState.Clear();
-                }
+                await _jobOfferRequirementService.AddAsync(viewModel.JobOfferId, viewModel.Content);
+                ModelState.Clear();
             }
 
             var responseFromQuery = await _jobOfferService.GetByIdAsync(viewModel.JobOfferId);

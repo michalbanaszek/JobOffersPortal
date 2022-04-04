@@ -12,8 +12,7 @@
     <div class="col-md-6 offset-md-3">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-         
+            <input type="hidden" asp-for="Id" />         
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
                 @Html.TextAreaFor(e => e.Content, 5, 20, new { @class = "form-control" })

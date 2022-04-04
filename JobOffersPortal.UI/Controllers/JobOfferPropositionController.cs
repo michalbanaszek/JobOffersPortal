@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using JobOffersPortal.UI.Interfaces;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.CreateDetailsPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.DeleteJobOfferPropositionMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApp.Interfaces;
-using WebApp.ViewModels.JobOfferPropositionMvc.CreateDetailsPropositionMvc;
-using WebApp.ViewModels.JobOfferPropositionMvc.DeleteJobOfferPropositionMvc;
-using WebApp.ViewModels.JobOfferPropositionMvc.UpdateJobOfferPropositionMvc;
 
-namespace WebApp.Controllers
+namespace JobOffersPortal.UI.Controllers
 {
     public class JobOfferPropositionController : WebControllerBase
     {
@@ -37,17 +37,13 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var responseFromCommand = await _jobOfferPropositionService.AddAsync(createDetailsJobOfferViewModel.JobOfferId, createDetailsJobOfferViewModel.Content);
-
-                if (responseFromCommand.Success)
-                {
-                    ModelState.Clear();                  
-                }
+                await _jobOfferPropositionService.AddAsync(createDetailsJobOfferViewModel.JobOfferId, createDetailsJobOfferViewModel.Content);
+                ModelState.Clear();
             }
 
             var jobOffer = await _jobOfferService.GetByIdAsync(createDetailsJobOfferViewModel.JobOfferId);
 
-            var propositionMapped = Mapper.Map<List<JobOfferJobOfferPropositionMvcDto>>(jobOffer.Propositions);            
+            var propositionMapped = Mapper.Map<List<JobOfferJobOfferPropositionMvcDto>>(jobOffer.Propositions);
 
             return View(new CreateDetailsJobOfferPropositionMvcViewModel() { JobOfferId = createDetailsJobOfferViewModel.JobOfferId, Propositions = propositionMapped });
         }

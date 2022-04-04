@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using JobOffersPortal.UI.Interfaces;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.CreateJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.DeleteJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.IndexJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using WebApp.Interfaces;
-using WebApp.ViewModels.JobOfferMvc.CreateJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.DeleteJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.IndexJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
 
-namespace WebApp.Controllers
+namespace JobOffersPortal.UI.Controllers
 {
     public class JobOfferController : WebControllerBase
     {
@@ -16,13 +16,13 @@ namespace WebApp.Controllers
 
         public JobOfferController(IJobOfferMvcService jobOfferService)
         {
-            _jobOfferService = jobOfferService;        
+            _jobOfferService = jobOfferService;
         }
 
         // GET: JobOffer
         public async Task<ActionResult<PaginatedMvcList<JobOfferMvcViewModel>>> Index()
         {
-             var viewModel = await _jobOfferService.GetAllByCompany(_companyId);          
+            var viewModel = await _jobOfferService.GetAllByCompany(_companyId);
 
             return View(viewModel);
         }
@@ -31,7 +31,7 @@ namespace WebApp.Controllers
         public async Task<ActionResult<JobOfferMvcViewModel>> Details(string id)
         {
             var viewModel = await _jobOfferService.GetByIdAsync(id);
-            
+
             return View(viewModel);
         }
 
@@ -53,25 +53,12 @@ namespace WebApp.Controllers
                 return View(createJobOfferMvcViewModel);
             }
 
-            try
-            {
-                createJobOfferMvcViewModel.CompanyId = _companyId;
-                var responseFromApi = await _jobOfferService.AddAsync(createJobOfferMvcViewModel);
+            createJobOfferMvcViewModel.CompanyId = _companyId;
 
-                if (!responseFromApi.Success)
-                {
-                    foreach (var error in responseFromApi.Errors)
-                    {
-                        ModelState.AddModelError("ErrorFromApi", error);
-                    }
-                }
-             
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+            await _jobOfferService.AddAsync(createJobOfferMvcViewModel);
+
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: JobOffer/Edit/5
@@ -102,12 +89,13 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Edit(UpdateJobOfferMvcViewModel updateJobOfferMvcViewModel)
         {
             updateJobOfferMvcViewModel.CompanyId = _companyId;
-            var responseFromApi = await _jobOfferService.UpdateAsync(updateJobOfferMvcViewModel.Id, updateJobOfferMvcViewModel);
+            await _jobOfferService.UpdateAsync(updateJobOfferMvcViewModel.Id, updateJobOfferMvcViewModel);
+            //var responseFromApi = await _jobOfferService.UpdateAsync(updateJobOfferMvcViewModel.Id, updateJobOfferMvcViewModel);
 
-            if (!responseFromApi.Success)
-            {
-                return View(updateJobOfferMvcViewModel);
-            }
+            //if (!responseFromApi.Success)
+            //{
+            //    return View(updateJobOfferMvcViewModel);
+            //}
 
             return RedirectToAction(nameof(Index));
         }

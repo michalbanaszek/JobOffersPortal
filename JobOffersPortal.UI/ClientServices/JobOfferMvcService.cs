@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
-using JobOffersPortal.UI.ClientServices;
+using JobOffersPortal.UI.Interfaces;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.CreateJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.IndexJobOfferMvc;
+using JobOffersPortal.UI.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApp.ClientServices.Responses;
-using WebApp.Interfaces;
-using WebApp.ViewModels.JobOfferMvc.CreateJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.IndexJobOfferMvc;
-using WebApp.ViewModels.JobOfferMvc.UpdateJobOfferMvc;
 
-namespace WebApp.ClientServices
+namespace JobOffersPortal.UI.ClientServices
 {
     public class JobOfferMvcService : IJobOfferMvcService
     {
@@ -60,73 +58,29 @@ namespace WebApp.ClientServices
             return responseMapped;
         }
 
-        public async Task<ResponseFromApi<string>> AddAsync(CreateJobOfferMvcViewModel createJobOfferViewModel)
+        public async Task AddAsync(CreateJobOfferMvcViewModel createJobOfferViewModel)
         {
             _addBearerTokenService.AddBearerToken(_client);
 
-            try
-            {
-                CreateJobOfferCommand command = _mapper.Map<CreateJobOfferCommand>(createJobOfferViewModel);
+            CreateJobOfferCommand command = _mapper.Map<CreateJobOfferCommand>(createJobOfferViewModel);
 
-                var responseFromApi = await _client.JobofferPostAsync(command);
-
-                if (!responseFromApi.Succeeded)
-                {
-                    return new ResponseFromApi<string>() { Success = false, Data = string.Empty };
-                }
-
-                return new ResponseFromApi<string>() { Data = responseFromApi.Id, Success = true };
-            } 
-            catch (ApiException ex)
-            {
-                _logger.LogError(ex.Message);
-
-                return new ResponseFromApi<string>() { Success = false, Errors = new string[] { ex.Message } };
-            }
+            await _client.JobofferPostAsync(command);
         }
 
-        public async Task<ResponseFromApi<string>> UpdateAsync(string jobOfferId, UpdateJobOfferMvcViewModel updateJobOfferViewModel)
+        public async Task UpdateAsync(string jobOfferId, UpdateJobOfferMvcViewModel updateJobOfferViewModel)
         {
             _addBearerTokenService.AddBearerToken(_client);
 
-            try
-            {
-                UpdateJobOfferCommand command = _mapper.Map<UpdateJobOfferCommand>(updateJobOfferViewModel);
+            UpdateJobOfferCommand command = _mapper.Map<UpdateJobOfferCommand>(updateJobOfferViewModel);
 
-                var responseFromApi = await _client.JobofferPutAsync(jobOfferId, command);
-
-                if (!responseFromApi.Succeeded)
-                {
-                    return new ResponseFromApi<string>() { Success = false };
-                }
-
-                return new ResponseFromApi<string> { Success = true, Data = responseFromApi.Id };
-            }
-            catch (ApiException ex)
-            {
-                _logger.LogError(ex.Message);
-
-                return new ResponseFromApi<string>() { Success = false, Errors = new string[] { ex.Message } };
-            }          
+            await _client.JobofferPutAsync(jobOfferId, command);
         }
 
-        public async Task<ResponseFromApi<string>> DeleteAsync(string jobOfferId)
+        public async Task DeleteAsync(string jobOfferId)
         {
             _addBearerTokenService.AddBearerToken(_client);
 
-            try
-            {
-                await _client.JobofferDeleteAsync(jobOfferId);
-
-                return new ResponseFromApi<string>() { Success = true };
-            }
-
-            catch (ApiException ex)
-            {
-                _logger.LogError(ex.Message);
-
-                return new ResponseFromApi<string>() { Success = false, Errors = new string[] { ex.Message } };
-            }
+            await _client.JobofferDeleteAsync(jobOfferId);
         }
     }
 }

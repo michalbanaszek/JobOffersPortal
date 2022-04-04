@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebApp.ViewModels.JobOfferMvc.IndexJobOfferMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferMvc.IndexJobOfferMvc
 {
     public class PaginatedMvcList<T>
     {

@@ -1,4 +1,6 @@
 ﻿using Hanssens.Net;
+using JobOffersPortal.UI.Interfaces;
+using JobOffersPortal.UI.ViewModels.AccountMvc.LoginAccountMvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -8,10 +10,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using WebApp.Interfaces;
-using WebApp.ViewModels.AccountMvc.LoginAccountMvc;
 
-namespace WebApp.Controllers
+namespace JobOffersPortal.UI.Controllers
 {
     public class AccountController : Controller
     {
@@ -33,7 +33,7 @@ namespace WebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
-      
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginMvcViewModel viewModel)
@@ -65,16 +65,16 @@ namespace WebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex.Message);                  
+                    _logger.LogError(ex.Message);
 
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-            
-            return View(new LoginMvcViewModel() { Username = viewModel.Username, Password = viewModel.Password, RememberMe = viewModel.RememberMe, ReturnUrl = viewModel.ReturnUrl  });
+
+            return View(new LoginMvcViewModel() { Username = viewModel.Username, Password = viewModel.Password, RememberMe = viewModel.RememberMe, ReturnUrl = viewModel.ReturnUrl });
         }
 
-        [HttpPost]      
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             _localStorage.Remove("token");

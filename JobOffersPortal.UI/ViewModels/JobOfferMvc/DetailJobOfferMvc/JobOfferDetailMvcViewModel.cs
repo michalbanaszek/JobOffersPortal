@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApp.ViewModels.JobOfferMvc.DetailJobOfferMvc
+namespace JobOffersPortal.UI.ViewModels.JobOfferMvc.DetailJobOfferMvc
 {
     public class JobOfferDetailMvcViewModel
     {

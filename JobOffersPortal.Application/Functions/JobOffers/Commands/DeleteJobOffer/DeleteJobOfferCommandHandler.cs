@@ -3,15 +3,13 @@ using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffer
 {
-    public class DeleteJobOfferCommandHandler : IRequestHandler<DeleteJobOfferCommand, DeleteJobOfferCommandResponse>
+    public class DeleteJobOfferCommandHandler : IRequestHandler<DeleteJobOfferCommand, Unit>
     {
         private readonly ILogger<DeleteJobOfferCommandHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
@@ -20,11 +18,11 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
         public DeleteJobOfferCommandHandler(IJobOfferRepository jobOfferRepository, ILogger<DeleteJobOfferCommandHandler> logger, ICurrentUserService currentUserService)
         {
             _jobOfferRepository = jobOfferRepository;
-            _logger = logger;        
+            _logger = logger;
             _currentUserService = currentUserService;
         }
 
-        public async Task<DeleteJobOfferCommandResponse> Handle(DeleteJobOfferCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteJobOfferCommand request, CancellationToken cancellationToken)
         {
             var entity = await _jobOfferRepository.GetByIdAsync(request.Id);
 
@@ -44,26 +42,11 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
                 throw new ForbiddenAccessException(nameof(JobOffer), request.Id);
             }
 
-            try
-            {
-                await _jobOfferRepository.DeleteAsync(entity);
+            await _jobOfferRepository.DeleteAsync(entity);
 
-                _logger.LogInformation("Deleted JobOffer Id: {0}", entity.Id);
+            _logger.LogInformation("Deleted JobOffer Id: {0}", entity.Id);
 
-                return new DeleteJobOfferCommandResponse(entity.Id);
-            }
-            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            {
-                _logger.LogError("DbUpdateConcurrencyException execuded, Message:", dbUpdateConcurrencyException.Message);
-
-                return new DeleteJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError("Exception execuded, Message:", exception.Message);
-
-                return new DeleteJobOfferCommandResponse(false, new string[] { "Cannot add entity to database." });
-            }
+            return Unit.Value;
         }
     }
 }

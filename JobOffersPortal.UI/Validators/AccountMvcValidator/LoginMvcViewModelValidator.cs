@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using WebApp.ViewModels.AccountMvc.LoginAccountMvc;
+using JobOffersPortal.UI.ViewModels.AccountMvc.LoginAccountMvc;
 
-namespace WebApp.Validators.AccountMvcValidator
+namespace JobOffersPortal.UI.Validators.AccountMvcValidator
 {
     public class LoginMvcViewModelValidator : AbstractValidator<LoginMvcViewModel>
     {
