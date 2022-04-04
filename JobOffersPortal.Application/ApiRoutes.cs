@@ -90,5 +90,10 @@
 
             public const string Delete = Base + "/user/{userId}";          
         }
+
+        public static class EmailRoute
+        {
+            public const string Post = Base + "/email";
+        }
     }
 }
