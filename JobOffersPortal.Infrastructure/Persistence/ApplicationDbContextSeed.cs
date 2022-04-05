@@ -1,7 +1,6 @@
 ﻿using JobOffersPortal.Domain.Entities;
 using JobOffersPortal.Infrastructure.Security.User;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,27 +11,34 @@ namespace JobOffersPortal.Persistance.EF.Persistence
 {
     public class ApplicationDbContextSeed
     {
-        public static async Task Initialize(IServiceScope service)
+        private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public ApplicationDbContextSeed(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
-            ApplicationDbContext context = service.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            context.Database.EnsureCreated();
-
-            if (context.Companies.Any())
-            {
-                return;
-            }
-
-            var roleManager = service.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            var userManager = service.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-            await CreateRoles(roleManager, userManager);
-
-            await SeedDatabase(context, userManager);
+            _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
-        private static async Task CreateRoles(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public async Task Seed()
+        {
+            if (_context.Database.CanConnect())
+            {
+                if (!_context.Roles.Any())
+                {
+                    await CreateUsersAndRoles(_roleManager, _userManager);
+                }
+
+                if (!_context.Companies.Any())
+                {
+                    await SeedData(_context, _userManager);
+                }               
+            }
+        }
+
+        private static async Task CreateUsersAndRoles(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             var adminRole = new IdentityRole()
             {
@@ -82,16 +88,16 @@ namespace JobOffersPortal.Persistance.EF.Persistence
             }
         }
 
-        private static async Task SeedDatabase(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private static async Task SeedData(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             var positions = new[]
             {
-                "TŁUMACZ NIEMIECKIEGO",
+                "Tłumacz niemieckiego",
                 "Pakowacz",
                 "Slusarz",
                 "Murarz",
-                "MAGAZYNIER BLACH",
-                "MAGAZYNIER"
+                "Magazynier blach",
+                "Magazynier"
             };
 
             var skills = new[]
@@ -222,30 +228,30 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 {
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[0] },
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[1] },
-                      new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[2] },
-                      new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[3] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[4] },
-                          new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[5] },
+                    new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[2] },
+                    new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[3] },
+                    new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[4] },
+                    new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[5] },
                 },
                 Requirements = new List<JobOfferRequirement>()
                 {
                     new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[0] },
                     new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[1] },
-                         new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[2] },
+                    new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[2] },
                     new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[3] },
-                         new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[4] },
+                    new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[4] },
                     new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[5] },
-                     new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[6] },
+                    new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[6] },
                 },
                 Skills = new List<JobOfferSkill>()
                 {
                     new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[0] },
                     new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[1] },
-                       new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[2] },
+                    new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[2] },
                     new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[3] },
-                       new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[4] },
+                    new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[4] },
                     new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[5] },
-                       new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[6] }
+                    new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[6] }
 
                 },
                 Salary = salaries[0],
@@ -259,7 +265,7 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 CompanyId = companies[0].Id,
                 Date = DateTime.Now,
                 IsAvailable = true,
-                    Propositions = new List<JobOfferProposition>()
+                Propositions = new List<JobOfferProposition>()
                 {
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[0] },
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[1] },
@@ -306,7 +312,7 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 CompanyId = companies[1].Id,
                 Date = DateTime.Now,
                 IsAvailable = true,
-                 Propositions = new List<JobOfferProposition>()
+                Propositions = new List<JobOfferProposition>()
                 {
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[2] },
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[3] },
@@ -332,7 +338,7 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 CompanyId = companies[1].Id,
                 Date = DateTime.Now,
                 IsAvailable = true,
-                 Propositions = new List<JobOfferProposition>()
+                Propositions = new List<JobOfferProposition>()
                 {
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[4] },
                     new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[5] },

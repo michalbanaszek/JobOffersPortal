@@ -4,6 +4,7 @@ using JobOffersPortal.Application;
 using JobOffersPortal.Infrastructure.Security.InfrastructureSecurityInstallation;
 using JobOffersPortal.Persistance.EF.InfrastructureInstallation;
 using JobOffersPortal.Persistance.EF.Options;
+using JobOffersPortal.Persistance.EF.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ namespace JobOffersPortal.API
             services.AddInfrastructure(Configuration);
             services.AddInfrastructureSecurity(Configuration);
             services.InstallServicesInAssembly(Configuration);
+            services.AddScoped<ApplicationDbContextSeed>();
 
             services.AddCors(options =>
             {
@@ -41,14 +43,15 @@ namespace JobOffersPortal.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContextSeed seeder)
         {
-
             var swaggerOptions = new SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
 
             if (env.IsDevelopment())
             {
+                seeder.Seed().Wait();
+
                 app.UseDeveloperExceptionPage();                      
                 app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
                 app.UseSwaggerUI(option => option.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description));
