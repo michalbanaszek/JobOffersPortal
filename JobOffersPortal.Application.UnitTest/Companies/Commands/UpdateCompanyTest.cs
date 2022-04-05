@@ -1,5 +1,11 @@
-﻿using JobOffersPortal.Application.Common.Exceptions;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
+using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
+using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
@@ -9,22 +15,34 @@ using Xunit;
 
 namespace JobOffersPortal.Application.UnitTest.Companies.Commands
 {
-    public class UpdateCompanyTest : BaseCompanyInitialization
+    public class UpdateCompanyTest
     {
-        private readonly ILogger<UpdateCompanyCommandHandler> _logger;
+        private readonly Mock<ICompanyRepository> _mockCompanyRepository;
+        private readonly Mock<ICurrentUserService> _mockCurrentUserService;             
+        private readonly Mock<ILogger<UpdateCompanyCommandHandler>> _logger;
         private readonly UpdateCompanyCommandValidator _validator;
+        private readonly IMapper _mapper;
 
         public UpdateCompanyTest()
         {
-            _logger = (new Mock<ILogger<UpdateCompanyCommandHandler>>()).Object;
+            _mockCompanyRepository = MockCompanyRepository.GetCompanyRepository();
+            _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
+            _logger = new Mock<ILogger<UpdateCompanyCommandHandler>>();        
             _validator = new UpdateCompanyCommandValidator(_mockCompanyRepository.Object);
+
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            });
+
+            _mapper = configurationProvider.CreateMapper();
         }
 
         [Fact]
         public async Task Handle_ValidCompany_UpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateCompanyCommand() { Id = "1", Name = "UpdateCompany" };
 
@@ -48,7 +66,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleValidator_InvalidEmptyCompany_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var allCompaniesBeforeCount = (await _mockCompanyRepository.Object.GetAllAsync()).Count;
 
@@ -78,7 +96,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleValidator_InvalidMaxLengthCompany_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateCompanyCommand() { Id = "1", Name = new string('a', 31) };
 
@@ -106,7 +124,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleValidator_InvalidFormatCompany_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateCompanyCommand() { Id = "1", Name = new string('*', 5) };          
 
@@ -128,7 +146,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleValidator_IsAlreadyNameExistCompany_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateCompanyCommand() { Id = "1", Name = "CompanyName1" };
 
@@ -150,7 +168,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleNotFoundException_InvalidCompanyId_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateCompanyCommand() { Id = "99", Name = "UpdateCompanyName" };
 
@@ -176,11 +194,11 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleForbiddenAccessException_NotOwnUser_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            _currentUserServiceMock.SetupGet(x => x.UserId).Returns("user2");
+            _mockCurrentUserService.SetupGet(x => x.UserId).Returns("user2");
 
             ForbiddenAccessException exceptionResponse = null;
 
-            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateCompanyCommand() { Id = "1", Name = "UpdateCompanyName" };
 

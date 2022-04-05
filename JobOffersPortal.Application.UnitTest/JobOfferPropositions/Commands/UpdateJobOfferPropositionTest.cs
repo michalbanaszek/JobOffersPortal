@@ -1,4 +1,8 @@
-﻿using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Application.Common.Mappings;
+using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition;
+using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
@@ -8,22 +12,32 @@ using Xunit;
 
 namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
 {
-    public class UpdateJobOfferPropositionTest : BaseJobOfferPropositionInitialization
+    public class UpdateJobOfferPropositionTest
     {
-        private readonly ILogger<UpdateJobOfferPropositionCommandHandler> _logger;
+        private readonly Mock<ILogger<UpdateJobOfferPropositionCommandHandler>> _logger;
+        private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;
+        private readonly IMapper _mapper;
         private readonly UpdateJobOfferPropositionCommandValidator _validator;
 
         public UpdateJobOfferPropositionTest()
         {
-            _logger = new Mock<ILogger<UpdateJobOfferPropositionCommandHandler>>().Object;
+            _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();
+            _logger = new Mock<ILogger<UpdateJobOfferPropositionCommandHandler>>();
             _validator = new UpdateJobOfferPropositionCommandValidator();
-        }
+
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            });
+
+            _mapper = configurationProvider.CreateMapper();
+        }    
 
         [Fact]
         public async Task Handle_ValidJobOfferProposition_UpdatedToJobOfferPropositionRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger, _mockJobOfferPropositionRepository.Object);
+            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
 
             var command = new UpdateJobOfferPropositionCommand()
             {
@@ -48,7 +62,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
         public async Task Handle_InvalidEmptyContent_NotUpdatedToJobOfferPropositionRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger, _mockJobOfferPropositionRepository.Object);
+            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
 
             var command = new UpdateJobOfferPropositionCommand()
             {
@@ -71,7 +85,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
         public async Task Handle_InvalidFormatContent_NotAddedToJobOfferPropositionRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger, _mockJobOfferPropositionRepository.Object);
+            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
 
             var command = new UpdateJobOfferPropositionCommand()
             {
@@ -94,7 +108,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
         public async Task Handle_InvalidMinLengthContent_NotUpdatedToJobOfferPropositionRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger, _mockJobOfferPropositionRepository.Object);
+            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
 
             var command = new UpdateJobOfferPropositionCommand()
             {
@@ -117,7 +131,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
         public async Task Handle_InvalidMaxLengthContent_NotUpdatedToJobOfferPropositionRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger, _mockJobOfferPropositionRepository.Object);
+            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
 
             var command = new UpdateJobOfferPropositionCommand()
             {

@@ -1,6 +1,11 @@
 ﻿using Application.JobOffers.Commands.CreateJobOffer;
+using AutoMapper;
 using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer;
+using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
+using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
@@ -11,24 +16,34 @@ using Xunit;
 
 namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
 {
-    public class CreateJobOfferTest : BaseJobOfferInitialization
+    public class CreateJobOfferTest
     {
-        private readonly ILogger<CreateJobOfferCommandHandler> _logger;
-        private readonly IUriService _uriService;
+        private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;       
+        private readonly Mock<IUriService> _mockUriService;
+        private readonly Mock<ILogger<CreateJobOfferCommandHandler>> _logger;
+        private readonly IMapper _mapper;      
         private readonly CreateJobOfferCommandValidator _validator;
 
         public CreateJobOfferTest()
         {
-            _logger = new Mock<ILogger<CreateJobOfferCommandHandler>>().Object;
-            _uriService = new Mock<IUriService>().Object;
+            _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
+            _mockUriService = MockUriService.GetUriService();
+            _logger = new Mock<ILogger<CreateJobOfferCommandHandler>>();          
             _validator = new CreateJobOfferCommandValidator();
+
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            });
+
+            _mapper = configurationProvider.CreateMapper();
         }
 
         [Fact]
         public async Task Handle_ValidJobOffer_AddedToJobOfferRepo()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger, _mockJobOfferRepository.Object, _uriService);
+            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {
@@ -64,7 +79,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_ValidEmptySalary_AddedToJobOfferRepo()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger, _mockJobOfferRepository.Object, _uriService);
+            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {
@@ -94,7 +109,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_InvalidEmptyPosition_NotAddedToJobOfferRepo()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger, _mockJobOfferRepository.Object, _uriService);
+            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {
@@ -134,7 +149,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_InvalidEmptyPropositionRequirementSkill_NotAddedToJobOfferRepo()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger, _mockJobOfferRepository.Object, _uriService);
+            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {
@@ -176,7 +191,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_InvalidFormatPosition_NotAddedToJobOfferRepo()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger, _mockJobOfferRepository.Object, _uriService);
+            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {
@@ -214,7 +229,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_InvalidMaxLengthPosition_NotAddedToJobOfferRepo()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger, _mockJobOfferRepository.Object, _uriService);
+            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {

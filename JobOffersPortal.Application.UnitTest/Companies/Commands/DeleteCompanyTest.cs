@@ -1,5 +1,11 @@
-﻿using JobOffersPortal.Application.Common.Exceptions;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany;
+using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
+using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
@@ -9,20 +15,32 @@ using Xunit;
 
 namespace JobOffersPortal.Application.UnitTest.Companies.Commands
 {
-    public class DeleteCompanyTest : BaseCompanyInitialization
+    public class DeleteCompanyTest
     {
-        private readonly ILogger<DeleteCompanyCommandHandler> _logger;
+        private readonly Mock<ICompanyRepository> _mockCompanyRepository;
+        private readonly Mock<ICurrentUserService> _mockCurrentUserService;
+        private readonly Mock<ILogger<DeleteCompanyCommandHandler>> _logger; 
+        private readonly IMapper _mapper;        
 
         public DeleteCompanyTest()
         {
-            _logger = (new Mock<ILogger<DeleteCompanyCommandHandler>>()).Object;
+            _mockCompanyRepository = MockCompanyRepository.GetCompanyRepository();
+            _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
+            _logger = new Mock<ILogger<DeleteCompanyCommandHandler>>();          
+
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            });
+
+            _mapper = configurationProvider.CreateMapper();
         }
 
         [Fact]
         public async Task Handle_ValidCompany_DeletedToCompanyRepo()
         {
             //Arrange
-            var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger, _currentUserService);
+            var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger.Object, _mockCurrentUserService.Object);
 
             var allCompaniesBeforeCount = (await _mockCompanyRepository.Object.GetAllAsync()).Count;
 
@@ -41,7 +59,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleNotFoundException_InvalidCompanyId_NotDeletedToCompanyRepo()
         {
             //Arrange
-            var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger, _currentUserService);
+            var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new DeleteCompanyCommand() { Id = "99" };
 
@@ -67,9 +85,9 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         public async Task HandleForbiddenAccessException_NotOwnUser_NotDeletedToCompanyRepo()
         {
             //Arrange
-            _currentUserServiceMock.SetupGet(x => x.UserId).Returns("user2");
+            _mockCurrentUserService.SetupGet(x => x.UserId).Returns("user2");
 
-            var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger, _currentUserService);
+            var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new DeleteCompanyCommand() { Id = "1" };
 

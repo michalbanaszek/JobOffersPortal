@@ -8,6 +8,9 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockServices
         public static Mock<ICurrentUserService> GetCurrentUserService()
         {
             var mockCurrentUserService = new Mock<ICurrentUserService>();
+
+            mockCurrentUserService.SetupGet(x => x.UserId).Returns("user1");
+
             return mockCurrentUserService;
         }
     }

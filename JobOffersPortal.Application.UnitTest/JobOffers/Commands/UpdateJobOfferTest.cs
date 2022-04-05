@@ -1,5 +1,11 @@
-﻿using JobOffersPortal.Application.Common.Exceptions;
+﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Interfaces;
+using JobOffersPortal.Application.Common.Interfaces.Persistance;
+using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
+using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
+using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
@@ -10,22 +16,34 @@ using Xunit;
 
 namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
 {
-    public class UpdateJobOfferTest : BaseJobOfferInitialization
+    public class UpdateJobOfferTest
     {
-        private readonly ILogger<UpdateJobOfferCommandHandler> _logger;
+        private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;
+        private readonly Mock<ICurrentUserService> _mockCurrentUserService;
+        private readonly Mock<ILogger<UpdateJobOfferCommandHandler>> _logger;
         private readonly UpdateJobOfferCommandValidator _validator;
+        private readonly IMapper _mapper;
 
         public UpdateJobOfferTest()
         {
-            _logger = new Mock<ILogger<UpdateJobOfferCommandHandler>>().Object;
+            _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
+            _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
+            _logger = new Mock<ILogger<UpdateJobOfferCommandHandler>>();
             _validator = new UpdateJobOfferCommandValidator();
+
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            });
+
+            _mapper = configurationProvider.CreateMapper();
         }
 
         [Fact]
         public async Task Handle_ValidJobOffer_UpdatedToJobOfferRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateJobOfferCommand()
             {
@@ -55,7 +73,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task Handle_ValidEmptySalary_UpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateJobOfferCommand()
             {
@@ -82,7 +100,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_InvalidEmptyPosition_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var allCompaniesBeforeCount = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
@@ -118,7 +136,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_InvalidFormatPosition_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var allCompaniesBeforeCount = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
@@ -152,7 +170,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleValidator_InvalidMaxLengthPosition_NotUpdatedToCompanyRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var allCompaniesBeforeCount = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
@@ -186,7 +204,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleNotFoundException_InvalidJobOffer_NotUpdatedToJobOfferRepo()
         {
             //Arrange
-            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateJobOfferCommand() { Id = "99" };
 
@@ -212,9 +230,9 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         public async Task HandleForbiddenAccessException_NotOwnUser_NotUpdatedToJobOfferRepo()
         {
             //Arrange
-            _currentUserServiceMock.SetupGet(x => x.UserId).Returns("user2");
+            _mockCurrentUserService.SetupGet(x => x.UserId).Returns("user2");
 
-            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger, _currentUserService);
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateJobOfferCommand() { Id = "1" };
 
