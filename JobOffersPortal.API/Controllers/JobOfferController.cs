@@ -23,7 +23,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Cached(50)]
-        [HttpGet(ApiRoutes.JobOfferRoute.GetAll), AllowAnonymous]
+        [HttpGet(ApiRoutes.JobOfferRoute.GetAll)]
         public async Task<ActionResult<PaginatedList<JobOfferViewModel>>> GetAll([FromQuery] GetJobOffersWithPaginationQuery query)
         {
             return Ok(await Mediator.Send(query));
@@ -39,7 +39,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Cached(50)]
-        [HttpGet(ApiRoutes.JobOfferRoute.Get), AllowAnonymous]
+        [HttpGet(ApiRoutes.JobOfferRoute.Get)]
         public async Task<ActionResult<JobOfferViewModel>> Get([FromRoute] string id)
         {
             return Ok(await Mediator.Send(new GetJobOfferDetailQuery() { Id = id }));

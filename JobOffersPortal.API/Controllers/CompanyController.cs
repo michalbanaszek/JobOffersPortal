@@ -35,7 +35,7 @@ namespace JobOffersPortal.API.Controllers
         /// <response code="200">Get item in the system</response>   
         /// <response code="401">Unauthorized</response>    
         /// <response code="404">Not found item</response>    
-        [HttpGet(ApiRoutes.CompanyRoute.Get), AllowAnonymous]
+        [HttpGet(ApiRoutes.CompanyRoute.Get)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]      
