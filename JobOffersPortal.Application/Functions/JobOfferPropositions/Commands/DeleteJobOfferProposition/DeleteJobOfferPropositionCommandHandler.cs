@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
-using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
@@ -16,7 +15,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.De
         private readonly ILogger<DeleteJobOfferPropositionCommandHandler> _logger;
         private readonly IJobOfferPropositionRepository _jobOfferPropositionRepository;
 
-        public DeleteJobOfferPropositionCommandHandler(IMapper mapper, ILogger<DeleteJobOfferPropositionCommandHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository, ICurrentUserService currentUserService)
+        public DeleteJobOfferPropositionCommandHandler(IMapper mapper, ILogger<DeleteJobOfferPropositionCommandHandler> logger, IJobOfferPropositionRepository jobOfferPropositionRepository)
         {
             _mapper = mapper;
             _logger = logger;

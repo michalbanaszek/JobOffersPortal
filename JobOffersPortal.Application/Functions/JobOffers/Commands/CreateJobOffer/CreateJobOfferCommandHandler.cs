@@ -15,14 +15,14 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
         private readonly IJobOfferRepository _jobOfferRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferCommandHandler> _logger;
-        private readonly IUriService _uriJobOfferService;
+        private readonly IUriService _uriService;
 
         public CreateJobOfferCommandHandler(IMapper mapper, ILogger<CreateJobOfferCommandHandler> logger, IJobOfferRepository jobOfferRepository, IUriService uriJobOfferService)
         {
             _mapper = mapper;
             _logger = logger;
             _jobOfferRepository = jobOfferRepository;
-            _uriJobOfferService = uriJobOfferService;
+            _uriService = uriJobOfferService;
         }
 
         public async Task<CreateJobOfferCommandResponse> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
 
             _logger.LogInformation("Created JobOffer Id: {0}", entity.Id);
 
-            var uri = _uriJobOfferService.Get(entity.Id, nameof(JobOffer));
+            var uri = _uriService.Get(entity.Id, nameof(JobOffer));
 
             return new CreateJobOfferCommandResponse(uri);
         }

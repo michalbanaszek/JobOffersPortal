@@ -14,14 +14,14 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateCompanyCommandHandler> _logger;
-        private readonly IUriService _uriCompanyService;
+        private readonly IUriService _uriService;
 
-        public CreateCompanyCommandHandler(ICompanyRepository companyRepository, IMapper mapper, ILogger<CreateCompanyCommandHandler> logger, IUriService uriCompanyService)
+        public CreateCompanyCommandHandler(ICompanyRepository companyRepository, IMapper mapper, ILogger<CreateCompanyCommandHandler> logger, IUriService uriService)
         {
             _companyRepository = companyRepository;
             _mapper = mapper;
             _logger = logger;
-            _uriCompanyService = uriCompanyService;
+            _uriService = uriService;
         }
 
         public async Task<CreateCompanyCommandResponse> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany
 
             _logger.LogInformation("Created company Id: {0}, Name: {1}", entity.Id, entity.Name);
 
-            var uri = _uriCompanyService.Get(entity.Id, nameof(Company));
+            var uri = _uriService.Get(entity.Id, nameof(Company));
 
             return new CreateCompanyCommandResponse(uri);
         }
