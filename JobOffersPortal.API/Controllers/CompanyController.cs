@@ -6,7 +6,6 @@ using JobOffersPortal.Application.Functions.Companies.Commands.DeleteCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

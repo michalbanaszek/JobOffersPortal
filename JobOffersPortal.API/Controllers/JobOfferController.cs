@@ -6,7 +6,6 @@ using JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffer;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.UpdateJobOffer;
 using JobOffersPortal.Application.Functions.JobOffers.Queries.GetJobOfferDetail;
 using JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
