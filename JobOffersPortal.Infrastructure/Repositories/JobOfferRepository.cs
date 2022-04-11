@@ -49,6 +49,11 @@ namespace JobOffersPortal.Persistance.EF.Repositories
                                  .SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<bool> IsPositionAlreadyExistAsync(string position)
+        {
+            return await _context.JobOffers.AnyAsync(x => x.Position.ToLower() == position.ToLower());
+        }
+
         public async Task<bool> UserOwnsEntityAsync(string id, string userId)
         {
             var entity = await _context.JobOffers.AsNoTracking()
