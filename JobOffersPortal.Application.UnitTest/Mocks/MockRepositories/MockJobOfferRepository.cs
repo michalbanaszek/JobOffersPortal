@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 {
-    internal class MockJobOfferRepository
+    public static class MockJobOfferRepository
     {
         public static Mock<IJobOfferRepository> GetJobOffersRepository()
         {
@@ -16,6 +16,11 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
             var mockJobOffersRepository = new Mock<IJobOfferRepository>();
 
             mockJobOffersRepository.Setup(repo => repo.GetAllAsync()).ReturnsAsync(jobOfferList);
+
+            mockJobOffersRepository.Setup(repo => repo.GetAllByCompany(It.IsAny<string>())).Returns((string companyId) =>
+            {
+                return jobOfferList.Where(repo => repo.CompanyId == companyId).AsQueryable();                
+            });
 
             mockJobOffersRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((string id) =>
             {
@@ -60,6 +65,13 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
                 }
 
                 return entity.CreatedBy != userId ? false : true;
+            });
+
+            mockJobOffersRepository.Setup(repo => repo.IsPositionAlreadyExistAsync(It.IsAny<string>())).ReturnsAsync((string position) =>
+            {
+                var entity = jobOfferList.FirstOrDefault(x => x.Position.ToLower() == position.ToLower());
+
+                return entity == null ? false : true;
             });
 
             return mockJobOffersRepository;

@@ -13,17 +13,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
+namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Commands
 {
-    public class DeleteJobOfferPropositionTest
+    public class DeleteJobOfferPropositionHandlerTests
     {
         private readonly Mock<ILogger<DeleteJobOfferPropositionCommandHandler>> _logger;
-        private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;       
-        private readonly IMapper _mapper;      
+        private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;
+        private readonly IMapper _mapper;
 
-        public DeleteJobOfferPropositionTest()
+        public DeleteJobOfferPropositionHandlerTests()
         {
-            _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();    
+            _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();
             _logger = new Mock<ILogger<DeleteJobOfferPropositionCommandHandler>>();
 
             var configurationProvider = new MapperConfiguration(cfg =>

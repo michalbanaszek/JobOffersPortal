@@ -14,22 +14,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
+namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
 {
-    public class CreateJobOfferTest
+    public class CreateJobOfferHandlerTests
     {
-        private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;       
+        private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;
         private readonly Mock<IUriService> _mockUriService;
         private readonly Mock<ILogger<CreateJobOfferCommandHandler>> _logger;
-        private readonly IMapper _mapper;      
+        private readonly IMapper _mapper;
         private readonly CreateJobOfferCommandValidator _validator;
 
-        public CreateJobOfferTest()
+        public CreateJobOfferHandlerTests()
         {
             _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
             _mockUriService = MockUriService.GetUriService();
-            _logger = new Mock<ILogger<CreateJobOfferCommandHandler>>();          
-            _validator = new CreateJobOfferCommandValidator();
+            _logger = new Mock<ILogger<CreateJobOfferCommandHandler>>();
+            _validator = new CreateJobOfferCommandValidator(_mockJobOfferRepository.Object);
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
@@ -134,8 +134,8 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
             }
 
             //Assert
-            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;   
-            
+            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
+
             validatorResult.IsValid.ShouldBeFalse();
 
             validatorResult.Errors[0].ErrorMessage.ShouldBe("'Position' must not be empty.");
@@ -174,8 +174,8 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
             }
 
             //Assert
-            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;    
-            
+            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
+
             validatorResult.IsValid.ShouldBeFalse();
 
             validatorResult.Errors[0].ErrorMessage.ShouldBe("'Requirements' must not be empty.");
@@ -216,8 +216,8 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
             }
 
             //Assert
-            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;     
-            
+            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
+
             validatorResult.IsValid.ShouldBeFalse();
 
             validatorResult.Errors[0].ErrorMessage.ShouldBe("'Position' is not in the correct format.");
@@ -254,8 +254,8 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
             }
 
             //Assert
-            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;       
-            
+            var jobListAfterAdd = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
+
             validatorResult.IsValid.ShouldBeFalse();
 
             validatorResult.Errors[0].ErrorMessage.ShouldBe("Position Length is between 2 and 30");

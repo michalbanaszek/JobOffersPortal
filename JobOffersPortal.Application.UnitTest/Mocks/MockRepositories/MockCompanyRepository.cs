@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 {
-    internal class MockCompanyRepository
+    public static class MockCompanyRepository
     {
         public static Mock<ICompanyRepository> GetCompanyRepository()
         {
@@ -19,6 +19,11 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 
             mockCompanyRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<string>()))
                                                     .ReturnsAsync((string id) =>
+            {
+                return companies.FirstOrDefault(x => x.Id == id);
+            });
+
+            mockCompanyRepository.Setup(repo => repo.GetByIdIncludeEntitiesAsync(It.IsAny<string>())).ReturnsAsync((string id) => 
             {
                 return companies.FirstOrDefault(x => x.Id == id);
             });

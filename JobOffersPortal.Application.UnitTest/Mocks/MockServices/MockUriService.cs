@@ -4,7 +4,7 @@ using System;
 
 namespace JobOffersPortal.Application.UnitTest.Mocks.MockServices
 {
-    internal class MockUriService
+    public class MockUriService
     {
         public static Mock<IUriService> GetUriService()
         {

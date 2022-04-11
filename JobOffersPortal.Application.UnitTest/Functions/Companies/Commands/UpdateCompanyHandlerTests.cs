@@ -9,25 +9,26 @@ using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.Companies.Commands
+namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
 {
-    public class UpdateCompanyTest
+    public class UpdateCompanyHandlerTests
     {
         private readonly Mock<ICompanyRepository> _mockCompanyRepository;
-        private readonly Mock<ICurrentUserService> _mockCurrentUserService;             
+        private readonly Mock<ICurrentUserService> _mockCurrentUserService;
         private readonly Mock<ILogger<UpdateCompanyCommandHandler>> _logger;
         private readonly UpdateCompanyCommandValidator _validator;
         private readonly IMapper _mapper;
 
-        public UpdateCompanyTest()
+        public UpdateCompanyHandlerTests()
         {
             _mockCompanyRepository = MockCompanyRepository.GetCompanyRepository();
             _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
-            _logger = new Mock<ILogger<UpdateCompanyCommandHandler>>();        
+            _logger = new Mock<ILogger<UpdateCompanyCommandHandler>>();
             _validator = new UpdateCompanyCommandValidator(_mockCompanyRepository.Object);
 
             var configurationProvider = new MapperConfiguration(cfg =>
@@ -126,7 +127,7 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
             //Arrange
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
-            var command = new UpdateCompanyCommand() { Id = "1", Name = new string('*', 5) };          
+            var command = new UpdateCompanyCommand() { Id = "1", Name = new string('*', 5) };
 
             //Act
             var validatorResult = await _validator.ValidateAsync(command);
@@ -165,57 +166,37 @@ namespace JobOffersPortal.Application.UnitTest.Companies.Commands
         }
 
         [Fact]
-        public async Task HandleNotFoundException_InvalidCompanyId_NotUpdatedToCompanyRepo()
+        public void Handle_ForInvalidCompanyId_ThrowsNotFoundException()
         {
             //Arrange
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new UpdateCompanyCommand() { Id = "99", Name = "UpdateCompanyName" };
 
-            NotFoundException exceptionResponse = null;
-
-            //Act
-            try
-            {
-                await handler.Handle(command, CancellationToken.None);
-            }
-            catch (NotFoundException exception)
-            {
-                exceptionResponse = exception;
-            }
+            //Act        
+            Func<Task> func = async () => await handler.Handle(command, CancellationToken.None);
 
             //Assert
-            exceptionResponse.ShouldNotBeNull();
-
-            exceptionResponse.Message.ShouldBe("Entity \"Company\" (99) was not found.");
+            Assert.ThrowsAsync<NotFoundException>(func);
         }
 
-        [Fact]
-        public async Task HandleForbiddenAccessException_NotOwnUser_NotUpdatedToCompanyRepo()
+        [Theory]
+        [InlineData("1", "2")]
+        [InlineData("2", "1")]
+        public void Handle_ForNotOwnerUserForCompanyId_ThrowsForbiddenAccessException(string userId, string companyId)
         {
             //Arrange
-            _mockCurrentUserService.SetupGet(x => x.UserId).Returns("user2");
-
-            ForbiddenAccessException exceptionResponse = null;
+            _mockCurrentUserService.SetupGet(x => x.UserId).Returns(userId);
 
             var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
 
-            var command = new UpdateCompanyCommand() { Id = "1", Name = "UpdateCompanyName" };
+            var command = new UpdateCompanyCommand() { Id = companyId, Name = "UpdateCompanyName" };
 
             //Act
-            try
-            {
-                await handler.Handle(command, CancellationToken.None);
-            }
-            catch (ForbiddenAccessException exception)
-            {
-                exceptionResponse = exception;
-            }
+            Func<Task> func = async () => await handler.Handle(command, CancellationToken.None);
 
             //Assert
-            exceptionResponse.ShouldNotBeNull();
-
-            exceptionResponse.Message.ShouldBe("Entity \"Company\" (1) do not own this entity.");
+            Assert.ThrowsAsync<ForbiddenAccessException>(func);
         }
     }
 }

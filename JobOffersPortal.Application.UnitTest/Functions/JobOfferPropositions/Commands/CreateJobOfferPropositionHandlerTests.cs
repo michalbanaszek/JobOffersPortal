@@ -12,24 +12,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
+namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Commands
 {
-    public class CreateJobOfferPropositionTest
+    public class CreateJobOfferPropositionHandlerTests
     {
         private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;
-        private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;     
+        private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;
         private readonly Mock<IUriService> _mockUriService;
         private readonly Mock<ILogger<CreateJobOfferPropositionCommandHandler>> _logger;
         private readonly IMapper _mapper;
         private readonly CreateJobOfferPropositionCommandValidator _validator;
 
-        public CreateJobOfferPropositionTest()
+        public CreateJobOfferPropositionHandlerTests()
         {
             _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();
-            _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();          
+            _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
             _mockUriService = MockUriService.GetUriService();
             _logger = new Mock<ILogger<CreateJobOfferPropositionCommandHandler>>();
-            _validator = new CreateJobOfferPropositionCommandValidator();           
+            _validator = new CreateJobOfferPropositionCommandValidator();
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
@@ -62,8 +62,8 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
             }
 
             //Assert   
-            var itemsCountAfter = (await _mockJobOfferPropositionRepository.Object.GetAllAsync()).Count;  
-            
+            var itemsCountAfter = (await _mockJobOfferPropositionRepository.Object.GetAllAsync()).Count;
+
             validatorResult.IsValid.ShouldBeTrue();
 
             itemsCountBefore.ShouldNotBe(itemsCountAfter);
@@ -92,8 +92,8 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
             }
 
             //Assert  
-            var itemsCountAfter = (await _mockJobOfferPropositionRepository.Object.GetAllAsync()).Count;    
-            
+            var itemsCountAfter = (await _mockJobOfferPropositionRepository.Object.GetAllAsync()).Count;
+
             validatorResult.IsValid.ShouldBeFalse();
 
             itemsCountBefore.ShouldBe(itemsCountAfter);

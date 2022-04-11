@@ -12,19 +12,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.Companies.Commands
+namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
 {
-    public class CreateCompanyTest
+    public class CreateCompanyHandlerTests
     {
-        private readonly Mock<ICompanyRepository> _mockCompanyRepository;    
+        private readonly Mock<ICompanyRepository> _mockCompanyRepository;
         private readonly Mock<IUriService> _mockUriService;
         private readonly Mock<ILogger<CreateCompanyCommandHandler>> _logger;
         private readonly CreateCompanyCommandValidator _validator;
         private readonly IMapper _mapper;
 
-        public CreateCompanyTest()
+        public CreateCompanyHandlerTests()
         {
-            _mockCompanyRepository = MockCompanyRepository.GetCompanyRepository();          
+            _mockCompanyRepository = MockCompanyRepository.GetCompanyRepository();
             _mockUriService = MockUriService.GetUriService();
             _logger = new Mock<ILogger<CreateCompanyCommandHandler>>();
             _validator = new CreateCompanyCommandValidator(_mockCompanyRepository.Object);

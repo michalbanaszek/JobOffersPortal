@@ -14,9 +14,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
+namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
 {
-    public class UpdateJobOfferTest
+    public class UpdateJobOfferHandlerTests
     {
         private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;
         private readonly Mock<ICurrentUserService> _mockCurrentUserService;
@@ -24,12 +24,12 @@ namespace JobOffersPortal.Application.UnitTest.JobOffers.Commands
         private readonly UpdateJobOfferCommandValidator _validator;
         private readonly IMapper _mapper;
 
-        public UpdateJobOfferTest()
+        public UpdateJobOfferHandlerTests()
         {
             _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
             _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
             _logger = new Mock<ILogger<UpdateJobOfferCommandHandler>>();
-            _validator = new UpdateJobOfferCommandValidator();
+            _validator = new UpdateJobOfferCommandValidator(_mockJobOfferRepository.Object);
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {

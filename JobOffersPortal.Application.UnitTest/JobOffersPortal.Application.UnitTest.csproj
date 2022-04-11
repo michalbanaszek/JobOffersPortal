@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
@@ -23,6 +24,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JobOffersPortal.Application\JobOffersPortal.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Functions\JobOfferRequirements\Commands\" />
+    <Folder Include="Functions\JobOfferSkills\Commands\" />
   </ItemGroup>
 
 </Project>

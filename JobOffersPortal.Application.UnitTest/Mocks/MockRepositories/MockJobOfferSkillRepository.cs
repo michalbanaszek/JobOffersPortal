@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 {
-    internal class MockJobOfferSkillRepository
+    public static class MockJobOfferSkillRepository
     {
         public static Mock<IJobOfferSkillRepository> GetJobOfferSkillRepository()
         {

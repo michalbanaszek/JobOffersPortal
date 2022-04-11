@@ -10,16 +10,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
+namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Commands
 {
-    public class UpdateJobOfferPropositionTest
+    public class UpdateJobOfferPropositionHandlerTests
     {
         private readonly Mock<ILogger<UpdateJobOfferPropositionCommandHandler>> _logger;
         private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;
         private readonly IMapper _mapper;
         private readonly UpdateJobOfferPropositionCommandValidator _validator;
 
-        public UpdateJobOfferPropositionTest()
+        public UpdateJobOfferPropositionHandlerTests()
         {
             _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();
             _logger = new Mock<ILogger<UpdateJobOfferPropositionCommandHandler>>();
@@ -31,7 +31,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
             });
 
             _mapper = configurationProvider.CreateMapper();
-        }    
+        }
 
         [Fact]
         public async Task Handle_ValidJobOfferProposition_UpdatedToJobOfferPropositionRepo()
@@ -55,7 +55,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
 
             validatorResult.IsValid.ShouldBeTrue();
 
-            entity.Content.ShouldBe("Updated 1");            
+            entity.Content.ShouldBe("Updated 1");
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
                 Id = "1",
                 Content = string.Empty
             };
-           
+
             var validatorResult = await _validator.ValidateAsync(command);
 
             //Act
@@ -92,7 +92,7 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
                 Id = "1",
                 Content = "Test /"
             };
-  
+
             var validatorResult = await _validator.ValidateAsync(command);
 
             //Act
@@ -113,17 +113,17 @@ namespace JobOffersPortal.Application.UnitTest.JobOfferPropositions.Commands
             var command = new UpdateJobOfferPropositionCommand()
             {
                 Id = "1",
-                Content = new string('a', 1)            
+                Content = new string('a', 1)
             };
-    
+
             var validatorResult = await _validator.ValidateAsync(command);
 
             //Act
             await handler.Handle(command, CancellationToken.None);
 
             //Assert          
-            validatorResult.IsValid.ShouldBeFalse();  
-            
+            validatorResult.IsValid.ShouldBeFalse();
+
             validatorResult.Errors[0].ErrorMessage.ShouldBe("The length of 'Content' must be at least 2 characters. You entered 1 characters.");
         }
 
