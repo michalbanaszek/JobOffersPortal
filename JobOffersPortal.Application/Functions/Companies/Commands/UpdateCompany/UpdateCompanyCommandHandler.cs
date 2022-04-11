@@ -42,7 +42,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
             {
                 _logger.LogWarning("User is not own for this entity, Id: {0}, UserId: {1}", request.Id, _currentUserService.UserId);
 
-                throw new ForbiddenAccessException(nameof(Company), request.Id);
+                throw new ForbiddenAccessException(nameof(Company), _currentUserService.UserId);
             }
 
             _mapper.Map(request, entity);
