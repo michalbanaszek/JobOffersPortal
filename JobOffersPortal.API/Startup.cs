@@ -28,18 +28,7 @@ namespace JobOffersPortal.API
             services.AddApplication();
             services.AddInfrastructure(Configuration);
             services.AddInfrastructureSecurity(Configuration);
-            services.InstallServicesInAssembly(Configuration);
-            services.AddScoped<ApplicationDbContextSeed>();
-
-            services.AddCors(options =>
-            {
-                services.AddCors(options =>
-                {
-                    options.AddPolicy("Open", builder => builder.AllowAnyOrigin()
-                                                                .AllowAnyHeader()
-                                                                .AllowAnyMethod());
-                });
-            });
+            services.InstallServicesInAssembly(Configuration);                     
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
