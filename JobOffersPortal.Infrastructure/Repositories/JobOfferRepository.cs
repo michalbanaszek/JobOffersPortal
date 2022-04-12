@@ -51,6 +51,11 @@ namespace JobOffersPortal.Persistance.EF.Repositories
 
         public async Task<bool> IsPositionAlreadyExistAsync(string position)
         {
+            if (string.IsNullOrEmpty(position))
+            {
+                return false;
+            }
+
             return await _context.JobOffers.AnyAsync(x => x.Position.ToLower() == position.ToLower());
         }
 
