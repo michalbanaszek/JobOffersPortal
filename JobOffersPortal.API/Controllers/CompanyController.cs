@@ -23,7 +23,7 @@ namespace JobOffersPortal.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Cached(50)]
-        public async Task<ActionResult<PaginatedList<CompanyJobOfferListViewModel>>> GetAllCompaniesWithJobs([FromQuery] GetCompaniesWithJobOffersListWithPaginationQuery query)
+        public async Task<ActionResult<PaginatedList<CompanyJobOfferListViewModel>>> GetAllCompaniesWithJobs([FromQuery] GetCompaniesListWithPaginationQuery query)
         {            
             return Ok(await Mediator.Send(query));
         }
@@ -41,7 +41,7 @@ namespace JobOffersPortal.API.Controllers
         [Cached(50)]
         public async Task<ActionResult<CompanyJobOfferListViewModel>> Get([FromRoute] string id)
         {
-            return Ok(await Mediator.Send(new GetCompanyQuery() { Id = id }));
+            return Ok(await Mediator.Send(new GetCompanyDetailQuery() { Id = id }));
         }
 
         /// <summary>
