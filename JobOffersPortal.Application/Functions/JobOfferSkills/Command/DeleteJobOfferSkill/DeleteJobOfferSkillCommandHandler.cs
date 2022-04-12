@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using JobOffersPortal.Application.Common.Exceptions;
+﻿using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
@@ -14,7 +13,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.DeleteJob
         private readonly ILogger<DeleteJobOfferSkillCommandHandler> _logger;
         private readonly IJobOfferSkillRepository _jobOfferSkillRepository;
 
-        public DeleteJobOfferSkillCommandHandler(IMapper mapper, ILogger<DeleteJobOfferSkillCommandHandler> logger, IJobOfferSkillRepository jobOfferSkillRepository)
+        public DeleteJobOfferSkillCommandHandler(ILogger<DeleteJobOfferSkillCommandHandler> logger, IJobOfferSkillRepository jobOfferSkillRepository)
         {
             _logger = logger;
             _jobOfferSkillRepository = jobOfferSkillRepository;

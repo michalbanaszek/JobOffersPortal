@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Queries.GetJobOfferRequirementDetail
 {
-    public class GetJobOfferRequirementQueryHandler : IRequestHandler<GetJobOfferRequirementDetailQuery, JobOfferRequirementDetailViewModel>
+    public class GetJobOfferRequirementDetailQueryHandler : IRequestHandler<GetJobOfferRequirementDetailQuery, JobOfferRequirementDetailViewModel>
     {
         private readonly IJobOfferRequirementRepository _jobOfferRequirementRepository;
         private readonly IMapper _mapper;
-        private readonly ILogger<GetJobOfferRequirementQueryHandler> _logger;
+        private readonly ILogger<GetJobOfferRequirementDetailQueryHandler> _logger;
 
-        public GetJobOfferRequirementQueryHandler(IJobOfferRequirementRepository jobOfferRequirementRepository, IMapper mapper, ILogger<GetJobOfferRequirementQueryHandler> logger)
+        public GetJobOfferRequirementDetailQueryHandler(IJobOfferRequirementRepository jobOfferRequirementRepository, IMapper mapper, ILogger<GetJobOfferRequirementDetailQueryHandler> logger)
         {
             _jobOfferRequirementRepository = jobOfferRequirementRepository;
             _mapper = mapper;

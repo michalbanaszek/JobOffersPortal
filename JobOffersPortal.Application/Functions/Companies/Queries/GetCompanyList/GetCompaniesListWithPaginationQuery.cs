@@ -4,7 +4,7 @@ using MediatR;
 
 namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyList
 {
-    public class GetCompaniesWithJobOffersListWithPaginationQuery : IRequest<PaginatedList<CompanyJobOfferListViewModel>>
+    public class GetCompaniesListWithPaginationQuery : IRequest<PaginatedList<CompanyJobOfferListViewModel>>
     {
         public SearchCompanyOptions SearchJobOffer { get; set; }
         public int PageNumber { get; set; } = 1;

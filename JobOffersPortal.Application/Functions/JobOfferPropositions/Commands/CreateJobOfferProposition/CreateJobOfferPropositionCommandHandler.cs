@@ -1,5 +1,4 @@
-﻿using Application.JobOfferPropositions.Commands.CreateJobOfferProposition;
-using AutoMapper;
+﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;

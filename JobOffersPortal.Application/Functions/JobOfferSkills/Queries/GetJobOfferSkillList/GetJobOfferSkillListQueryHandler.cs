@@ -15,7 +15,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOff
         private readonly ILogger<GetJobOfferSkillListQueryHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;    
 
-        public GetJobOfferSkillListQueryHandler(IMapper mapper, ILogger<GetJobOfferSkillListQueryHandler> logger, IJobOfferSkillRepository jobOfferSkillRepository, IJobOfferRepository jobOfferRepository)
+        public GetJobOfferSkillListQueryHandler(IMapper mapper, ILogger<GetJobOfferSkillListQueryHandler> logger, IJobOfferRepository jobOfferRepository)
         {
             _mapper = mapper;
             _logger = logger;         

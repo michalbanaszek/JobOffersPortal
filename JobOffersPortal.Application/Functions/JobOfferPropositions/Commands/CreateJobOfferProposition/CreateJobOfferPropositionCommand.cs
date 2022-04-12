@@ -1,5 +1,4 @@
-﻿using Application.JobOfferPropositions.Commands.CreateJobOfferProposition;
-using MediatR;
+﻿using MediatR;
 
 namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.CreateJobOfferProposition
 {

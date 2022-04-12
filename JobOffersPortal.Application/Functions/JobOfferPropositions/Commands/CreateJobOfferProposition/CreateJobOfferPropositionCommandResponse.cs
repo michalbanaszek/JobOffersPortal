@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Application.JobOfferPropositions.Commands.CreateJobOfferProposition
+namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.CreateJobOfferProposition
 {
     public class CreateJobOfferPropositionCommandResponse
     {
