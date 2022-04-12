@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JobOffersPortal.Application.Common.Mappings
+namespace JobOffersPortal.Application.Extensions
 {
     public static class MappingExtensions
     {
