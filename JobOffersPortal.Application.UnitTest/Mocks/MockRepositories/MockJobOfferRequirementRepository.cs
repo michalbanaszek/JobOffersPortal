@@ -38,7 +38,7 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 
             mockJobOffeRequirementRepository.Setup(repo => repo.DeleteAsync(It.IsAny<JobOfferRequirement>())).Callback<JobOfferRequirement>((entity) =>
             {
-                jobOfferRequirementList.Remove(entity);                
+                jobOfferRequirementList.Remove(entity);
             });
 
             return mockJobOffeRequirementRepository;

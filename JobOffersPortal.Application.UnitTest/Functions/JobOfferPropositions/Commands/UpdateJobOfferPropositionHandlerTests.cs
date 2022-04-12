@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.UpdateJobOfferProposition;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -45,109 +48,30 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
                 Content = "Updated 1"
             };
 
-            var validatorResult = await _validator.ValidateAsync(command);
-
             //Act
-            await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
-            //Assert
             var entity = await _mockJobOfferPropositionRepository.Object.GetByIdAsync(command.Id);
 
-            validatorResult.IsValid.ShouldBeTrue();
-
+            //Assert
             entity.Content.ShouldBe("Updated 1");
+
+            result.ShouldBeOfType<Unit>();
         }
 
         [Fact]
-        public async Task Handle_InvalidEmptyContent_NotUpdatedToJobOfferPropositionRepo()
+        public void Handle_InvalidJobOfferPropositionId_ReturnsNotFoundException()
         {
             //Arrange
             var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
 
-            var command = new UpdateJobOfferPropositionCommand()
-            {
-                Id = "1",
-                Content = string.Empty
-            };
-
-            var validatorResult = await _validator.ValidateAsync(command);
+            var command = new UpdateJobOfferPropositionCommand() { Id = "99" };
 
             //Act
-            await handler.Handle(command, CancellationToken.None);
+            Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
-            //Assert          
-            validatorResult.IsValid.ShouldBeFalse();
-
-            validatorResult.Errors[0].ErrorMessage.ShouldBe("'Content' must not be empty.");
-        }
-
-        [Fact]
-        public async Task Handle_InvalidFormatContent_NotAddedToJobOfferPropositionRepo()
-        {
-            //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
-
-            var command = new UpdateJobOfferPropositionCommand()
-            {
-                Id = "1",
-                Content = "Test /"
-            };
-
-            var validatorResult = await _validator.ValidateAsync(command);
-
-            //Act
-            await handler.Handle(command, CancellationToken.None);
-
-            //Assert          
-            validatorResult.IsValid.ShouldBeFalse();
-
-            validatorResult.Errors[0].ErrorMessage.ShouldBe("'Content' is not in the correct format.");
-        }
-
-        [Fact]
-        public async Task Handle_InvalidMinLengthContent_NotUpdatedToJobOfferPropositionRepo()
-        {
-            //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
-
-            var command = new UpdateJobOfferPropositionCommand()
-            {
-                Id = "1",
-                Content = new string('a', 1)
-            };
-
-            var validatorResult = await _validator.ValidateAsync(command);
-
-            //Act
-            await handler.Handle(command, CancellationToken.None);
-
-            //Assert          
-            validatorResult.IsValid.ShouldBeFalse();
-
-            validatorResult.Errors[0].ErrorMessage.ShouldBe("The length of 'Content' must be at least 2 characters. You entered 1 characters.");
-        }
-
-        [Fact]
-        public async Task Handle_InvalidMaxLengthContent_NotUpdatedToJobOfferPropositionRepo()
-        {
-            //Arrange
-            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
-
-            var command = new UpdateJobOfferPropositionCommand()
-            {
-                Id = "1",
-                Content = new string('a', 51)
-            };
-
-            var validatorResult = await _validator.ValidateAsync(command);
-
-            //Act
-            await handler.Handle(command, CancellationToken.None);
-
-            //Assert         
-            validatorResult.IsValid.ShouldBeFalse();
-
-            validatorResult.Errors[0].ErrorMessage.ShouldBe("Content Length is between 2 and 50");
+            //Assert
+            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
         }
     }
 }

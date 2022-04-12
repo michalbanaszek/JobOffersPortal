@@ -23,7 +23,7 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
                 return companies.FirstOrDefault(x => x.Id == id);
             });
 
-            mockCompanyRepository.Setup(repo => repo.GetByIdIncludeEntitiesAsync(It.IsAny<string>())).ReturnsAsync((string id) => 
+            mockCompanyRepository.Setup(repo => repo.GetByIdIncludeEntitiesAsync(It.IsAny<string>())).ReturnsAsync((string id) =>
             {
                 return companies.FirstOrDefault(x => x.Id == id);
             });

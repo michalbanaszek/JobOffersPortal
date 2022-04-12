@@ -19,7 +19,7 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 
             mockJobOffersRepository.Setup(repo => repo.GetAllByCompany(It.IsAny<string>())).Returns((string companyId) =>
             {
-                return jobOfferList.Where(repo => repo.CompanyId == companyId).AsQueryable();                
+                return jobOfferList.Where(repo => repo.CompanyId == companyId).AsQueryable();
             });
 
             mockJobOffersRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<string>())).ReturnsAsync((string id) =>
@@ -69,6 +69,11 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 
             mockJobOffersRepository.Setup(repo => repo.IsPositionAlreadyExistAsync(It.IsAny<string>())).ReturnsAsync((string position) =>
             {
+                if (string.IsNullOrEmpty(position))
+                {
+                    return false;
+                }
+
                 var entity = jobOfferList.FirstOrDefault(x => x.Position.ToLower() == position.ToLower());
 
                 return entity == null ? false : true;

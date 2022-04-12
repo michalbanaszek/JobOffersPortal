@@ -63,7 +63,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Validators
         public void Should_Have_Error_When_Position_Is_Invalid_Format()
         {
             //Arrange 
-            var command = new CreateJobOfferCommand() { Position = "NewCompany/" };
+            var command = new CreateJobOfferCommand() { Position = "Test/" };
 
             //Act
             var result = _validator.TestValidate(command);
@@ -76,7 +76,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Validators
         public void Should_Have_Error_When_Position_Is_Already_Exists()
         {
             //Arrange 
-            var command = new CreateJobOfferCommand() { Position = "CompanyName1" };
+            var command = new CreateJobOfferCommand() { Position = "Position1" };
 
             //Act
             var result = _validator.TestValidate(command);

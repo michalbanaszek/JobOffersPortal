@@ -62,7 +62,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Validators
         public void Should_Have_Error_When_Name_Is_Invalid_Format()
         {
             //Arrange 
-            var command = new CreateCompanyCommand() { Name = "NewCompany/" };
+            var command = new CreateCompanyCommand() { Name = "Test/" };
 
             //Act
             var result = _validator.TestValidate(command);

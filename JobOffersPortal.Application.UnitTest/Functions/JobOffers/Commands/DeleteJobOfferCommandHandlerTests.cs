@@ -6,23 +6,25 @@ using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffer;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
 using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
 {
-    public class DeleteJobOfferHandlerTests
+    public class DeleteJobOfferCommandHandlerTests
     {
         private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;
         private readonly Mock<ICurrentUserService> _mockCurrentUserService;
         private readonly Mock<ILogger<DeleteJobOfferCommandHandler>> _logger;
         private readonly IMapper _mapper;
 
-        public DeleteJobOfferHandlerTests()
+        public DeleteJobOfferCommandHandlerTests()
         {
             _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
             _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
@@ -47,42 +49,33 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
             var jobOffersListCountBeforeDelete = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
             //Act
-            await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
-            //Assert
             var jobOffersListCountAfterDelete = (await _mockJobOfferRepository.Object.GetAllAsync()).Count;
 
+            //Assert
             jobOffersListCountAfterDelete.ShouldNotBe(jobOffersListCountBeforeDelete);
+
+            result.ShouldBeOfType<Unit>();
         }
 
         [Fact]
-        public async Task HandleNotFoundException_InvalidJobOffer_DeletedToJobOfferRepo()
+        public void Handle_InvalidJobOfferId_ReturnsNotFoundException()
         {
             //Arrange
             var handler = new DeleteJobOfferCommandHandler(_mockJobOfferRepository.Object, _logger.Object, _mockCurrentUserService.Object);
 
             var command = new DeleteJobOfferCommand() { Id = "99" };
 
-            NotFoundException exceptionResponse = null;
-
             //Act
-            try
-            {
-                await handler.Handle(command, CancellationToken.None);
-            }
-            catch (NotFoundException exception)
-            {
-                exceptionResponse = exception;
-            }
+            Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            exceptionResponse.ShouldNotBeNull();
-
-            exceptionResponse.Message.ShouldBe("Entity \"JobOffer\" (99) was not found.");
+            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
         }
 
         [Fact]
-        public async Task HandleForbiddenAccessException_NotOwnUser_NotDeletedToJobOfferRepo()
+        public void Handle_NotOwnerUser_ReturnsForbiddenAccessException()
         {
             //Arrange
             _mockCurrentUserService.SetupGet(x => x.UserId).Returns("user2");
@@ -91,22 +84,11 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
 
             var command = new DeleteJobOfferCommand() { Id = "1" };
 
-            ForbiddenAccessException exceptionResponse = null;
-
             //Act
-            try
-            {
-                await handler.Handle(command, CancellationToken.None);
-            }
-            catch (ForbiddenAccessException exception)
-            {
-                exceptionResponse = exception;
-            }
+            Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            exceptionResponse.ShouldNotBeNull();
-
-            exceptionResponse.Message.ShouldBe("Entity \"JobOffer\" (1) do not own this entity.");
+            Assert.ThrowsAsync<ForbiddenAccessException>(() => func.Invoke());
         }
     }
 }

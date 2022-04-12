@@ -6,9 +6,11 @@ using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.DeleteJobOfferProposition;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
 using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -19,11 +21,13 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
     {
         private readonly Mock<ILogger<DeleteJobOfferPropositionCommandHandler>> _logger;
         private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;
+        private readonly Mock<ICurrentUserService> _mockCurrentUserService;
         private readonly IMapper _mapper;
 
         public DeleteJobOfferPropositionHandlerTests()
         {
             _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();
+            _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
             _logger = new Mock<ILogger<DeleteJobOfferPropositionCommandHandler>>();
 
             var configurationProvider = new MapperConfiguration(cfg =>
@@ -43,38 +47,25 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
             var command = new DeleteJobOfferPropositionCommand() { Id = "1" };
 
             //Act
-            await handler.Handle(command, CancellationToken.None);
+            var result = await handler.Handle(command, CancellationToken.None);
 
             //Assert
-            var entity = await _mockJobOfferPropositionRepository.Object.GetByIdAsync("1");
-
-            entity.ShouldBeNull();
+            result.ShouldBeOfType<Unit>();
         }
 
         [Fact]
-        public async Task HandleNotFoundException_InvalidJbOfferPropositionId_NotDeletedToJobOfferPropositionRepo()
+        public void Handle_InvalidJobOfferPropositionId_ReturnsNotFoundException()
         {
             //Arrange
             var handler = new DeleteJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
 
-            var command = new DeleteJobOfferPropositionCommand() { Id = "10" };
-
-            NotFoundException exceptionResponse = null;
+            var command = new DeleteJobOfferPropositionCommand() { Id = "99" };
 
             //Act
-            try
-            {
-                var response = await handler.Handle(command, CancellationToken.None);
-            }
-            catch (NotFoundException ex)
-            {
-                exceptionResponse = ex;
-            }
+            Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            exceptionResponse.ShouldNotBeNull();
-
-            exceptionResponse.Message.ShouldBe("Entity \"JobOfferProposition\" (10) was not found.");
+            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
         }
     }
 }

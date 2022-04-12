@@ -6,10 +6,10 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Va
 {
     public class CreateJobOfferPropositionCommandValidatorTests
     {
-        private CreateJobOfferPropositionCommandValidator _validator;      
+        private CreateJobOfferPropositionCommandValidator _validator;
 
         public CreateJobOfferPropositionCommandValidatorTests()
-        {         
+        {
             _validator = new CreateJobOfferPropositionCommandValidator();
         }
 

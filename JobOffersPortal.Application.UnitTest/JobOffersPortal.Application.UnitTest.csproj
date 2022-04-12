@@ -26,9 +26,4 @@
     <ProjectReference Include="..\JobOffersPortal.Application\JobOffersPortal.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Functions\JobOfferRequirements\Commands\" />
-    <Folder Include="Functions\JobOfferSkills\Commands\" />
-  </ItemGroup>
-
 </Project>
