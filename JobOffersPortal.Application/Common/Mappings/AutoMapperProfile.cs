@@ -1,5 +1,4 @@
-﻿using Application.JobOfferPropositions.Commands.CreateJobOfferProposition;
-using Application.JobOffers.Commands.CreateJobOffer;
+﻿using Application.JobOffers.Commands.CreateJobOffer;
 using AutoMapper;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
