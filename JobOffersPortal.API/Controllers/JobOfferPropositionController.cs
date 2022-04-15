@@ -1,5 +1,4 @@
-﻿using Application.JobOfferPropositions.Commands.CreateJobOfferProposition;
-using JobOffersPortal.API.Filters.Cache;
+﻿using JobOffersPortal.API.Filters.Cache;
 using JobOffersPortal.Application;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.CreateJobOfferProposition;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.DeleteJobOfferProposition;

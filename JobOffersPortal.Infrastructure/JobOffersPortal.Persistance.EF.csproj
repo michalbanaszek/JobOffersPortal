@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DummyData\**" />
+    <EmbeddedResource Remove="DummyData\**" />
+    <None Remove="DummyData\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
@@ -30,10 +36,6 @@
     <ProjectReference Include="..\JobOffersPortal.Application\JobOffersPortal.Application.csproj" />
     <ProjectReference Include="..\JobOffersPortal.Domain\JobOffersPortal.Domain.csproj" />
     <ProjectReference Include="..\JobOffersPortal.Infrastructure.Security\JobOffersPortal.Infrastructure.Security.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DummyData\" />
   </ItemGroup>
 
 
