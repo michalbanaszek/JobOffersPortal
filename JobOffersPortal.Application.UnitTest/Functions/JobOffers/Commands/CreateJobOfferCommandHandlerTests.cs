@@ -95,7 +95,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
         }
 
         [Fact]
-        public void Handle_InvalidCompanyId_ReturnsNotFoundException()
+        public void Handle_InvalidCompanyId_ThrowsNotFoundException()
         {
             //Arrange
             var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockCompanyRepository.Object, _mockUriService.Object);

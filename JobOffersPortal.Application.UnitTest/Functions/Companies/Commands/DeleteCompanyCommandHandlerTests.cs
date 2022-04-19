@@ -63,7 +63,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
         }
 
         [Fact]
-        public void Handle_InvalidCompanyId_ReturnsNotFoundException()
+        public void Handle_InvalidCompanyId_ThrowsNotFoundException()
         {
             //Arrange
             var handler = new DeleteCompanyCommandHandler(_mockCompanyRepository.Object, _logger.Object, _mockCurrentUserService.Object);
@@ -78,7 +78,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
         }
 
         [Fact]
-        public void Handle_NotOwnerUser_ReturnsForbiddenAccessException()
+        public void Handle_NotOwnerUser_ThrowsForbiddenAccessException()
         {
             //Arrange
             _mockCurrentUserService.SetupGet(x => x.UserId).Returns("user2");

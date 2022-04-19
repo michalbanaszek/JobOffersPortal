@@ -50,7 +50,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
         }
 
         [Fact]
-        public void Handle_InvalidJobOfferSkillId_ReturnsNotFoundException()
+        public void Handle_InvalidJobOfferSkillId_ThrowsNotFoundException()
         {
             //Arrange
             var handler = new UpdateJobOfferSkillCommandHandler(_mapper, _mockLogger.Object, _mockJobOfferSkillRepository.Object);

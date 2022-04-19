@@ -25,7 +25,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
         }
 
         [Fact]
-        public async Task Handle_ValidJobOfferSkill_AddedToJobOfferSkillRepository()
+        public async Task Handle_ValidJobOfferSkill_ReturnsSpecyficType()
         {
             //Arrange     
             var handler = new DeleteJobOfferSkillCommandHandler(_mockLogger.Object, _mockJobOfferSkillRepository.Object);
@@ -40,7 +40,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
         }
 
         [Fact]
-        public void Handle_InvalidJobOfferSkillId_ReturnsNotFoundException()
+        public void Handle_InvalidJobOfferSkillId_ThrowsNotFoundException()
         {
             //Arrange
             var handler = new DeleteJobOfferSkillCommandHandler(_mockLogger.Object, _mockJobOfferSkillRepository.Object);
