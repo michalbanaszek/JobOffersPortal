@@ -67,7 +67,7 @@ namespace JobOffersPortal.API.Controllers
         /// <response code="200">Updates a item in the system</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Unauthorized</response>   
-        /// <response code="403">User own for this entity is diffrent</response>
+        /// <response code="403">User own for this entity is different</response>
         /// <response code="404">Not found item</response>    
         [HttpPut(ApiRoutes.JobOfferSkillRoute.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -91,7 +91,7 @@ namespace JobOffersPortal.API.Controllers
         /// <response code="204">Deletes a item in the system</response>
         /// <response code="400">Bad request</response>
         /// <response code="401">Unauthorized</response>   
-        /// <response code="403">User own for this entity is diffrent</response>
+        /// <response code="403">User own for this entity is different</response>
         /// <response code="404">Not found item</response>  
         [HttpDelete(ApiRoutes.JobOfferSkillRoute.Delete)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
