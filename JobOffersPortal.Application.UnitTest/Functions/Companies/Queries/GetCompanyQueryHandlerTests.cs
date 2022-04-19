@@ -47,7 +47,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Queries
         }
 
         [Fact]
-        public void Handle_InvalidCompanyId_ReturnsNotFoundException()
+        public void Handle_InvalidCompanyId_ThrowsNotFoundException()
         {
             //Arrange
             var handler = new GetCompanyDetailQueryHandler(_mockCompanyRepository.Object, _mapper, _mockLogger.Object);

@@ -71,7 +71,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
         }
 
         [Fact]
-        public void Handle_InvalidJobOfferRequirementId_ReturnsNotFoundException()
+        public void Handle_InvalidJobOfferRequirementId_ThrowsNotFoundException()
         {
             //Arrange
             var handler = new UpdateJobOfferRequirementCommandHandler(_mapper, _mockLogger.Object, _mockJobOfferRequirementRepository.Object);
