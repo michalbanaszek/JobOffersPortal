@@ -5,7 +5,6 @@ using JobOffersPortal.Infrastructure.Security.Options;
 using JobOffersPortal.Infrastructure.Security.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace JobOffersPortal.Infrastructure.Security.Services
 {
     public class IdentityService : IIdentityService
@@ -24,7 +22,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
         private readonly JwtOptions _jwtOptions;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IApplicationDbContext _context;
-        private readonly IFacebookAuthService _facebookAuthService;      
+        private readonly IFacebookAuthService _facebookAuthService;
 
         public IdentityService(
             UserManager<ApplicationUser> userManager,
@@ -37,7 +35,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
             _facebookAuthService = facebookAuthService;
-            _jwtOptions = jwtOptions;       
+            _jwtOptions = jwtOptions;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -81,7 +79,6 @@ namespace JobOffersPortal.Infrastructure.Security.Services
 
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                                         .AddSeconds(expiryDateUnix);
-
 
             if (expiryDateTimeUtc > DateTime.UtcNow)
             {
