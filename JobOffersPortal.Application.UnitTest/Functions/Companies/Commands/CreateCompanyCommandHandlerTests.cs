@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation.TestHelper;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Common.Mappings;
@@ -50,15 +49,29 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
             };
 
             //Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            await handler.Handle(command, CancellationToken.None);
 
-            var allCompanies = await _mockCompanyRepository.Object.GetAllAsync();
+            var allCompaniesAfterCount = (await _mockCompanyRepository.Object.GetAllAsync()).Count;
 
             //Assert
-            allCompanies.Count.ShouldBe(allCompaniesBeforeCount + 1);
+            allCompaniesAfterCount.ShouldBe(allCompaniesBeforeCount + 1);
+        }
 
-            result.Uri.ShouldNotBeNull();
+        [Fact]
+        public async Task Handle_ValidCompany_ReturnsSpecyficType()
+        {
+            //Arrange
+            var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockUriService.Object);
 
+            var command = new CreateCompanyCommand()
+            {
+                Name = "New Company",
+            };
+
+            //Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert
             result.ShouldBeOfType<CreateCompanyCommandResponse>();
         }
     }

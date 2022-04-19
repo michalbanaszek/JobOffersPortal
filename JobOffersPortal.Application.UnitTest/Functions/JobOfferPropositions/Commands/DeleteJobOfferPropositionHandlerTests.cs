@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
-using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOfferPropositions.Commands.DeleteJobOfferProposition;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
-using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -20,14 +18,12 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
     public class DeleteJobOfferPropositionHandlerTests
     {
         private readonly Mock<ILogger<DeleteJobOfferPropositionCommandHandler>> _logger;
-        private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;
-        private readonly Mock<ICurrentUserService> _mockCurrentUserService;
+        private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;     
         private readonly IMapper _mapper;
 
         public DeleteJobOfferPropositionHandlerTests()
         {
-            _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();
-            _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
+            _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();          
             _logger = new Mock<ILogger<DeleteJobOfferPropositionCommandHandler>>();
 
             var configurationProvider = new MapperConfiguration(cfg =>
@@ -39,7 +35,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
         }
 
         [Fact]
-        public async Task Handle_ValidJobOfferProposition_DeletedToJobOfferPropositionRepo()
+        public async Task Handle_ValidJobOfferProposition_ReturnsSpecyficType()
         {
             //Arrange
             var handler = new DeleteJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
@@ -65,7 +61,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

@@ -19,14 +19,12 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
     {
         private readonly Mock<ILogger<UpdateJobOfferPropositionCommandHandler>> _logger;
         private readonly Mock<IJobOfferPropositionRepository> _mockJobOfferPropositionRepository;
-        private readonly IMapper _mapper;
-        private readonly UpdateJobOfferPropositionCommandValidator _validator;
+        private readonly IMapper _mapper;     
 
         public UpdateJobOfferPropositionHandlerTests()
         {
             _mockJobOfferPropositionRepository = MockJobOfferPropositionRepository.GetJobOfferPropositionRepository();
-            _logger = new Mock<ILogger<UpdateJobOfferPropositionCommandHandler>>();
-            _validator = new UpdateJobOfferPropositionCommandValidator();
+            _logger = new Mock<ILogger<UpdateJobOfferPropositionCommandHandler>>();      
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
@@ -37,7 +35,28 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
         }
 
         [Fact]
-        public async Task Handle_ValidJobOfferProposition_UpdatedToJobOfferPropositionRepo()
+        public async Task Handle_ValidJobOfferProposition_UpdatedToJobOfferPropositionRepository()
+        {
+            //Arrange
+            var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
+
+            var command = new UpdateJobOfferPropositionCommand()
+            {
+                Id = "1",
+                Content = "Updated 1"
+            };
+
+            //Act
+            await handler.Handle(command, CancellationToken.None);
+
+            var entity = await _mockJobOfferPropositionRepository.Object.GetByIdAsync(command.Id);
+
+            //Assert
+            entity.Content.ShouldBe("Updated 1");
+        }
+
+        [Fact]
+        public async Task Handle_ValidJobOfferProposition_ReturnSpecyficType()
         {
             //Arrange
             var handler = new UpdateJobOfferPropositionCommandHandler(_mapper, _logger.Object, _mockJobOfferPropositionRepository.Object);
@@ -51,11 +70,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
             //Act
             var result = await handler.Handle(command, CancellationToken.None);
 
-            var entity = await _mockJobOfferPropositionRepository.Object.GetByIdAsync(command.Id);
-
             //Assert
-            entity.Content.ShouldBe("Updated 1");
-
             result.ShouldBeOfType<Unit>();
         }
 
@@ -71,7 +86,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

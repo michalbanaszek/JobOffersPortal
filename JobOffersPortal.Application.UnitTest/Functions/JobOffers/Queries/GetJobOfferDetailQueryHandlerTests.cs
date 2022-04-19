@@ -57,7 +57,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Queries
             Func<Task> func = () => handler.Handle(new GetJobOfferDetailQuery() { Id = "99" }, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

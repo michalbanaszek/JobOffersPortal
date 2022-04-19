@@ -21,16 +21,14 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
     {
         private readonly Mock<IJobOfferRepository> _mockJobOfferRepository;
         private readonly Mock<ICurrentUserService> _mockCurrentUserService;
-        private readonly Mock<ILogger<UpdateJobOfferCommandHandler>> _logger;
-        private readonly UpdateJobOfferCommandValidator _validator;
+        private readonly Mock<ILogger<UpdateJobOfferCommandHandler>> _logger;      
         private readonly IMapper _mapper;
 
         public UpdateJobOfferCommandHandlerTests()
         {
             _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
             _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
-            _logger = new Mock<ILogger<UpdateJobOfferCommandHandler>>();
-            _validator = new UpdateJobOfferCommandValidator(_mockJobOfferRepository.Object);
+            _logger = new Mock<ILogger<UpdateJobOfferCommandHandler>>();       
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
@@ -55,16 +53,35 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
             };
 
             //Act         
-            var result = await handler.Handle(command, CancellationToken.None);
+            await handler.Handle(command, CancellationToken.None);
 
             var entityUpdated = await _mockJobOfferRepository.Object.GetByIdAsync(command.Id);
 
             //Assert
-            result.ShouldBeOfType<Unit>();
-
             entityUpdated.Id.ShouldBe("1");
 
             entityUpdated.Position.ShouldBe("PositionTest");
+        }
+
+        [Fact]
+        public async Task Handle_ValidJobOffer_ReturnsSpecyficType()
+        {
+            //Arrange
+            var handler = new UpdateJobOfferCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
+
+            var command = new UpdateJobOfferCommand()
+            {
+                Id = "1",
+                Position = "PositionTest",
+                IsAvailable = true,
+                Salary = "1000"
+            };
+
+            //Act         
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert
+            result.ShouldBeOfType<Unit>();
         }
 
         [Fact]
@@ -79,7 +96,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
 
         [Fact]
@@ -96,7 +113,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<ForbiddenAccessException>(() => func.Invoke());
+            func.ShouldThrowAsync<ForbiddenAccessException>();
         }
     }
 }

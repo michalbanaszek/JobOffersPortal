@@ -56,7 +56,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Qu
             Func<Task> func = () => handler.Handle(new GetJobOfferRequirementListQuery() { JobOfferId = "99" }, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

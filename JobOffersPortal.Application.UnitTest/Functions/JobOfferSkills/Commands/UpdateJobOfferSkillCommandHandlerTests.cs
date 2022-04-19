@@ -35,7 +35,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
         }
 
         [Fact]
-        public async Task Handle_ValidJobOfferSkill_AddedToJobOfferSkillRepository()
+        public async Task Handle_ValidJobOfferSkill_ReturnsSpecyficType()
         {
             //Arrange     
             var handler = new UpdateJobOfferSkillCommandHandler(_mapper, _mockLogger.Object, _mockJobOfferSkillRepository.Object);
@@ -61,7 +61,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

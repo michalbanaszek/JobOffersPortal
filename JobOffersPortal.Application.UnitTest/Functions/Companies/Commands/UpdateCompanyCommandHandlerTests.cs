@@ -17,14 +17,14 @@ using Xunit;
 
 namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
 {
-    public class UpdateCompanyHandlerTests
+    public class UpdateCompanyCommandHandlerTests
     {
         private readonly Mock<ICompanyRepository> _mockCompanyRepository;
         private readonly Mock<ICurrentUserService> _mockCurrentUserService;
         private readonly Mock<ILogger<UpdateCompanyCommandHandler>> _logger;
         private readonly IMapper _mapper;
 
-        public UpdateCompanyHandlerTests()
+        public UpdateCompanyCommandHandlerTests()
         {
             _mockCompanyRepository = MockCompanyRepository.GetCompanyRepository();
             _mockCurrentUserService = MockCurrentUserService.GetCurrentUserService();
@@ -47,7 +47,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
             var command = new UpdateCompanyCommand() { Id = "1", Name = "UpdateCompany" };
 
             //Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            await handler.Handle(command, CancellationToken.None);
 
             var entityUpdated = await _mockCompanyRepository.Object.GetByIdAsync(command.Id);
 
@@ -55,7 +55,20 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
             entityUpdated.Id.ShouldBe("1");
 
             entityUpdated.Name.ShouldBe("UpdateCompany");
+        }
 
+        [Fact]
+        public async Task Handle_ValidCompany_ReturnsSpecyficType()
+        {
+            //Arrange
+            var handler = new UpdateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockCurrentUserService.Object);
+
+            var command = new UpdateCompanyCommand() { Id = "1", Name = "UpdateCompany" };
+
+            //Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert   
             result.ShouldBeOfType<Unit>();
         }
 
@@ -71,7 +84,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
 
         [Fact]
@@ -88,7 +101,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<ForbiddenAccessException>(() => func.Invoke());
+            func.ShouldThrowAsync<ForbiddenAccessException>();
         }
     }
 }

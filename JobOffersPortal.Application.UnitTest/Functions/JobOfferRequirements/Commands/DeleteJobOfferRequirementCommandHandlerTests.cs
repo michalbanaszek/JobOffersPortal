@@ -1,8 +1,6 @@
 ﻿using Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
-using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
-using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
 using MediatR;
@@ -17,8 +15,7 @@ using Xunit;
 namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Commands
 {
     public class DeleteJobOfferRequirementCommandHandlerTests
-    {
-        private readonly IMapper _mapper;     
+    {        
         private readonly Mock<IJobOfferRequirementRepository> _mockJobOfferRequirementRepository;      
         private readonly Mock<ILogger<DeleteJobOfferRequirementCommandHandler>> _mockLogger;
 
@@ -26,17 +23,10 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
         {      
             _mockJobOfferRequirementRepository = MockJobOfferRequirementRepository.GetJobOfferRequirementRepository();          
             _mockLogger = new Mock<ILogger<DeleteJobOfferRequirementCommandHandler>>();
-
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<AutoMapperProfile>();
-            });
-
-            _mapper = configurationProvider.CreateMapper();
         }
 
         [Fact]
-        public async Task Handle_ValidJobOfferRequirement_AddedToJobOfferRequirementRepository()
+        public async Task Handle_ValidJobOfferRequirement_ReturnsSpecyficType()
         {
             //Arrange     
             var handler = new DeleteJobOfferRequirementCommandHandler(_mockLogger.Object, _mockJobOfferRequirementRepository.Object);
@@ -62,7 +52,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using JobOffersPortal.Application.Common.Exceptions;
+﻿using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
-using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOfferSkills.Command.DeleteJobOfferSkill;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
 using MediatR;
@@ -16,8 +14,7 @@ using Xunit;
 namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
 {
     public class DeleteJobOfferSkillCommandHandlerTests
-    {
-        private readonly IMapper _mapper;
+    {     
         private readonly Mock<IJobOfferSkillRepository> _mockJobOfferSkillRepository;
         private readonly Mock<ILogger<DeleteJobOfferSkillCommandHandler>> _mockLogger;
 
@@ -25,13 +22,6 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
         {
             _mockJobOfferSkillRepository = MockJobOfferSkillRepository.GetJobOfferSkillRepository();
             _mockLogger = new Mock<ILogger<DeleteJobOfferSkillCommandHandler>>();
-
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<AutoMapperProfile>();
-            });
-
-            _mapper = configurationProvider.CreateMapper();
         }
 
         [Fact]
@@ -61,7 +51,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

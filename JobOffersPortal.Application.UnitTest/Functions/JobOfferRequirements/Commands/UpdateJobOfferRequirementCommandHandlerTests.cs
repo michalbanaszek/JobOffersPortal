@@ -35,7 +35,28 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
         }
 
         [Fact]
-        public async Task Handle_ValidJobOfferRequirement_AddedToJobOfferRequirementRepository()
+        public async Task Handle_ValidJobOfferRequirement_UpdatedToJobOfferRequirementRepository()
+        {
+            //Arrange
+            var handler = new UpdateJobOfferRequirementCommandHandler(_mapper, _mockLogger.Object, _mockJobOfferRequirementRepository.Object);
+
+            var command = new UpdateJobOfferRequirementCommand()
+            {
+                Id = "1",
+                Content = "Updated 1"
+            };
+
+            //Act
+            await handler.Handle(command, CancellationToken.None);
+
+            var entity = await _mockJobOfferRequirementRepository.Object.GetByIdAsync(command.Id);
+
+            //Assert
+            entity.Content.ShouldBe("Updated 1");
+        }
+
+        [Fact]
+        public async Task Handle_ValidJobOfferRequirement_ReturnsSpecyficType()
         {
             //Arrange     
             var handler = new UpdateJobOfferRequirementCommandHandler(_mapper, _mockLogger.Object, _mockJobOfferRequirementRepository.Object);
@@ -61,7 +82,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

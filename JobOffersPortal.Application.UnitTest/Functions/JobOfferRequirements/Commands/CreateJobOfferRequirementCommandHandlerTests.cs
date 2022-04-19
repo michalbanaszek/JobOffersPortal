@@ -52,8 +52,6 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
 
             //Assert
             result.ShouldBeOfType<CreateJobOfferRequirementCommandResponse>();
-
-            result.Uri.ShouldNotBeNull();
         }
 
         [Fact]
@@ -68,7 +66,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }

@@ -54,15 +54,30 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
             var itemsCountBefore = (await _mockJobOfferPropositionRepository.Object.GetAllAsync()).Count;
 
             //Act          
-            var result = await handler.Handle(command, CancellationToken.None);
+            await handler.Handle(command, CancellationToken.None);
 
             var itemsCountAfter = (await _mockJobOfferPropositionRepository.Object.GetAllAsync()).Count;
 
             //Assert   
-            itemsCountBefore.ShouldNotBe(itemsCountAfter);
+            itemsCountAfter.ShouldBe(itemsCountBefore + 1);
+        }
 
-            result.Uri.ShouldNotBeNull();
+        [Fact]
+        public async Task Handle_ValidJobOfferProposition_ReturnsSpecyficType()
+        {
+            //Arrange
+            var handler = new CreateJobOfferPropositionCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockJobOfferPropositionRepository.Object, _mockUriService.Object);
 
+            var command = new CreateJobOfferPropositionCommand()
+            {
+                Content = "JobOfferProposition 1",
+                JobOfferId = "1"
+            };
+
+            //Act          
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            //Assert   
             result.ShouldBeOfType<CreateJobOfferPropositionCommandResponse>();
         }
 
@@ -79,7 +94,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
             Func<Task> func = () => handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.ThrowsAsync<NotFoundException>(() => func.Invoke());
+            func.ShouldThrowAsync<NotFoundException>();
         }
     }
 }
