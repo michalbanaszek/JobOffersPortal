@@ -49,7 +49,7 @@ namespace JobOffersPortal.Persistance.EF.Repositories
                                                                   .ThenInclude(x => x.Requirements)
                                                                .Include(x => x.JobOffers)
                                                                   .ThenInclude(x => x.Skills)
-                                                               .SingleOrDefaultAsync(x => x.Id == id);
+                                                               .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> IsNameAlreadyExistAsync(string name)
