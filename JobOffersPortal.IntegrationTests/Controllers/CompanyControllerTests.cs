@@ -26,7 +26,6 @@ namespace JobOffersPortal.IntegrationTests.Controllers
 
         public CompanyControllerTests(WebApplicationFactory<Startup> factory)
         {
-            //Arrange  
             var application = factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
@@ -87,6 +86,9 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         [Fact]
         public async void Get_InvalidId_ReturnsNotFoundStatus()
         {
+            //Arrange
+            string id = "99";
+
             //Act
             var response = await _client.GetAsync(ApiRoutes.CompanyRoute.Get.Replace("{id}", "99"));
 
