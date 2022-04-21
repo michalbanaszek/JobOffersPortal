@@ -39,7 +39,7 @@ namespace JobOffersPortal.API
 
             if (env.IsDevelopment())
             {
-                seeder.Seed().Wait();
+                seeder.Seed();
 
                 app.UseDeveloperExceptionPage();                      
                 app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
