@@ -222,6 +222,13 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                     Name = "Company3",
                     CreatedBy = "1",
                     Created = DateTime.Now
+                },
+                   new Company()
+                {
+                    Id = "4",
+                    Name = "Company4",
+                    CreatedBy = "2",
+                    Created = DateTime.Now
                 }
             };
 
