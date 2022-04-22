@@ -100,7 +100,7 @@ namespace JobOffersPortal.IntegrationTests.Controllers
             //Arrange
             var command = new CreateCompanyCommand()
             {
-                Name = "NewCompany"
+                Name = "NewCompany5"
             };
 
             var json = JsonConvert.SerializeObject(command);
@@ -136,7 +136,7 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         public async Task Update_ValidModel_ReturnsOkStatus()
         {
             //Arrange
-            var command = new UpdateCompanyCommand() { Id = "3", Name = "UpdateCompany" };
+            var command = new UpdateCompanyCommand() { Id = "3", Name = "UpdateCompany1" };
 
             var json = JsonConvert.SerializeObject(command);
 
@@ -153,7 +153,7 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         public async Task Update_InvalidUserOwn_ReturnsForbiddenStatus()
         {
             //Arrange
-            var command = new UpdateCompanyCommand() { Id = "4", Name = "UpdateCompany" };
+            var command = new UpdateCompanyCommand() { Id = "2", Name = "UpdateCompany2" };
 
             var json = JsonConvert.SerializeObject(command);
 
@@ -167,27 +167,10 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         }
 
         [Fact]
-        public async Task Update_InvalidIdFromRoute_ReturnsBadRequestStatus()
-        {
-            //Arrange
-            var command = new UpdateCompanyCommand() { Id = "99", Name = "UpdateCompany" };
-
-            var json = JsonConvert.SerializeObject(command);
-
-            var httpContent = new StringContent(json, Encoding.UTF8, JSON_CONTENT_TYPE);
-
-            //Act
-            var response = await _client.PutAsync(ApiRoutes.CompanyRoute.Update.Replace("{id}", "98"), httpContent);
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        }
-
-        [Fact]
         public async Task Update_InvalidId_ReturnsNotFoundStatus()
         {
             //Assert
-            var command = new UpdateCompanyCommand { Id = "99", Name = "UpdateCompany" };
+            var command = new UpdateCompanyCommand { Id = "99", Name = "UpdateCompany4" };
 
             var json = JsonConvert.SerializeObject(command);
 
