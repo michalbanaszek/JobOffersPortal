@@ -153,7 +153,7 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         public async Task Update_InvalidUserOwn_ReturnsForbiddenStatus()
         {
             //Arrange
-            var command = new UpdateCompanyCommand() { Id = "2", Name = "UpdateCompany" };
+            var command = new UpdateCompanyCommand() { Id = "4", Name = "UpdateCompany" };
 
             var json = JsonConvert.SerializeObject(command);
 
