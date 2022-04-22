@@ -90,7 +90,7 @@ namespace JobOffersPortal.IntegrationTests.Controllers
             string id = "99";
 
             //Act
-            var response = await _client.GetAsync(ApiRoutes.CompanyRoute.Get.Replace("{id}", "99"));
+            var response = await _client.GetAsync(ApiRoutes.CompanyRoute.Get.Replace("{id}", id));
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
