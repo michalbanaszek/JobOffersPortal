@@ -1,4 +1,5 @@
 ﻿using JobOffersPortal.Application.Common.Exceptions;
+using JobOffersPortal.Application.Common.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
@@ -30,7 +31,13 @@ namespace JobOffersPortal.API.Middleware
 
                 context.Response.ContentType = JsonContentType;
 
-                await context.Response.WriteAsync(exception.Message);
+                var errorValidationResponse = new ErrorValidationResponse()
+                {
+                    StatusCode = 400,
+                    Errors = exception.Errors,
+                }.ToString();
+
+                await context.Response.WriteAsync(errorValidationResponse);
             }
             catch (UnauthorizedAccessException exception)
             {
@@ -40,7 +47,13 @@ namespace JobOffersPortal.API.Middleware
 
                 context.Response.ContentType = JsonContentType;
 
-                await context.Response.WriteAsync(exception.Message);
+                var errorModelResponse = new ErrorModelResponse()
+                {
+                    StatusCode = 401,
+                    Message = exception.Message,
+                }.ToString();
+
+                await context.Response.WriteAsync(errorModelResponse);
             }
             catch (ForbiddenAccessException exception)
             {
@@ -50,7 +63,13 @@ namespace JobOffersPortal.API.Middleware
 
                 context.Response.ContentType = JsonContentType;
 
-                await context.Response.WriteAsync(exception.Message);
+                var errorModelResponse = new ErrorModelResponse()
+                {
+                    StatusCode = 403,
+                    Message = exception.Message,
+                }.ToString();
+
+                await context.Response.WriteAsync(errorModelResponse);
             }
             catch (NotFoundException exception)
             {
@@ -60,8 +79,14 @@ namespace JobOffersPortal.API.Middleware
 
                 context.Response.ContentType = JsonContentType;
 
-                await context.Response.WriteAsync(exception.Message);
-            }     
+                var errorModelResponse = new ErrorModelResponse()
+                {
+                    StatusCode = 404,
+                    Message = exception.Message,
+                }.ToString();
+
+                await context.Response.WriteAsync(errorModelResponse);
+            }
             catch (Exception exception)
             {
                 _logger.LogError(exception, exception.Message);
@@ -70,7 +95,13 @@ namespace JobOffersPortal.API.Middleware
 
                 context.Response.ContentType = JsonContentType;
 
-                await context.Response.WriteAsync(exception.Message);
+                var errorModelResponse = new ErrorModelResponse()
+                {
+                    StatusCode = 500,
+                    Message = "An error has occurred",
+                }.ToString();
+
+                await context.Response.WriteAsync(errorModelResponse);
             }
         }
     }

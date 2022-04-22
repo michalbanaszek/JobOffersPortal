@@ -5,7 +5,7 @@ namespace JobOffersPortal.Application.Common.Models
 {
     public class ErrorValidationResponse
     {
-        public int Status { get; set; }
+        public int StatusCode { get; set; }
         public IDictionary<string, string[]> Errors { get; set; }
 
         public override string ToString()
