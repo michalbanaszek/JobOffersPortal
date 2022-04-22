@@ -70,18 +70,5 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Validators
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.Position);
         }
-
-        [Fact]
-        public void Should_Have_Error_When_Position_Is_Already_Exists()
-        {
-            //Arrange 
-            var command = new UpdateJobOfferCommand() { Position = "Position1" };
-
-            //Act
-            var result = _validator.TestValidate(command);
-
-            //Assert
-            result.ShouldHaveValidationErrorFor(x => x.Position);
-        }
     }
 }
