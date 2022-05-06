@@ -8,12 +8,11 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Company> builder)
         {
-            builder.Property(p => p.Id)
-                   .ValueGeneratedOnAdd();
+            builder.Property(c => c.Id).ValueGeneratedOnAdd();
+            
+            builder.Property(c => c.Name).IsRequired().HasMaxLength(30);
 
-            builder.Property(x => x.Name)
-                   .IsRequired()
-                   .HasMaxLength(30);
+            builder.HasMany<JobOffer>(c => c.JobOffers).WithOne(j => j.Company).HasForeignKey(j => j.CompanyId);
         }
     }
 }

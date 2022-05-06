@@ -8,22 +8,17 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
-            builder.HasKey(x => x.Token);
+            builder.HasKey(r => r.Token);
 
-            builder.Property(x => x.Token)
-                .ValueGeneratedOnAdd();
+            builder.Property(r => r.Token).ValueGeneratedOnAdd();
 
-            builder.Property(p => p.JwtId)
-                .IsRequired();
+            builder.Property(r => r.JwtId).IsRequired();
 
-            builder.Property(x => x.CreationDate)
-                .IsRequired();
+            builder.Property(r => r.CreationDate).IsRequired();
 
-            builder.Property(x => x.Used)
-                .IsRequired();
+            builder.Property(r => r.Used).IsRequired();
 
-            builder.Property(x => x.ExpiryDate)
-                .IsRequired();
+            builder.Property(r => r.ExpiryDate).IsRequired();
         }
     }
 }

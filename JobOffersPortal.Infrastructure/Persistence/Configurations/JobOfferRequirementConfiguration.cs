@@ -8,12 +8,11 @@ namespace JobOffersPortal.Persistance.EF.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<JobOfferRequirement> builder)
         {
-            builder.Property(x => x.Id)
-               .ValueGeneratedOnAdd();
+            builder.Property(jr => jr.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.Content)
-                .IsRequired()
-                .HasMaxLength(50);
+            builder.Property(jr => jr.Content).IsRequired().HasMaxLength(50);
+
+            builder.HasOne(jr => jr.JobOffer).WithMany(j => j.Requirements).HasForeignKey(jr => jr.JobOfferId);
         }
     }
 }
