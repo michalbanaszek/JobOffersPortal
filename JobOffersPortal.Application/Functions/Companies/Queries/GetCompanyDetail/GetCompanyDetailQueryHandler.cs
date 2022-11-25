@@ -26,7 +26,7 @@ namespace JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDeta
         {
             var entity = await _companyRepository.GetByIdIncludeEntitiesAsync(request.Id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
 

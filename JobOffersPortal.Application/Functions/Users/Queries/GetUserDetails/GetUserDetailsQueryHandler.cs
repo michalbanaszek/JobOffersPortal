@@ -22,7 +22,7 @@ namespace JobOffersPortal.Application.Functions.Users.Queries.GetUserDetails
         {
             var userResult = await _userService.GetUserByIdAsync(request.Id);
 
-            if (userResult == null)
+            if (userResult is null)
             {
                 _logger.LogWarning("User Id not found from database. Request ID: {0}", request.Id);
 

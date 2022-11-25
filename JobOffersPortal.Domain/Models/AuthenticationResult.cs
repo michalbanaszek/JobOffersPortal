@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JobOffersPortal.Domain.Entities
+namespace JobOffersPortal.Domain.Models
 {
     public class AuthenticationResult
     {

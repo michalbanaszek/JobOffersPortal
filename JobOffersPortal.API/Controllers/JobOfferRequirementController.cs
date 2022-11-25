@@ -1,5 +1,4 @@
-﻿using Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
-using Application.JobOfferRequirements.Queries.GetJobOfferRequirement;
+﻿using Application.JobOfferRequirements.Queries.GetJobOfferRequirement;
 using JobOffersPortal.API.Filters.Cache;
 using JobOffersPortal.Application;
 using JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.CreateJobOfferRequirement;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
 
 namespace JobOffersPortal.API.Controllers
 {

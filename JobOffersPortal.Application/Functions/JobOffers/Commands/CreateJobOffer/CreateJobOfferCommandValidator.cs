@@ -1,5 +1,4 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
-using FluentValidation;
+﻿using FluentValidation;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using System;
 using System.Threading;
@@ -18,8 +17,6 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
                 .NotNull();
 
             RuleFor(x => x.Position)
-                .MustAsync(IsPositionAlreadyExist)
-                .WithMessage("JobOffer with the same Position already exist.")
                 .NotEmpty()
                 .NotNull()
                 .MinimumLength(2).MaximumLength(30)
@@ -41,13 +38,6 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
                 .NotNull();
 
             _jobOfferRepository = jobOfferRepository;
-        }
-
-        private async Task<bool> IsPositionAlreadyExist(string position, CancellationToken cancellationToken)
-        {
-            var check = await _jobOfferRepository.IsPositionAlreadyExistAsync(position);
-
-            return !check;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
-using JobOffersPortal.Application.Common.Exceptions;
+﻿using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;

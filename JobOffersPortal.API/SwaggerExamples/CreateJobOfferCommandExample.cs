@@ -1,4 +1,4 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
+﻿using JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace JobOffersPortal.API.SwaggerExamples

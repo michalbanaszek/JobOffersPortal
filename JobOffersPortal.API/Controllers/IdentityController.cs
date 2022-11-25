@@ -2,7 +2,7 @@
 using JobOffersPortal.API.Metrics;
 using JobOffersPortal.Application;
 using JobOffersPortal.Application.Security.Services;
-using JobOffersPortal.Domain.Entities;
+using JobOffersPortal.Domain.Models;
 using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Requests;
 using JobOffersPortal.Infrastructure.Security.Contracts.Identity.Responses;
 using JobOffersPortal.Infrastructure.Security.Contracts.OAuth.Facebook.Requests;

@@ -1,9 +1,6 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
-using AutoMapper;
-using JobOffersPortal.Application.Common.Exceptions;
+﻿using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
-using JobOffersPortal.Application.Common.Mappings;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
 using JobOffersPortal.Application.UnitTest.Mocks.MockServices;
@@ -23,7 +20,6 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
         private readonly Mock<ICompanyRepository> _mockCompanyRepository;
         private readonly Mock<IUriService> _mockUriService;
         private readonly Mock<ILogger<CreateJobOfferCommandHandler>> _logger;
-        private readonly IMapper _mapper;
 
         public CreateJobOfferCommandHandlerTests()
         {
@@ -31,20 +27,13 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
             _mockJobOfferRepository = MockJobOfferRepository.GetJobOffersRepository();
             _mockUriService = MockUriService.GetUriService();
             _logger = new Mock<ILogger<CreateJobOfferCommandHandler>>();
-
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<AutoMapperProfile>();
-            });
-
-            _mapper = configurationProvider.CreateMapper();
         }
 
         [Fact]
         public async Task Handle_ValidJobOffer_AddedToJobOfferRepository()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockCompanyRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferCommandHandler(_logger.Object, _mockJobOfferRepository.Object, _mockCompanyRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {
@@ -73,7 +62,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
         public async Task Handle_ValidJobOffer_ReturnSpecyficType()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockCompanyRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferCommandHandler(_logger.Object, _mockJobOfferRepository.Object, _mockCompanyRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand()
             {
@@ -98,7 +87,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Commands
         public void Handle_InvalidCompanyId_ThrowsNotFoundException()
         {
             //Arrange
-            var handler = new CreateJobOfferCommandHandler(_mapper, _logger.Object, _mockJobOfferRepository.Object, _mockCompanyRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferCommandHandler(_logger.Object, _mockJobOfferRepository.Object, _mockCompanyRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferCommand() { CompanyId = "99" };
 

@@ -31,8 +31,7 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
             mockCompanyRepository.Setup(repo => repo.AddAsync(It.IsAny<Company>()))
                                                     .ReturnsAsync((Company company) =>
             {
-                company.Id = (companies.Count + 1).ToString();
-                companies.Add(company);
+                companies.Add(new Company((companies.Count + 1).ToString(), "newCompany"));
                 return company;
             });
 
@@ -69,9 +68,9 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
         {
             return new List<Company>()
             {
-                new Company() { Id = "1", Name = "CompanyName1", CreatedBy = "user1" },
-                new Company() { Id = "2", Name = "CompanyName2", CreatedBy = "user2" },
-                new Company() { Id = "3", Name = "CompanyName3", CreatedBy = "user3"  },
+                new Company("1", "CompanyName1") {CreatedBy = "user1"},
+                new Company("2", "CompanyName2") {CreatedBy = "user2"},
+                new Company("3", "CompanyName3") {CreatedBy = "user3"},
              };
         }
     }

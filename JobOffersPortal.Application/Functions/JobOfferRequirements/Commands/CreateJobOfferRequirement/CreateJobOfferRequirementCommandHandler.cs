@@ -12,16 +12,14 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
 {
     public class CreateJobOfferRequirementCommandHandler : IRequestHandler<CreateJobOfferRequirementCommand, CreateJobOfferRequirementCommandResponse>
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferRequirementCommandHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
         private readonly IJobOfferRequirementRepository _jobOfferRequirementRepository;
         private readonly IUriService _uriService;
 
-        public CreateJobOfferRequirementCommandHandler(IJobOfferRepository jobOfferRepository, IMapper mapper, ILogger<CreateJobOfferRequirementCommandHandler> logger, IJobOfferRequirementRepository jobOfferRequirementRepository, IUriService uriService)
+        public CreateJobOfferRequirementCommandHandler(IJobOfferRepository jobOfferRepository, ILogger<CreateJobOfferRequirementCommandHandler> logger, IJobOfferRequirementRepository jobOfferRequirementRepository, IUriService uriService)
         {
             _jobOfferRepository = jobOfferRepository;
-            _mapper = mapper;
             _logger = logger;
             _jobOfferRequirementRepository = jobOfferRequirementRepository;
             _uriService = uriService;
@@ -29,27 +27,21 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Cr
 
         public async Task<CreateJobOfferRequirementCommandResponse> Handle(CreateJobOfferRequirementCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
+            var jobOffer = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
 
-            if (entity == null)
+            if (jobOffer is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.JobOfferId);
 
                 throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
             }
+            var requirement = jobOffer.AddRequirement(request.Content, request.JobOfferId);
 
-            JobOfferRequirement jobOfferRequirement = new JobOfferRequirement()
-            {               
-                Content = request.Content
-            };
+            await _jobOfferRequirementRepository.AddAsync(requirement);
 
-            entity.Requirements.Add(jobOfferRequirement);
+            _logger.LogInformation("Created CreateJobOfferRequirement for JobOffer Id: {0}, Name: {1}", jobOffer.Id, jobOffer.Position);
 
-            await _jobOfferRequirementRepository.AddAsync(jobOfferRequirement);
-
-            _logger.LogInformation("Created CreateJobOfferRequirement for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
-
-            var uri = _uriService.Get(jobOfferRequirement.Id, nameof(JobOfferRequirement));
+            var uri = _uriService.Get(requirement.Id, nameof(JobOfferRequirement));
 
             return new CreateJobOfferRequirementCommandResponse(uri);
         }

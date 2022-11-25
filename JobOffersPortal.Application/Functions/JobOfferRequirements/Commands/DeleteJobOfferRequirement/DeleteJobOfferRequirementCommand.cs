@@ -1,9 +1,8 @@
-﻿using JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
-using MediatR;
+﻿using MediatR;
 
-namespace Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement
+namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.DeleteJobOfferRequirement
 {
-    public class DeleteJobOfferRequirementCommand : IRequest<Unit>
+    public sealed class DeleteJobOfferRequirementCommand : IRequest<Unit>
     {
         public string Id { get; set; }
     }

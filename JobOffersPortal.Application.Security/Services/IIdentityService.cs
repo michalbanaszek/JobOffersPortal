@@ -1,4 +1,4 @@
-﻿using JobOffersPortal.Domain.Entities;
+﻿using JobOffersPortal.Domain.Models;
 using System.Threading.Tasks;
 
 namespace JobOffersPortal.Application.Security.Services

@@ -1,5 +1,4 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
-using AutoMapper;
+﻿using AutoMapper;
 using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
@@ -19,9 +18,8 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
         private readonly ILogger<CreateJobOfferCommandHandler> _logger;
         private readonly IUriService _uriService;
 
-        public CreateJobOfferCommandHandler(IMapper mapper, ILogger<CreateJobOfferCommandHandler> logger, IJobOfferRepository jobOfferRepository, ICompanyRepository companyRepository, IUriService uriJobOfferService)
+        public CreateJobOfferCommandHandler(ILogger<CreateJobOfferCommandHandler> logger, IJobOfferRepository jobOfferRepository, ICompanyRepository companyRepository, IUriService uriJobOfferService)
         {
-            _mapper = mapper;
             _logger = logger;
             _jobOfferRepository = jobOfferRepository;
             _uriService = uriJobOfferService;
@@ -32,20 +30,20 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffe
         {
             var company = await _companyRepository.GetByIdAsync(request.CompanyId);
 
-            if (company == null)
+            if (company is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.CompanyId);
 
                 throw new NotFoundException(nameof(Company), request.CompanyId);
             }
 
-            var entity = _mapper.Map<JobOffer>(request);
+            var jobOffer = company.AddJobOffer(request.CompanyId, request.Position, request.Salary, request.Date, request.IsAvailable);
 
-            await _jobOfferRepository.AddAsync(entity);
+            await _jobOfferRepository.AddAsync(jobOffer);
 
-            _logger.LogInformation("Created JobOffer Id: {0}", entity.Id);
+            _logger.LogInformation("Created JobOffer Id: {0}", jobOffer.Id);
 
-            var uri = _uriService.Get(entity.Id, nameof(JobOffer));
+            var uri = _uriService.Get(jobOffer.Id, nameof(JobOffer));
 
             return new CreateJobOfferCommandResponse(uri);
         }

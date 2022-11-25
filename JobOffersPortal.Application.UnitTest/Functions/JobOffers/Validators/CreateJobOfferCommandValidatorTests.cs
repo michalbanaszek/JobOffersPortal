@@ -1,5 +1,4 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer;
 using JobOffersPortal.Application.UnitTest.Mocks.MockRepositories;
@@ -64,19 +63,6 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOffers.Validators
         {
             //Arrange 
             var command = new CreateJobOfferCommand() { Position = "Test/" };
-
-            //Act
-            var result = _validator.TestValidate(command);
-
-            //Assert
-            result.ShouldHaveValidationErrorFor(x => x.Position);
-        }
-
-        [Fact]
-        public void Should_Have_Error_When_Position_Is_Already_Exists()
-        {
-            //Arrange 
-            var command = new CreateJobOfferCommand() { Position = "Position1" };
 
             //Act
             var result = _validator.TestValidate(command);

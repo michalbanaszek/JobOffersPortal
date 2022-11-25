@@ -43,7 +43,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
         public async Task Handle_ValidJobOfferRequirement_AddedToJobOfferRequirementRepository()
         {
             //Arrange     
-            var handler = new CreateJobOfferRequirementCommandHandler(_mockJobOfferRepository.Object, _mapper, _mockLogger.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferRequirementCommandHandler(_mockJobOfferRepository.Object, _mockLogger.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferRequirementCommand() { JobOfferId = "1", Content = "Test" };
 
@@ -58,7 +58,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferRequirements.Co
         public void Handle_InvalidJobOfferRequirementId_ThrowsNotFoundException()
         {
             //Arrange
-            var handler = new CreateJobOfferRequirementCommandHandler(_mockJobOfferRepository.Object, _mapper, _mockLogger.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferRequirementCommandHandler(_mockJobOfferRepository.Object, _mockLogger.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferRequirementCommand() { JobOfferId = "99" };
 

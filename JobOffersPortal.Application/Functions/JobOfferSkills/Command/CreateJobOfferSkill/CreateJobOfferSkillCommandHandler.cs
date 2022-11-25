@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using JobOffersPortal.Application.Common.Exceptions;
+﻿using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,15 +11,13 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
 {
     public class CreateJobOfferSkillCommandHandler : IRequestHandler<CreateJobOfferSkillCommand, CreateJobOfferSkillCommandResponse>
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<CreateJobOfferSkillCommandHandler> _logger;
         private readonly IJobOfferRepository _jobOfferRepository;
         private readonly IJobOfferSkillRepository _jobOfferSkillRepository;
         private readonly IUriService _uriService;
 
-        public CreateJobOfferSkillCommandHandler(IMapper mapper, ILogger<CreateJobOfferSkillCommandHandler> logger, IJobOfferRepository jobOfferRepository, IJobOfferSkillRepository jobOfferSkillRepository, IUriService uriService)
+        public CreateJobOfferSkillCommandHandler(ILogger<CreateJobOfferSkillCommandHandler> logger, IJobOfferRepository jobOfferRepository, IJobOfferSkillRepository jobOfferSkillRepository, IUriService uriService)
         {
-            _mapper = mapper;
             _logger = logger;
             _jobOfferRepository = jobOfferRepository;
             _jobOfferSkillRepository = jobOfferSkillRepository;
@@ -30,25 +26,20 @@ namespace JobOffersPortal.Application.Functions.JobOfferSkills.Command.CreateJob
 
         public async Task<CreateJobOfferSkillCommandResponse> Handle(CreateJobOfferSkillCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
+            var jobOffer = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
 
-            if (entity == null)
+            if (jobOffer is null)
             {
                 throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
             }
 
-            JobOfferSkill jobOfferSkill = new JobOfferSkill()
-            {    
-                Content = request.Content
-            };
+            var skill = jobOffer.AddSkill(request.Content, request.JobOfferId);
 
-            entity.Skills.Add(jobOfferSkill);
+            await _jobOfferSkillRepository.AddAsync(skill);
 
-            await _jobOfferSkillRepository.AddAsync(jobOfferSkill);
+            _logger.LogInformation("Created JobOfferSkill for JobOffer Id: {0}, Name: {1}", jobOffer.Id, jobOffer.Position);
 
-            _logger.LogInformation("Created JobOfferSkill for JobOffer Id: {0}, Name: {1}", entity.Id, entity.Position);
-
-            var uri = _uriService.Get(jobOfferSkill.Id, nameof(JobOfferSkill));
+            var uri = _uriService.Get(skill.Id, nameof(JobOfferSkill));
 
             return new CreateJobOfferSkillCommandResponse(uri);
         }

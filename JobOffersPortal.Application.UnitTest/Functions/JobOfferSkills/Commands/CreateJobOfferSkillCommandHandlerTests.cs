@@ -43,7 +43,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
         public async Task Handle_ValidJobOfferSkill_ReturnsSpecyficType()
         {
             //Arrange     
-            var handler = new CreateJobOfferSkillCommandHandler(_mapper, _mockLogger.Object, _mockJobOfferRepository.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferSkillCommandHandler(_mockLogger.Object, _mockJobOfferRepository.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferSkillCommand() { JobOfferId = "1", Content = "Test" };
 
@@ -58,7 +58,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferSkills.Commands
         public void Handle_InvalidJobOfferSkillId_ThrowsNotFoundException()
         {
             //Arrange
-            var handler = new CreateJobOfferSkillCommandHandler(_mapper, _mockLogger.Object, _mockJobOfferRepository.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferSkillCommandHandler(_mockLogger.Object, _mockJobOfferRepository.Object, _mockJobOfferRequirementRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferSkillCommand() { JobOfferId = "99" };
 

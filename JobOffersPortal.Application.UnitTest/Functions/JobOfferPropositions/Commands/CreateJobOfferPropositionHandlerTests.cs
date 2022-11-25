@@ -43,7 +43,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
         public async Task Handle_ValidJobOfferProposition_AddedToJobOfferPropositionRepository()
         {
             //Arrange
-            var handler = new CreateJobOfferPropositionCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockJobOfferPropositionRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferPropositionCommandHandler(_mockJobOfferRepository.Object, _logger.Object, _mockJobOfferPropositionRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferPropositionCommand()
             {
@@ -66,7 +66,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
         public async Task Handle_ValidJobOfferProposition_ReturnsSpecyficType()
         {
             //Arrange
-            var handler = new CreateJobOfferPropositionCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockJobOfferPropositionRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferPropositionCommandHandler(_mockJobOfferRepository.Object, _logger.Object, _mockJobOfferPropositionRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferPropositionCommand()
             {
@@ -86,7 +86,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.JobOfferPropositions.Co
         public void Handle_InvalidJobOfferPropositionId_ThrowsNotFoundException()
         {
             //Arrange
-            var handler = new CreateJobOfferPropositionCommandHandler(_mockJobOfferRepository.Object, _mapper, _logger.Object, _mockJobOfferPropositionRepository.Object, _mockUriService.Object);
+            var handler = new CreateJobOfferPropositionCommandHandler(_mockJobOfferRepository.Object, _logger.Object, _mockJobOfferPropositionRepository.Object, _mockUriService.Object);
 
             var command = new CreateJobOfferPropositionCommand() { JobOfferId = "99" };
 

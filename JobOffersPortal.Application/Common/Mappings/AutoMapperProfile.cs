@@ -1,5 +1,4 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
-using AutoMapper;
+﻿using AutoMapper;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
 using JobOffersPortal.Application.Functions.Companies.Queries.GetCompanyDetail;
@@ -22,6 +21,7 @@ using JobOffersPortal.Application.Functions.JobOfferSkills.Queries.GetJobOfferSk
 using JobOffersPortal.Domain.Entities;
 using System;
 using System.Linq;
+using JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer;
 
 namespace JobOffersPortal.Application.Common.Mappings
 {
@@ -51,16 +51,7 @@ namespace JobOffersPortal.Application.Common.Mappings
 
             CreateMap<JobOfferRequirement, JobOfferRequirementDetailViewModel>().ReverseMap();
 
-            CreateMap<CreateJobOfferCommand, JobOffer>()
-                   .ForMember(dest => dest.Requirements,
-                      opt => opt.MapFrom(src => src.Requirements.Select(x =>
-                      new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = x })))
-                   .ForMember(dest => dest.Skills,
-                      opt => opt.MapFrom(src => src.Skills.Select(y =>
-                      new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = y })))
-                   .ForMember(dest => dest.Propositions,
-                      opt => opt.MapFrom(src => src.Propositions.Select(z =>
-                      new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = z })));
+            CreateMap<CreateJobOfferCommand, JobOffer>();
 
             CreateMap<UpdateJobOfferCommand, JobOffer>();
 

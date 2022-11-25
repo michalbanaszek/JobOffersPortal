@@ -10,35 +10,34 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
     {
         public static Mock<IJobOfferSkillRepository> GetJobOfferSkillRepository()
         {
-            var jobOfferRequirementList = GetJobOfferSkillList();
+            var jobOfferSkillList = GetJobOfferSkillList();
 
             var mockJobOfferSkillRepository = new Mock<IJobOfferSkillRepository>();
 
             mockJobOfferSkillRepository.Setup(repo => repo.GetAllAsync())
-                                            .ReturnsAsync(jobOfferRequirementList);
+                                            .ReturnsAsync(jobOfferSkillList);
 
             mockJobOfferSkillRepository.Setup(repo => repo.GetByIdAsync(It.IsAny<string>()))
                                             .ReturnsAsync((string id) =>
                                             {
-                                                return jobOfferRequirementList.FirstOrDefault(x => x.Id == id);
+                                                return jobOfferSkillList.FirstOrDefault(x => x.Id == id);
                                             });
 
             mockJobOfferSkillRepository.Setup(repo => repo.AddAsync(It.IsAny<JobOfferSkill>())).ReturnsAsync((JobOfferSkill entity) =>
             {
-                entity.Id = (jobOfferRequirementList.Count + 1).ToString();
-                jobOfferRequirementList.Add(entity);
+                jobOfferSkillList.Add(new JobOfferSkill((jobOfferSkillList.Count + 1).ToString(), "NewContent", entity.JobOfferId));
                 return entity;
             });
 
             mockJobOfferSkillRepository.Setup(repo => repo.UpdateAsync(It.IsAny<JobOfferSkill>())).Callback<JobOfferSkill>((entity) =>
             {
-                jobOfferRequirementList.Remove(entity);
-                jobOfferRequirementList.Add(entity);
+                jobOfferSkillList.Remove(entity);
+                jobOfferSkillList.Add(entity);
             });
 
             mockJobOfferSkillRepository.Setup(repo => repo.DeleteAsync(It.IsAny<JobOfferSkill>())).Callback<JobOfferSkill>((entity) =>
             {
-                jobOfferRequirementList.Remove(entity);
+                jobOfferSkillList.Remove(entity);
             });
 
             return mockJobOfferSkillRepository;
@@ -48,8 +47,8 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
         {
             return new List<JobOfferSkill>()
             {
-                new JobOfferSkill() { Id = "1", Content = "JobOfferSkill1" },
-                new JobOfferSkill() { Id = "2", Content = "JobOfferSkill2" }
+                new JobOfferSkill("1", "JobOfferSkill1", "1"),
+                new JobOfferSkill("2", "JobOfferSkill2", "1")
             };
         }
     }

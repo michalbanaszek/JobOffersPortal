@@ -32,14 +32,14 @@ namespace JobOffersPortal.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContextSeed seeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)//, ApplicationDbContextSeed seeder)
         {
             var swaggerOptions = new SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
 
             if (env.IsDevelopment())
             {
-                seeder.Seed();
+                //seeder.Seed();
 
                 app.UseDeveloperExceptionPage();                      
                 app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });

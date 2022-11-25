@@ -11,6 +11,6 @@ namespace JobOffersPortal.Application.Common.Interfaces.Persistance
         Task<List<JobOffer>> GetAllIncludeAllEntities();
         Task<JobOffer> GetByIdIncludeAllEntities(string id);
         IQueryable<JobOffer> GetAllByCompany(string companyId);
-        Task<bool> IsPositionAlreadyExistAsync(string position);
+        Task<bool> IsPositionAlreadyExistAsync(string position, string companyId);
     }
 }

@@ -118,7 +118,7 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 "Magazynier"
             };
 
-            var skills = new[]
+            var skills1 = new[]
             {
                 "znajomość rysunku technicznego",
                 "umiejętność czytania dokumentacji technicznej",
@@ -132,7 +132,7 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 "znajomość oprogramowania HAAS"
             };
 
-            var requirements = new[]
+            var requirements1 = new[]
        {
                 "bardzo dobra znajomość języka niemieckiego w mowie i piśmie",
                 "mile widziane doświadczenie w zarządzaniu projektami",
@@ -141,7 +141,7 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 "doświadczenie zawodowe na wyżej wymienionym stanowisku",
             };
 
-            var propositions = new[]
+            var propositions1 = new[]
        {
                 "umowę o pracę na pełen etat",
                 "odpowiednie do stanowiska narzędzia pracy",
@@ -164,6 +164,16 @@ namespace JobOffersPortal.Persistance.EF.Persistence
           {
                 "konieczne uprawnienia na wózki z doświadczeniem jazdy",
                 "podstawowa znajomość obiegu dokumentacji magazynowej"
+            };
+
+            var propositions2 = new[]
+            {
+                "Stałą pracę w firmie o uregulowanej pozycji rynkowej",
+                "Odpowiednie do stanowiska narzędzia pracy",
+                "Atrakcyjne wynagrodzenie",
+                "terminowość w wypłacaniu wynagrodzenia",
+                "Dobre warunki pracy",
+                "Możliwość rozwoju zawodowego"
             };
 
             var skills3 = new[]
@@ -198,184 +208,44 @@ namespace JobOffersPortal.Persistance.EF.Persistence
                 "Możliwość rozwoju zawodowego"
             };
 
-            var salaries = new[] { "2000", "2500", "3000", "3200", "4000", "5000" };
+            var companies = new List<Company>();
 
-            var companies = new List<Company>()
-            {
-                new Company()
-                {
-                    Id = "1",
-                    Name = "Company1",
-                    CreatedBy = "1",
-                    Created = DateTime.Now
-                },
-                new Company()
-                {
-                    Id = "2",
-                    Name = "Company2",
-                    CreatedBy = "2",
-                    Created = DateTime.Now
-                },
-                new Company()
-                {
-                    Id = "3",
-                    Name = "Company3",
-                    CreatedBy = "1",
-                    Created = DateTime.Now
-                },
-                   new Company()
-                {
-                    Id = "4",
-                    Name = "Company4",
-                    CreatedBy = "2",
-                    Created = DateTime.Now
-                }
-            };
+            var company1 = new Company("1", "Company1") { CreatedBy = "1", Created = DateTime.Now };
 
-            List<JobOffer> jobOffers = new List<JobOffer>()
-            {
-                new JobOffer()
-                {
-                    Id = "1",
-                    CompanyId = companies[0].Id,
-                    Date = DateTime.Now,
-                    IsAvailable = true,
-                    Propositions = new List<JobOfferProposition>()
-                    {
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[0] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[1] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[2] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[3] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[4] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[5] },
-                    },
-                    Requirements = new List<JobOfferRequirement>()
-                    {
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[0] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[1] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[2] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[3] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[4] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[5] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[6] },
-                    },
-                    Skills = new List<JobOfferSkill>()
-                    {
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[0] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[1] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[2] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[3] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[4] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[5] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[6] }
-                    },
-                    Salary = salaries[0],
-                    Position = positions[4],
-                    CreatedBy = "1",
-                    Created = DateTime.Now
-                },
-                 new JobOffer()
-                 {
-                    Id = "2",
-                    CompanyId = companies[0].Id,
-                    Date = DateTime.Now,
-                    IsAvailable = true,
-                    Propositions = new List<JobOfferProposition>()
-                    {
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[0] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions3[1] },
-                    },
-                    Requirements = new List<JobOfferRequirement>()
-                    {
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[0] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements3[1] },
-                    },
-                    Skills = new List<JobOfferSkill>()
-                    {
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[0] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills3[1] },
-                    },
-                    Salary = salaries[0],
-                    Position = positions[5],
-                    CreatedBy = "1",
-                    Created = DateTime.Now
-                 },
-                 new JobOffer()
-                 {
-                    Id = "3",
-                    CompanyId = companies[0].Id,
-                    Date = DateTime.Now,
-                    IsAvailable = true,
-                    Requirements = new List<JobOfferRequirement>()
-                    {
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements2[0] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements2[1] },
-                    },
-                    Skills = new List<JobOfferSkill>()
-                    {
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills2[0] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills2[1] },
-                    },
-                    Salary = salaries[0],
-                    Position = positions[0],
-                    CreatedBy = "1",
-                    Created = DateTime.Now
-                 },
-                 new JobOffer()
-                 {
-                    Id = "4",
-                    CompanyId = companies[1].Id,
-                    Date = DateTime.Now,
-                    IsAvailable = true,
-                    Propositions = new List<JobOfferProposition>()
-                    {
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[2] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[3] },
-                    },
-                    Requirements = new List<JobOfferRequirement>()
-                    {
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements[2] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements[3] },
-                    },
-                    Skills = new List<JobOfferSkill>()
-                    {
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills[2] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills[3] },
-                    },
-                    Salary = salaries[1],
-                    Position = positions[1],
-                    CreatedBy = "1",
-                    Created = DateTime.Now
-                 },
-                 new JobOffer()
-                 {
-                    Id = "5",
-                    CompanyId = companies[1].Id,
-                    Date = DateTime.Now,
-                    IsAvailable = true,
-                    Propositions = new List<JobOfferProposition>()
-                    {
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[4] },
-                        new JobOfferProposition() { Id = Guid.NewGuid().ToString(), Content = propositions[5] },
-                    },
-                    Requirements = new List<JobOfferRequirement>()
-                    {
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements[3] },
-                        new JobOfferRequirement() { Id = Guid.NewGuid().ToString(), Content = requirements[4] },
-                    },
-                    Skills = new List<JobOfferSkill>()
-                    {
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills[4] },
-                        new JobOfferSkill() { Id = Guid.NewGuid().ToString(), Content = skills[5] },
-                    },
-                    Salary = salaries[2],
-                    Position = positions[2],
-                    CreatedBy = "2",
-                    Created = DateTime.Now
-                 }
-            };
+            var jobOffer1 = company1.AddJobOffer(companies[0].Id, positions[0], "1000", DateTime.Now, true);
+            jobOffer1.AddProposition(propositions1[0], "1");
+            jobOffer1.AddProposition(propositions1[1], "1");
+            jobOffer1.AddProposition(propositions1[2], "1");
 
-            context.JobOffers.AddRange(jobOffers);
+            jobOffer1.AddRequirement(requirements1[0], "1");
+            jobOffer1.AddRequirement(requirements1[1], "1");
+            jobOffer1.AddRequirement(requirements1[2], "1");
+
+            jobOffer1.AddSkill(skills1[0], "1");
+            jobOffer1.AddSkill(skills1[1], "1");
+            jobOffer1.AddSkill(skills1[2], "1");
+
+            var company2 = new Company("2", "Company2") { CreatedBy = "2", Created = DateTime.Now };
+
+            var jobOffer2 = company2.AddJobOffer(companies[1].Id, positions[1], "2000", DateTime.Now, true);
+            jobOffer2.AddProposition(propositions2[0], "2");
+            jobOffer2.AddProposition(propositions2[1], "2");
+            jobOffer2.AddProposition(propositions2[2], "2");
+
+            jobOffer2.AddRequirement(requirements2[0], "2");
+            jobOffer2.AddRequirement(requirements2[1], "2");
+            jobOffer2.AddRequirement(requirements2[2], "2");
+
+            jobOffer2.AddSkill(skills2[0], "2");
+            jobOffer2.AddSkill(skills2[1], "2");
+            jobOffer2.AddSkill(skills2[2], "2");
+
+            companies.Add(company2);
+
+            companies.Add(new Company("2", "Company3") { CreatedBy = "3", Created = DateTime.Now });
+            companies.Add(new Company("3", "Company4") { CreatedBy = "4", Created = DateTime.Now });
+            companies.Add(new Company("4", "Company5") { CreatedBy = "5", Created = DateTime.Now });
+
             context.Companies.AddRange(companies);
             context.SaveChanges();
         }

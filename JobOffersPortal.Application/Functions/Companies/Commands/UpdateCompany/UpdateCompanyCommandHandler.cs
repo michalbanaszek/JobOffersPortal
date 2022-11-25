@@ -27,9 +27,9 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
 
         public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _companyRepository.GetByIdAsync(request.Id);
+            var company = await _companyRepository.GetByIdAsync(request.Id);
 
-            if (entity == null)
+            if (company is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
 
@@ -45,9 +45,9 @@ namespace JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany
                 throw new ForbiddenAccessException(nameof(Company), _currentUserService.UserId);
             }
 
-            _mapper.Map(request, entity);
+            _mapper.Map(request, company);
 
-            await _companyRepository.UpdateAsync(entity);
+            await _companyRepository.UpdateAsync(company);
 
             _logger.LogInformation("Updated Company Id: {0}", request.Id);
 

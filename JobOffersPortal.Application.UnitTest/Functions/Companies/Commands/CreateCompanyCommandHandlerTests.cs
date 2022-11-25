@@ -39,7 +39,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
         public async Task Handle_ValidCompany_AddedToCompanyRepository()
         {
             //Arrange
-            var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockUriService.Object);
+            var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _logger.Object, _mockUriService.Object);
 
             var allCompaniesBeforeCount = (await _mockCompanyRepository.Object.GetAllAsync()).Count;
 
@@ -61,7 +61,7 @@ namespace JobOffersPortal.Application.UnitTest.Functions.Companies.Commands
         public async Task Handle_ValidCompany_ReturnsSpecyficType()
         {
             //Arrange
-            var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _mapper, _logger.Object, _mockUriService.Object);
+            var handler = new CreateCompanyCommandHandler(_mockCompanyRepository.Object, _logger.Object, _mockUriService.Object);
 
             var command = new CreateCompanyCommand()
             {

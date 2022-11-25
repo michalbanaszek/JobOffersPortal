@@ -1,6 +1,7 @@
 ﻿using JobOffersPortal.Application.Common.Interfaces;
 using JobOffersPortal.Application.Security.Services;
 using JobOffersPortal.Domain.Entities;
+using JobOffersPortal.Domain.Models;
 using JobOffersPortal.Infrastructure.Security.Options;
 using JobOffersPortal.Infrastructure.Security.User;
 using Microsoft.AspNetCore.Identity;
@@ -124,7 +125,7 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                 };
             }
 
-            storedRefreshToken.Used = true;
+           // storedRefreshToken.Used = true;
 
             _context.RefreshTokens.Update(storedRefreshToken);
 
@@ -292,12 +293,9 @@ namespace JobOffersPortal.Infrastructure.Security.Services
                 };
             }
 
-            var refreshToken = new RefreshToken()
+            var refreshToken = new RefreshToken(Guid.NewGuid().ToString(), token.Id, DateTime.UtcNow, DateTime.UtcNow.AddMonths(6), false) 
             {
-                JwtId = token.Id,
                 CreatedBy = user.Id,
-                CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
 
             await _context.RefreshTokens.AddAsync(refreshToken);

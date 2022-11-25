@@ -62,7 +62,7 @@ namespace JobOffersPortal.Persistance.EF.Repositories
             var entity = await _context.Companies.AsNoTracking()
                                                  .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 return false;
             }

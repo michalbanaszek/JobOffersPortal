@@ -26,7 +26,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferPropositions.Queries.Get
         {
             var entity = await _jobOfferRepository.GetByIdIncludeAllEntities(request.JobOfferId);
 
-            if (entity == null)
+            if (entity is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.JobOfferId);
 

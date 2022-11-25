@@ -26,7 +26,7 @@ namespace JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffe
         {
             var entity = await _jobOfferRepository.GetByIdAsync(request.Id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
 

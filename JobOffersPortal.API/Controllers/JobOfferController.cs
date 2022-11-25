@@ -1,5 +1,4 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
-using JobOffersPortal.API.Filters.Cache;
+﻿using JobOffersPortal.API.Filters.Cache;
 using JobOffersPortal.Application;
 using JobOffersPortal.Application.Common.Models;
 using JobOffersPortal.Application.Functions.JobOffers.Commands.DeleteJobOffer;
@@ -9,6 +8,7 @@ using JobOffersPortal.Application.Functions.JobOffers.Queries.GetListJobOffers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer;
 
 namespace JobOffersPortal.API.Controllers
 {

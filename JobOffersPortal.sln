@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{C8DE228F-EF90-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobOffersPortal.UI", "JobOffersPortal.UI\JobOffersPortal.UI.csproj", "{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobOffersPortal.Architecture.Tests", "JobOffersPortal.Architecture.Tests\JobOffersPortal.Architecture.Tests.csproj", "{04F36C29-3589-40F0-A21C-CFF5ACBE70DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F36C29-3589-40F0-A21C-CFF5ACBE70DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F36C29-3589-40F0-A21C-CFF5ACBE70DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F36C29-3589-40F0-A21C-CFF5ACBE70DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F36C29-3589-40F0-A21C-CFF5ACBE70DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +99,7 @@ Global
 		{FAA860D6-2BF6-43BF-81B5-1F0E5CC12CE2} = {3D78851F-55F2-474D-B026-85BBA1E55B9B}
 		{C8DE228F-EF90-4042-BA6E-5251E5DD44D4} = {57D041CA-7D2E-4987-8433-6097267FDD7E}
 		{9BC505F8-E8E1-43E8-87C5-9D52D274E5A7} = {C8DE228F-EF90-4042-BA6E-5251E5DD44D4}
+		{04F36C29-3589-40F0-A21C-CFF5ACBE70DE} = {DF2EAFCE-0378-42AC-874C-A66BB61E8765}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70826AAB-0714-4654-9E78-323657ACBB13}

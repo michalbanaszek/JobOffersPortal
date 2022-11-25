@@ -49,14 +49,14 @@ namespace JobOffersPortal.Persistance.EF.Repositories
                                  .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<bool> IsPositionAlreadyExistAsync(string position)
+        public async Task<bool> IsPositionAlreadyExistAsync(string position, string companyId)
         {
-            if (string.IsNullOrEmpty(position))
+            if (string.IsNullOrEmpty(position) && string.IsNullOrEmpty(companyId))
             {
                 return false;
             }
 
-            return await _context.JobOffers.AnyAsync(x => x.Position.ToLower() == position.ToLower());
+            return await _context.JobOffers.Where(jobOffer => jobOffer.CompanyId == companyId).AnyAsync(jobOffer => jobOffer.Position.ToLower() == position.ToLower());
         }
 
         public async Task<bool> UserOwnsEntityAsync(string id, string userId)

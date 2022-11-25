@@ -25,8 +25,7 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
 
             mockJobOffeRequirementRepository.Setup(repo => repo.AddAsync(It.IsAny<JobOfferRequirement>())).ReturnsAsync((JobOfferRequirement entity) =>
             {
-                entity.Id = (jobOfferRequirementList.Count + 1).ToString();
-                jobOfferRequirementList.Add(entity);
+                jobOfferRequirementList.Add(new JobOfferRequirement((jobOfferRequirementList.Count + 1).ToString(), "NewContent", entity.JobOfferId));
                 return entity;
             });
 
@@ -48,8 +47,8 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
         {
             return new List<JobOfferRequirement>()
             {
-                new JobOfferRequirement() { Id = "1", Content = "JobOfferRequirement1" },
-                new JobOfferRequirement() { Id = "2", Content = "JobOfferRequirement2" }
+                new JobOfferRequirement("1", "JobOfferRequirement1", "1"),
+                new JobOfferRequirement("2", "JobOfferRequirement2", "1") 
             };
         }
     }

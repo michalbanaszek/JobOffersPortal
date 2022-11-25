@@ -26,7 +26,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.Up
         {
             var entity = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
 

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using JobOffersPortal.API;
+using JobOffersPortal.API.Services;
 using JobOffersPortal.Application;
 using JobOffersPortal.Application.Functions.Companies.Commands.CreateCompany;
 using JobOffersPortal.Application.Functions.Companies.Commands.UpdateCompany;
@@ -74,7 +75,7 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         public async Task Get_ValidId_ReturnsOkStatus()
         {
             //Arrange
-            string id = "2";
+            string id = await CreateCompanyAsync(new CreateCompanyCommand() { Name = "Company1" });
 
             //Act
             var response = await _client.GetAsync(ApiRoutes.CompanyRoute.Get.Replace("{id}", id));
@@ -138,7 +139,9 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         public async Task Update_ValidModel_ReturnsOkStatus()
         {
             //Arrange
-            var command = new UpdateCompanyCommand() { Id = "3", Name = "UpdateCompany1" };
+            string id = await CreateCompanyAsync(new CreateCompanyCommand() { Name = "Company1" });
+
+            var command = new UpdateCompanyCommand() { Id = id, Name = "UpdateCompany1" };
 
             var json = JsonConvert.SerializeObject(command);
 
@@ -149,23 +152,6 @@ namespace JobOffersPortal.IntegrationTests.Controllers
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }
-
-        [Fact]
-        public async Task Update_InvalidUserOwn_ReturnsForbiddenStatus()
-        {
-            //Arrange
-            var command = new UpdateCompanyCommand() { Id = "2", Name = "UpdateCompany2" };
-
-            var json = JsonConvert.SerializeObject(command);
-
-            var httpContent = new StringContent(json, Encoding.UTF8, JSON_CONTENT_TYPE);
-
-            //Act
-            var response = await _client.PutAsync(ApiRoutes.CompanyRoute.Update.Replace("{id}", command.Id), httpContent);
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
 
         [Fact]
@@ -189,7 +175,7 @@ namespace JobOffersPortal.IntegrationTests.Controllers
         public async Task Delete_ValidId_ReturnsNoContentStatus()
         {
             //Assert
-            string id = "1";
+            string id = await CreateCompanyAsync(new CreateCompanyCommand() { Name = "Company1"});
 
             //Act
             var response = await _client.DeleteAsync(ApiRoutes.CompanyRoute.Delete.Replace("{id}", id));
@@ -211,17 +197,13 @@ namespace JobOffersPortal.IntegrationTests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        [Fact]
-        public async Task Delete_InvalidUserOwn_ReturnsForbiddenStatus()
+        private async Task<string> CreateCompanyAsync(CreateCompanyCommand request)
         {
-            //Assert
-            string id = "2";
-
-            //Act
-            var response = await _client.DeleteAsync(ApiRoutes.CompanyRoute.Delete.Replace("{id}", id));
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            var response = await _client.PostAsJsonAsync(ApiRoutes.CompanyRoute.Create, request);
+            var location = response.Headers.Location.ToString();
+            var splitLocation = location.Split('/');
+            string id = splitLocation[5];
+            return id;
         }
     }
 }

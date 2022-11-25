@@ -1,11 +1,10 @@
-﻿using JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer;
-using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using MediatR;
 
-namespace Application.JobOffers.Commands.CreateJobOffer
+namespace JobOffersPortal.Application.Functions.JobOffers.Commands.CreateJobOffer
 {
-    public class CreateJobOfferCommand : IRequest<CreateJobOfferCommandResponse>
+    public sealed class CreateJobOfferCommand : IRequest<CreateJobOfferCommandResponse>
     {
         public string CompanyId { get; set; }
         public string Position { get; set; }

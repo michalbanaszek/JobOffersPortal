@@ -1,5 +1,4 @@
-﻿using Application.JobOfferRequirements.Commands.DeleteJobOfferRequirement;
-using JobOffersPortal.Application.Common.Exceptions;
+﻿using JobOffersPortal.Application.Common.Exceptions;
 using JobOffersPortal.Application.Common.Interfaces.Persistance;
 using JobOffersPortal.Domain.Entities;
 using MediatR;
@@ -24,7 +23,7 @@ namespace JobOffersPortal.Application.Functions.JobOfferRequirements.Commands.De
         {
             var entity = await _jobOfferRequirementRepository.GetByIdAsync(request.Id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 _logger.LogWarning("Entity not found from database. Request ID: {0}", request.Id);
 
