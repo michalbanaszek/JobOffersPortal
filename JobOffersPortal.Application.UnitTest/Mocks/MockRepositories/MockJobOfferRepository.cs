@@ -114,70 +114,16 @@ namespace JobOffersPortal.Application.UnitTest.Mocks.MockRepositories
             };
 
             List<JobOffer> jobsLists = new List<JobOffer>();
-            
-                var jobOffer1 = new JobOffer("1", companies[0].Id, "position1", "1000", DateTime.Now, true) { CreatedBy = "user1", Created = DateTime.Now};
-                jobOffer1.AddProposition(propositions[0], "1");
-                jobOffer1.AddProposition(propositions[1], "1");
-                jobOffer1.AddRequirement(requirements[0], "1");
-                jobOffer1.AddRequirement(requirements[1], "1");
-                jobOffer1.AddSkill(skills[0], "1");
-                jobOffer1.AddSkill(skills[1], "1");
 
-                jobsLists.Add(jobOffer1);
+            var jobOffer1 = new JobOffer("1", companies[0].Id, "position1", "1000", DateTime.Now, true) { CreatedBy = "user1", Created = DateTime.Now };
+            jobOffer1.AddProposition(propositions[0], "1");
+            jobOffer1.AddProposition(propositions[1], "1");
+            jobOffer1.AddRequirement(requirements[0], "1");
+            jobOffer1.AddRequirement(requirements[1], "1");
+            jobOffer1.AddSkill(skills[0], "1");
+            jobOffer1.AddSkill(skills[1], "1");
 
-                //new JobOffer()
-                 //{
-                 //    Id = "2",
-                 //    CompanyId = companies[1].Id,
-                 //    Date = DateTime.Now,
-                 //    IsAvailable = true,
-                 //    Propositions = new List<JobOfferProposition>()
-                 //   {
-                 //       new JobOfferProposition() { Id = "1", Content = propositions[0] },
-                 //       new JobOfferProposition() { Id = "2", Content = propositions[1] },
-                 //   },
-                 //    Requirements = new List<JobOfferRequirement>()
-                 //   {
-                 //       new JobOfferRequirement() { Id = "1", Content = requirements[0] },
-                 //       new JobOfferRequirement() { Id = "2", Content = requirements[1] },
-                 //   },
-                 //    Skills = new List<JobOfferSkill>()
-                 //   {
-                 //       new JobOfferSkill() { Id = "1", Content = skills[0] },
-                 //       new JobOfferSkill() { Id = "2", Content = skills[1] },
-                 //   },
-                 //    Salary = "2000",
-                 //    Position = "Position2",
-                 //    CreatedBy = "user1",
-                 //    Created = DateTime.Now
-                 //},
-                 //new JobOffer()
-                 //{
-                 //    Id = "3",
-                 //    CompanyId = companies[2].Id,
-                 //    Date = DateTime.Now,
-                 //    IsAvailable = true,
-                 //    Propositions = new List<JobOfferProposition>()
-                 //   {
-                 //       new JobOfferProposition() { Id = "2", Content = propositions[1] },
-                 //       new JobOfferProposition() { Id = "3", Content = propositions[2] },
-                 //   },
-                 //    Requirements = new List<JobOfferRequirement>()
-                 //   {
-                 //       new JobOfferRequirement() { Id = "2", Content = requirements[1] },
-                 //       new JobOfferRequirement() { Id = "3", Content = requirements[2] },
-                 //   },
-                 //    Skills = new List<JobOfferSkill>()
-                 //   {
-                 //       new JobOfferSkill() { Id = "2", Content = skills[1] },
-                 //       new JobOfferSkill() { Id = "3", Content = skills[2] },
-                 //   },
-                 //    Salary = "3000",
-                 //    Position = "Position3",
-                 //    CreatedBy = "user1",
-                 //    Created = DateTime.Now
-                 //}
-       
+            jobsLists.Add(jobOffer1);
 
             return jobsLists;
         }
